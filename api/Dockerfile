@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.15-slim
 # Pinned: a new uv release must not change the image without a commit.
 COPY --from=ghcr.io/astral-sh/uv:0.13.8 /uv /usr/local/bin/uv
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
