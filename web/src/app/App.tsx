@@ -22,7 +22,11 @@ const Family = lazy(() => import('@/features/family').then((m) => ({ default: m.
 const Purchases = lazy(() => import('@/features/places').then((m) => ({ default: m.Purchases })))
 
 function PageLoading() {
-  return <div className="flex justify-center py-16"><VinylSpinner className="size-6" /></div>
+  return (
+    <div className="flex justify-center py-16">
+      <VinylSpinner className="size-6" />
+    </div>
+  )
 }
 
 /** Dialog routes keep the collection visible behind them. */
@@ -41,26 +45,40 @@ export default function App() {
     <AuthProvider>
       <LanguageProvider>
         <Suspense fallback={<PageLoading />}>
-        <Routes>
-          {legacyRedirects.map((r) => (
-            <Route key={r.from} path={r.from} element={<LegacyRedirect to={r.to} />} />
-          ))}
-          <Route path={routes.signIn} element={<SignIn />} />
-          <Route path={routes.register} element={<Register />} />
-          <Route path={patterns.invite} element={<Join />} />
-          <Route path={patterns.resetPassword} element={<ResetPassword />} />
-          <Route element={<RequireAuth />}>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Home />} />
-              <Route path={routes.newRecord} element={<AddRecord />} />
-              <Route path={patterns.record} element={<OnCollection><RecordDetail /></OnCollection>} />
-              <Route path={routes.map} element={<Purchases />} />
-              <Route path={routes.family} element={<Family />} />
-              <Route path={routes.settings} element={<OnCollection><Settings /></OnCollection>} />
-              <Route path={routes.import} element={<Import />} />
+          <Routes>
+            {legacyRedirects.map((r) => (
+              <Route key={r.from} path={r.from} element={<LegacyRedirect to={r.to} />} />
+            ))}
+            <Route path={routes.signIn} element={<SignIn />} />
+            <Route path={routes.register} element={<Register />} />
+            <Route path={patterns.invite} element={<Join />} />
+            <Route path={patterns.resetPassword} element={<ResetPassword />} />
+            <Route element={<RequireAuth />}>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Home />} />
+                <Route path={routes.newRecord} element={<AddRecord />} />
+                <Route
+                  path={patterns.record}
+                  element={
+                    <OnCollection>
+                      <RecordDetail />
+                    </OnCollection>
+                  }
+                />
+                <Route path={routes.map} element={<Purchases />} />
+                <Route path={routes.family} element={<Family />} />
+                <Route
+                  path={routes.settings}
+                  element={
+                    <OnCollection>
+                      <Settings />
+                    </OnCollection>
+                  }
+                />
+                <Route path={routes.import} element={<Import />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
+          </Routes>
         </Suspense>
       </LanguageProvider>
     </AuthProvider>
