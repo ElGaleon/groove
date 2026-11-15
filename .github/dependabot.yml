@@ -1,0 +1,19 @@
+# Weekly update PRs; CI checks each one before it can be merged.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly }
+  - package-ecosystem: uv
+    directory: /api
+    schedule: { interval: weekly }
+    groups:
+      python: { patterns: ["*"], update-types: [minor, patch] }
+  - package-ecosystem: npm
+    directory: /web
+    schedule: { interval: weekly }
+    groups:
+      npm: { patterns: ["*"], update-types: [minor, patch] }
+  - package-ecosystem: docker
+    directories: [/api, /web]
+    schedule: { interval: weekly }

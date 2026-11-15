@@ -1,0 +1,9 @@
+{
+  "name": "schema-gen",
+  "private": true,
+  "description": "Generates the zod schemas of the web app from the OpenAPI document. Kept apart because the generator needs the TypeScript 5 compiler API, while the app uses TypeScript 7.",
+  "devDependencies": {
+    "@hey-api/openapi-ts": "0.99.0",
+    "typescript": "5.9.3"
+  }
+}

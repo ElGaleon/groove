@@ -1,0 +1,4674 @@
+{
+ "components": {
+  "schemas": {
+   "Body_upload_back_cover_api_records__record_id__back_cover_post": {
+    "properties": {
+     "file": {
+      "contentMediaType": "application/octet-stream",
+      "title": "File",
+      "type": "string"
+     }
+    },
+    "required": [
+     "file"
+    ],
+    "title": "Body_upload_back_cover_api_records__record_id__back_cover_post",
+    "type": "object"
+   },
+   "Body_upload_cover_api_records__record_id__cover_post": {
+    "properties": {
+     "file": {
+      "contentMediaType": "application/octet-stream",
+      "title": "File",
+      "type": "string"
+     }
+    },
+    "required": [
+     "file"
+    ],
+    "title": "Body_upload_cover_api_records__record_id__cover_post",
+    "type": "object"
+   },
+   "ChangePasswordIn": {
+    "properties": {
+     "current_password": {
+      "maxLength": 256,
+      "title": "Current Password",
+      "type": "string"
+     },
+     "new_password": {
+      "maxLength": 256,
+      "title": "New Password",
+      "type": "string"
+     }
+    },
+    "required": [
+     "current_password",
+     "new_password"
+    ],
+    "title": "ChangePasswordIn",
+    "type": "object"
+   },
+   "ConnectOut": {
+    "properties": {
+     "authorize_url": {
+      "title": "Authorize Url",
+      "type": "string"
+     }
+    },
+    "required": [
+     "authorize_url"
+    ],
+    "title": "ConnectOut",
+    "type": "object"
+   },
+   "CoverFromDiscogs": {
+    "properties": {
+     "url": {
+      "title": "Url",
+      "type": "string"
+     }
+    },
+    "required": [
+     "url"
+    ],
+    "title": "CoverFromDiscogs",
+    "type": "object"
+   },
+   "CurrencyTotals": {
+    "properties": {
+     "currency": {
+      "title": "Currency",
+      "type": "string"
+     },
+     "diff": {
+      "title": "Diff",
+      "type": "integer"
+     },
+     "excluded": {
+      "title": "Excluded",
+      "type": "integer"
+     },
+     "included": {
+      "title": "Included",
+      "type": "integer"
+     },
+     "spent": {
+      "title": "Spent",
+      "type": "integer"
+     },
+     "value": {
+      "title": "Value",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "currency",
+     "spent",
+     "value",
+     "diff",
+     "included",
+     "excluded"
+    ],
+    "title": "CurrencyTotals",
+    "type": "object"
+   },
+   "DiscogsStatus": {
+    "properties": {
+     "configured": {
+      "title": "Configured",
+      "type": "boolean"
+     },
+     "connected": {
+      "title": "Connected",
+      "type": "boolean"
+     },
+     "status": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Status"
+     },
+     "username": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Username"
+     }
+    },
+    "required": [
+     "configured",
+     "connected"
+    ],
+    "title": "DiscogsStatus",
+    "type": "object"
+   },
+   "ExistingRecord": {
+    "properties": {
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     },
+     "owner_id": {
+      "anyOf": [
+       {
+        "format": "uuid",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Owner Id"
+     },
+     "owner_name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Owner Name"
+     }
+    },
+    "required": [
+     "id",
+     "owner_id",
+     "owner_name"
+    ],
+    "title": "ExistingRecord",
+    "type": "object"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "title": "Detail",
+      "type": "array"
+     }
+    },
+    "title": "HTTPValidationError",
+    "type": "object"
+   },
+   "HouseholdDetail": {
+    "properties": {
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     },
+     "members": {
+      "items": {
+       "$ref": "#/components/schemas/MemberOut"
+      },
+      "title": "Members",
+      "type": "array"
+     },
+     "name": {
+      "title": "Name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "name",
+     "members"
+    ],
+    "title": "HouseholdDetail",
+    "type": "object"
+   },
+   "HouseholdOut": {
+    "properties": {
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     },
+     "name": {
+      "title": "Name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "name"
+    ],
+    "title": "HouseholdOut",
+    "type": "object"
+   },
+   "ImportJobOut": {
+    "properties": {
+     "added": {
+      "title": "Added",
+      "type": "integer"
+     },
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     },
+     "message": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Message"
+     },
+     "processed": {
+      "title": "Processed",
+      "type": "integer"
+     },
+     "shared": {
+      "title": "Shared",
+      "type": "boolean"
+     },
+     "status": {
+      "title": "Status",
+      "type": "string"
+     },
+     "total": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Total"
+     }
+    },
+    "required": [
+     "id",
+     "status",
+     "shared",
+     "total",
+     "processed",
+     "added",
+     "message"
+    ],
+    "title": "ImportJobOut",
+    "type": "object"
+   },
+   "ImportResult": {
+    "properties": {
+     "locations_added": {
+      "title": "Locations Added",
+      "type": "integer"
+     },
+     "locations_reused": {
+      "title": "Locations Reused",
+      "type": "integer"
+     },
+     "records_added": {
+      "title": "Records Added",
+      "type": "integer"
+     },
+     "records_skipped": {
+      "title": "Records Skipped",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "records_added",
+     "records_skipped",
+     "locations_added",
+     "locations_reused"
+    ],
+    "title": "ImportResult",
+    "type": "object"
+   },
+   "ImportStart": {
+    "properties": {
+     "shared": {
+      "default": false,
+      "title": "Shared",
+      "type": "boolean"
+     }
+    },
+    "title": "ImportStart",
+    "type": "object"
+   },
+   "InviteCheck": {
+    "properties": {
+     "household_name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Household Name"
+     },
+     "status": {
+      "title": "Status",
+      "type": "string"
+     }
+    },
+    "required": [
+     "status"
+    ],
+    "title": "InviteCheck",
+    "type": "object"
+   },
+   "InviteCreated": {
+    "properties": {
+     "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+     },
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     },
+     "token": {
+      "title": "Token",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "token",
+     "expires_at"
+    ],
+    "title": "InviteCreated",
+    "type": "object"
+   },
+   "InviteOut": {
+    "properties": {
+     "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+     },
+     "created_by": {
+      "anyOf": [
+       {
+        "format": "uuid",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Created By"
+     },
+     "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+     },
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     },
+     "status": {
+      "title": "Status",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "created_by",
+     "created_at",
+     "expires_at",
+     "status"
+    ],
+    "title": "InviteOut",
+    "type": "object"
+   },
+   "LeaveIn": {
+    "properties": {
+     "confirm_delete_collection": {
+      "default": false,
+      "title": "Confirm Delete Collection",
+      "type": "boolean"
+     }
+    },
+    "title": "LeaveIn",
+    "type": "object"
+   },
+   "LocationIn": {
+    "properties": {
+     "address": {
+      "anyOf": [
+       {
+        "maxLength": 300,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Address"
+     },
+     "kind": {
+      "enum": [
+       "physical",
+       "online",
+       "both"
+      ],
+      "title": "Kind",
+      "type": "string"
+     },
+     "lat": {
+      "anyOf": [
+       {
+        "maximum": 90.0,
+        "minimum": -90.0,
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lat"
+     },
+     "lng": {
+      "anyOf": [
+       {
+        "maximum": 180.0,
+        "minimum": -180.0,
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lng"
+     },
+     "name": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+     },
+     "url": {
+      "anyOf": [
+       {
+        "maxLength": 500,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Url"
+     }
+    },
+    "required": [
+     "name",
+     "kind"
+    ],
+    "title": "LocationIn",
+    "type": "object"
+   },
+   "LocationOut": {
+    "properties": {
+     "address": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Address"
+     },
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     },
+     "kind": {
+      "enum": [
+       "physical",
+       "online",
+       "both"
+      ],
+      "title": "Kind",
+      "type": "string"
+     },
+     "lat": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lat"
+     },
+     "lng": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lng"
+     },
+     "name": {
+      "title": "Name",
+      "type": "string"
+     },
+     "url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Url"
+     }
+    },
+    "required": [
+     "id",
+     "name",
+     "kind",
+     "address",
+     "lat",
+     "lng",
+     "url"
+    ],
+    "title": "LocationOut",
+    "type": "object"
+   },
+   "LocationUpdate": {
+    "description": "Same rules as creation: the whole location is sent.",
+    "properties": {
+     "address": {
+      "anyOf": [
+       {
+        "maxLength": 300,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Address"
+     },
+     "kind": {
+      "enum": [
+       "physical",
+       "online",
+       "both"
+      ],
+      "title": "Kind",
+      "type": "string"
+     },
+     "lat": {
+      "anyOf": [
+       {
+        "maximum": 90.0,
+        "minimum": -90.0,
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lat"
+     },
+     "lng": {
+      "anyOf": [
+       {
+        "maximum": 180.0,
+        "minimum": -180.0,
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Lng"
+     },
+     "name": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+     },
+     "url": {
+      "anyOf": [
+       {
+        "maxLength": 500,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Url"
+     }
+    },
+    "required": [
+     "name",
+     "kind"
+    ],
+    "title": "LocationUpdate",
+    "type": "object"
+   },
+   "LoginIn": {
+    "properties": {
+     "email": {
+      "format": "email",
+      "title": "Email",
+      "type": "string"
+     },
+     "password": {
+      "maxLength": 256,
+      "title": "Password",
+      "type": "string"
+     }
+    },
+    "required": [
+     "email",
+     "password"
+    ],
+    "title": "LoginIn",
+    "type": "object"
+   },
+   "MemberOut": {
+    "properties": {
+     "display_name": {
+      "title": "Display Name",
+      "type": "string"
+     },
+     "email": {
+      "title": "Email",
+      "type": "string"
+     },
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "display_name",
+     "email"
+    ],
+    "title": "MemberOut",
+    "type": "object"
+   },
+   "OwnerCount": {
+    "properties": {
+     "count": {
+      "title": "Count",
+      "type": "integer"
+     },
+     "display_name": {
+      "title": "Display Name",
+      "type": "string"
+     },
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "display_name",
+     "count"
+    ],
+    "title": "OwnerCount",
+    "type": "object"
+   },
+   "PasswordResetCheck": {
+    "properties": {
+     "display_name": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Display Name"
+     },
+     "status": {
+      "title": "Status",
+      "type": "string"
+     }
+    },
+    "required": [
+     "status"
+    ],
+    "title": "PasswordResetCheck",
+    "type": "object"
+   },
+   "PasswordResetCreated": {
+    "properties": {
+     "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+     },
+     "token": {
+      "title": "Token",
+      "type": "string"
+     }
+    },
+    "required": [
+     "token",
+     "expires_at"
+    ],
+    "title": "PasswordResetCreated",
+    "type": "object"
+   },
+   "PasswordResetIn": {
+    "properties": {
+     "new_password": {
+      "maxLength": 256,
+      "title": "New Password",
+      "type": "string"
+     },
+     "token": {
+      "maxLength": 128,
+      "minLength": 1,
+      "title": "Token",
+      "type": "string"
+     }
+    },
+    "required": [
+     "token",
+     "new_password"
+    ],
+    "title": "PasswordResetIn",
+    "type": "object"
+   },
+   "PlaceRecord": {
+    "properties": {
+     "amount_minor": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Amount Minor"
+     },
+     "artist": {
+      "title": "Artist",
+      "type": "string"
+     },
+     "currency": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Currency"
+     },
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     },
+     "title": {
+      "title": "Title",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "title",
+     "artist",
+     "amount_minor",
+     "currency"
+    ],
+    "title": "PlaceRecord",
+    "type": "object"
+   },
+   "PlaceStats": {
+    "properties": {
+     "count": {
+      "title": "Count",
+      "type": "integer"
+     },
+     "location": {
+      "$ref": "#/components/schemas/LocationOut"
+     },
+     "records": {
+      "items": {
+       "$ref": "#/components/schemas/PlaceRecord"
+      },
+      "title": "Records",
+      "type": "array"
+     },
+     "spent": {
+      "additionalProperties": {
+       "type": "integer"
+      },
+      "title": "Spent",
+      "type": "object"
+     }
+    },
+    "required": [
+     "location",
+     "count",
+     "spent",
+     "records"
+    ],
+    "title": "PlaceStats",
+    "type": "object"
+   },
+   "PlacesOut": {
+    "properties": {
+     "mapped": {
+      "items": {
+       "$ref": "#/components/schemas/PlaceStats"
+      },
+      "title": "Mapped",
+      "type": "array"
+     },
+     "online": {
+      "items": {
+       "$ref": "#/components/schemas/PlaceStats"
+      },
+      "title": "Online",
+      "type": "array"
+     },
+     "unmapped": {
+      "items": {
+       "$ref": "#/components/schemas/PlaceStats"
+      },
+      "title": "Unmapped",
+      "type": "array"
+     },
+     "years": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Years",
+      "type": "array"
+     }
+    },
+    "required": [
+     "years",
+     "mapped",
+     "unmapped",
+     "online"
+    ],
+    "title": "PlacesOut",
+    "type": "object"
+   },
+   "PreferencesIn": {
+    "description": "Only the fields that are sent change; sending null clears one.",
+    "properties": {
+     "default_currency": {
+      "anyOf": [
+       {
+        "maxLength": 3,
+        "minLength": 3,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Default Currency"
+     },
+     "language": {
+      "anyOf": [
+       {
+        "enum": [
+         "it",
+         "en"
+        ],
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Language"
+     }
+    },
+    "title": "PreferencesIn",
+    "type": "object"
+   },
+   "PurchaseIn": {
+    "properties": {
+     "amount_minor": {
+      "anyOf": [
+       {
+        "minimum": 0.0,
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Amount Minor"
+     },
+     "channel": {
+      "anyOf": [
+       {
+        "enum": [
+         "physical",
+         "online"
+        ],
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Channel"
+     },
+     "currency": {
+      "default": "EUR",
+      "maxLength": 3,
+      "minLength": 3,
+      "pattern": "^[A-Za-z]{3}$",
+      "title": "Currency",
+      "type": "string"
+     },
+     "date": {
+      "anyOf": [
+       {
+        "format": "date",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Date"
+     },
+     "location_id": {
+      "anyOf": [
+       {
+        "format": "uuid",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Location Id"
+     }
+    },
+    "title": "PurchaseIn",
+    "type": "object"
+   },
+   "PurchaseOut": {
+    "properties": {
+     "amount_minor": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Amount Minor"
+     },
+     "channel": {
+      "anyOf": [
+       {
+        "enum": [
+         "physical",
+         "online"
+        ],
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Channel"
+     },
+     "currency": {
+      "title": "Currency",
+      "type": "string"
+     },
+     "date": {
+      "anyOf": [
+       {
+        "format": "date",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Date"
+     },
+     "location_id": {
+      "anyOf": [
+       {
+        "format": "uuid",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Location Id"
+     }
+    },
+    "required": [
+     "amount_minor",
+     "currency",
+     "date",
+     "location_id",
+     "channel"
+    ],
+    "title": "PurchaseOut",
+    "type": "object"
+   },
+   "ReassignIn": {
+    "properties": {
+     "to": {
+      "format": "uuid",
+      "title": "To",
+      "type": "string"
+     }
+    },
+    "required": [
+     "to"
+    ],
+    "title": "ReassignIn",
+    "type": "object"
+   },
+   "RecordCreate": {
+    "properties": {
+     "allow_duplicate": {
+      "default": false,
+      "title": "Allow Duplicate",
+      "type": "boolean"
+     },
+     "artist": {
+      "maxLength": 300,
+      "minLength": 1,
+      "title": "Artist",
+      "type": "string"
+     },
+     "catalog_no": {
+      "anyOf": [
+       {
+        "maxLength": 100,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Catalog No"
+     },
+     "country": {
+      "anyOf": [
+       {
+        "maxLength": 100,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Country"
+     },
+     "discogs_release_id": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Discogs Release Id"
+     },
+     "format": {
+      "anyOf": [
+       {
+        "maxLength": 100,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Format"
+     },
+     "genres": {
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 30,
+      "title": "Genres",
+      "type": "array"
+     },
+     "label": {
+      "anyOf": [
+       {
+        "maxLength": 200,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Label"
+     },
+     "note": {
+      "anyOf": [
+       {
+        "maxLength": 5000,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Note"
+     },
+     "owner_id": {
+      "anyOf": [
+       {
+        "format": "uuid",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Owner Id"
+     },
+     "purchase": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/PurchaseIn"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": {
+      "maxLength": 300,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+     },
+     "value": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ValueIn"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "year": {
+      "anyOf": [
+       {
+        "maximum": 2100.0,
+        "minimum": 1800.0,
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Year"
+     }
+    },
+    "required": [
+     "title",
+     "artist"
+    ],
+    "title": "RecordCreate",
+    "type": "object"
+   },
+   "RecordList": {
+    "description": "One page of records; `total` counts every match, not just this page.",
+    "properties": {
+     "items": {
+      "items": {
+       "$ref": "#/components/schemas/RecordOut"
+      },
+      "title": "Items",
+      "type": "array"
+     },
+     "limit": {
+      "title": "Limit",
+      "type": "integer"
+     },
+     "offset": {
+      "title": "Offset",
+      "type": "integer"
+     },
+     "total": {
+      "title": "Total",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "items",
+     "total",
+     "offset",
+     "limit"
+    ],
+    "title": "RecordList",
+    "type": "object"
+   },
+   "RecordOptions": {
+    "properties": {
+     "countries": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Countries",
+      "type": "array"
+     },
+     "decades": {
+      "items": {
+       "type": "integer"
+      },
+      "title": "Decades",
+      "type": "array"
+     },
+     "formats": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Formats",
+      "type": "array"
+     },
+     "genres": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Genres",
+      "type": "array"
+     },
+     "labels": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Labels",
+      "type": "array"
+     },
+     "owners": {
+      "items": {
+       "$ref": "#/components/schemas/OwnerCount"
+      },
+      "title": "Owners",
+      "type": "array"
+     },
+     "shared_count": {
+      "title": "Shared Count",
+      "type": "integer"
+     },
+     "total": {
+      "title": "Total",
+      "type": "integer"
+     },
+     "years": {
+      "items": {
+       "type": "integer"
+      },
+      "title": "Years",
+      "type": "array"
+     }
+    },
+    "required": [
+     "genres",
+     "decades",
+     "labels",
+     "countries",
+     "formats",
+     "years",
+     "owners",
+     "shared_count",
+     "total"
+    ],
+    "title": "RecordOptions",
+    "type": "object"
+   },
+   "RecordOut": {
+    "properties": {
+     "artist": {
+      "title": "Artist",
+      "type": "string"
+     },
+     "catalog_no": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Catalog No"
+     },
+     "country": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Country"
+     },
+     "cover_version": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cover Version"
+     },
+     "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+     },
+     "created_by": {
+      "anyOf": [
+       {
+        "format": "uuid",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Created By"
+     },
+     "discogs_release_id": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Discogs Release Id"
+     },
+     "format": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Format"
+     },
+     "genres": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Genres",
+      "type": "array"
+     },
+     "has_back_cover": {
+      "title": "Has Back Cover",
+      "type": "boolean"
+     },
+     "has_cover": {
+      "title": "Has Cover",
+      "type": "boolean"
+     },
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     },
+     "label": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Label"
+     },
+     "note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Note"
+     },
+     "owner_id": {
+      "anyOf": [
+       {
+        "format": "uuid",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Owner Id"
+     },
+     "purchase": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/PurchaseOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": {
+      "title": "Title",
+      "type": "string"
+     },
+     "updated_at": {
+      "format": "date-time",
+      "title": "Updated At",
+      "type": "string"
+     },
+     "value": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ValueOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "year": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Year"
+     }
+    },
+    "required": [
+     "id",
+     "title",
+     "artist",
+     "year",
+     "label",
+     "genres",
+     "format",
+     "note",
+     "catalog_no",
+     "country",
+     "purchase",
+     "value",
+     "owner_id",
+     "has_cover",
+     "cover_version",
+     "has_back_cover",
+     "discogs_release_id",
+     "created_by",
+     "created_at",
+     "updated_at"
+    ],
+    "title": "RecordOut",
+    "type": "object"
+   },
+   "RecordSummary": {
+    "properties": {
+     "total": {
+      "title": "Total",
+      "type": "integer"
+     },
+     "totals": {
+      "items": {
+       "$ref": "#/components/schemas/CurrencyTotals"
+      },
+      "title": "Totals",
+      "type": "array"
+     },
+     "without_data": {
+      "title": "Without Data",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "total",
+     "totals",
+     "without_data"
+    ],
+    "title": "RecordSummary",
+    "type": "object"
+   },
+   "RecordUpdate": {
+    "description": "Partial update: only fields that are sent are changed (owner_id null clears the owner).",
+    "properties": {
+     "artist": {
+      "anyOf": [
+       {
+        "maxLength": 300,
+        "minLength": 1,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Artist"
+     },
+     "catalog_no": {
+      "anyOf": [
+       {
+        "maxLength": 100,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Catalog No"
+     },
+     "country": {
+      "anyOf": [
+       {
+        "maxLength": 100,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Country"
+     },
+     "format": {
+      "anyOf": [
+       {
+        "maxLength": 100,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Format"
+     },
+     "genres": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "string"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Genres"
+     },
+     "label": {
+      "anyOf": [
+       {
+        "maxLength": 200,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Label"
+     },
+     "note": {
+      "anyOf": [
+       {
+        "maxLength": 5000,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Note"
+     },
+     "owner_id": {
+      "anyOf": [
+       {
+        "format": "uuid",
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Owner Id"
+     },
+     "purchase": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/PurchaseIn"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "title": {
+      "anyOf": [
+       {
+        "maxLength": 300,
+        "minLength": 1,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Title"
+     },
+     "value": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ValueIn"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "year": {
+      "anyOf": [
+       {
+        "maximum": 2100.0,
+        "minimum": 1800.0,
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Year"
+     }
+    },
+    "title": "RecordUpdate",
+    "type": "object"
+   },
+   "RefreshOut": {
+    "properties": {
+     "proposal": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ValueOut"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "record": {
+      "$ref": "#/components/schemas/RecordOut"
+     },
+     "status": {
+      "enum": [
+       "updated",
+       "unchanged",
+       "proposal",
+       "no_value"
+      ],
+      "title": "Status",
+      "type": "string"
+     }
+    },
+    "required": [
+     "status",
+     "record"
+    ],
+    "title": "RefreshOut",
+    "type": "object"
+   },
+   "RegisterIn": {
+    "properties": {
+     "display_name": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Display Name",
+      "type": "string"
+     },
+     "email": {
+      "format": "email",
+      "title": "Email",
+      "type": "string"
+     },
+     "household_name": {
+      "anyOf": [
+       {
+        "maxLength": 120,
+        "minLength": 1,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Household Name"
+     },
+     "invite_token": {
+      "anyOf": [
+       {
+        "maxLength": 128,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Invite Token"
+     },
+     "password": {
+      "maxLength": 256,
+      "title": "Password",
+      "type": "string"
+     }
+    },
+    "required": [
+     "email",
+     "password",
+     "display_name"
+    ],
+    "title": "RegisterIn",
+    "type": "object"
+   },
+   "ReleaseValue": {
+    "properties": {
+     "amount_minor": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Amount Minor"
+     },
+     "currency": {
+      "title": "Currency",
+      "type": "string"
+     },
+     "measure": {
+      "default": "lowest_price_for_sale",
+      "title": "Measure",
+      "type": "string"
+     },
+     "num_for_sale": {
+      "title": "Num For Sale",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "amount_minor",
+     "currency",
+     "num_for_sale"
+    ],
+    "title": "ReleaseValue",
+    "type": "object"
+   },
+   "SearchOut": {
+    "properties": {
+     "page": {
+      "default": 1,
+      "title": "Page",
+      "type": "integer"
+     },
+     "pages": {
+      "default": 1,
+      "title": "Pages",
+      "type": "integer"
+     },
+     "results": {
+      "items": {
+       "$ref": "#/components/schemas/SearchResult"
+      },
+      "title": "Results",
+      "type": "array"
+     }
+    },
+    "required": [
+     "results"
+    ],
+    "title": "SearchOut",
+    "type": "object"
+   },
+   "SearchResult": {
+    "properties": {
+     "artist": {
+      "title": "Artist",
+      "type": "string"
+     },
+     "catalog_no": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Catalog No"
+     },
+     "country": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Country"
+     },
+     "cover_url": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Cover Url"
+     },
+     "format": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Format"
+     },
+     "genres": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Genres",
+      "type": "array"
+     },
+     "in_collection": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/ExistingRecord"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "label": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Label"
+     },
+     "release_id": {
+      "title": "Release Id",
+      "type": "integer"
+     },
+     "title": {
+      "title": "Title",
+      "type": "string"
+     },
+     "year": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Year"
+     }
+    },
+    "required": [
+     "release_id",
+     "title",
+     "artist",
+     "year",
+     "label",
+     "genres",
+     "format",
+     "cover_url",
+     "in_collection"
+    ],
+    "title": "SearchResult",
+    "type": "object"
+   },
+   "SetupStatus": {
+    "properties": {
+     "min_password_length": {
+      "title": "Min Password Length",
+      "type": "integer"
+     },
+     "needs_setup": {
+      "title": "Needs Setup",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "needs_setup",
+     "min_password_length"
+    ],
+    "title": "SetupStatus",
+    "type": "object"
+   },
+   "Track": {
+    "properties": {
+     "duration": {
+      "default": "",
+      "title": "Duration",
+      "type": "string"
+     },
+     "position": {
+      "default": "",
+      "title": "Position",
+      "type": "string"
+     },
+     "title": {
+      "title": "Title",
+      "type": "string"
+     }
+    },
+    "required": [
+     "title"
+    ],
+    "title": "Track",
+    "type": "object"
+   },
+   "TracklistOut": {
+    "properties": {
+     "available": {
+      "title": "Available",
+      "type": "boolean"
+     },
+     "reason": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Reason"
+     },
+     "tracks": {
+      "default": [],
+      "items": {
+       "$ref": "#/components/schemas/Track"
+      },
+      "title": "Tracks",
+      "type": "array"
+     }
+    },
+    "required": [
+     "available"
+    ],
+    "title": "TracklistOut",
+    "type": "object"
+   },
+   "UserOut": {
+    "properties": {
+     "default_currency": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Default Currency"
+     },
+     "display_name": {
+      "title": "Display Name",
+      "type": "string"
+     },
+     "email": {
+      "title": "Email",
+      "type": "string"
+     },
+     "household": {
+      "$ref": "#/components/schemas/HouseholdOut"
+     },
+     "id": {
+      "format": "uuid",
+      "title": "Id",
+      "type": "string"
+     },
+     "language": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Language"
+     }
+    },
+    "required": [
+     "id",
+     "email",
+     "display_name",
+     "household"
+    ],
+    "title": "UserOut",
+    "type": "object"
+   },
+   "ValidationError": {
+    "properties": {
+     "ctx": {
+      "title": "Context",
+      "type": "object"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "title": "Location",
+      "type": "array"
+     },
+     "msg": {
+      "title": "Message",
+      "type": "string"
+     },
+     "type": {
+      "title": "Error Type",
+      "type": "string"
+     }
+    },
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError",
+    "type": "object"
+   },
+   "ValueIn": {
+    "properties": {
+     "amount_minor": {
+      "minimum": 0.0,
+      "title": "Amount Minor",
+      "type": "integer"
+     },
+     "currency": {
+      "default": "EUR",
+      "maxLength": 3,
+      "minLength": 3,
+      "pattern": "^[A-Za-z]{3}$",
+      "title": "Currency",
+      "type": "string"
+     },
+     "measure": {
+      "anyOf": [
+       {
+        "maxLength": 100,
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Measure"
+     },
+     "num_for_sale": {
+      "anyOf": [
+       {
+        "minimum": 0.0,
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Num For Sale"
+     },
+     "source": {
+      "default": "manual",
+      "enum": [
+       "manual",
+       "discogs"
+      ],
+      "title": "Source",
+      "type": "string"
+     }
+    },
+    "required": [
+     "amount_minor"
+    ],
+    "title": "ValueIn",
+    "type": "object"
+   },
+   "ValueOut": {
+    "properties": {
+     "amount_minor": {
+      "title": "Amount Minor",
+      "type": "integer"
+     },
+     "currency": {
+      "title": "Currency",
+      "type": "string"
+     },
+     "fetched_at": {
+      "format": "date-time",
+      "title": "Fetched At",
+      "type": "string"
+     },
+     "measure": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Measure"
+     },
+     "num_for_sale": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Num For Sale"
+     },
+     "source": {
+      "enum": [
+       "manual",
+       "discogs"
+      ],
+      "title": "Source",
+      "type": "string"
+     }
+    },
+    "required": [
+     "amount_minor",
+     "currency",
+     "source",
+     "measure",
+     "fetched_at",
+     "num_for_sale"
+    ],
+    "title": "ValueOut",
+    "type": "object"
+   }
+  }
+ },
+ "info": {
+  "title": "Groove API",
+  "version": "0.1.0"
+ },
+ "openapi": "3.1.0",
+ "paths": {
+  "/api/auth/login": {
+   "post": {
+    "operationId": "login_api_auth_login_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/LoginIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UserOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Login",
+    "tags": [
+     "auth"
+    ]
+   }
+  },
+  "/api/auth/logout": {
+   "post": {
+    "operationId": "logout_api_auth_logout_post",
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Logout",
+    "tags": [
+     "auth"
+    ]
+   }
+  },
+  "/api/auth/me": {
+   "get": {
+    "operationId": "me_api_auth_me_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UserOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Me",
+    "tags": [
+     "auth"
+    ]
+   }
+  },
+  "/api/auth/password": {
+   "post": {
+    "operationId": "change_password_api_auth_password_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ChangePasswordIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Change Password",
+    "tags": [
+     "auth"
+    ]
+   }
+  },
+  "/api/auth/password-reset": {
+   "post": {
+    "description": "Set a new password with a link; the member is signed in on this device afterwards.",
+    "operationId": "apply_password_reset_api_auth_password_reset_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PasswordResetIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UserOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Apply Password Reset",
+    "tags": [
+     "auth"
+    ]
+   }
+  },
+  "/api/auth/password-reset/check": {
+   "get": {
+    "description": "Public: lets the reset page say whether a link can still be used.",
+    "operationId": "check_password_reset_api_auth_password_reset_check_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "token",
+      "required": true,
+      "schema": {
+       "maxLength": 128,
+       "minLength": 1,
+       "title": "Token",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PasswordResetCheck"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Check Password Reset",
+    "tags": [
+     "auth"
+    ]
+   }
+  },
+  "/api/auth/preferences": {
+   "patch": {
+    "description": "The member's own settings: the currency suggested for new prices and the app language.",
+    "operationId": "set_preferences_api_auth_preferences_patch",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PreferencesIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UserOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Set Preferences",
+    "tags": [
+     "auth"
+    ]
+   }
+  },
+  "/api/auth/register": {
+   "post": {
+    "operationId": "register_api_auth_register_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RegisterIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UserOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Register",
+    "tags": [
+     "auth"
+    ]
+   }
+  },
+  "/api/auth/status": {
+   "get": {
+    "description": "Public: the sign-in screen needs to know whether to offer first-time setup.",
+    "operationId": "setup_status_api_auth_status_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SetupStatus"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Setup Status",
+    "tags": [
+     "auth"
+    ]
+   }
+  },
+  "/api/backup": {
+   "get": {
+    "description": "Download the collection as a JSON file.",
+    "operationId": "export_backup_api_backup_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Export Backup",
+    "tags": [
+     "backup"
+    ]
+   }
+  },
+  "/api/backup/import": {
+   "post": {
+    "description": "Add the records and places of a backup file. Existing ones are kept; nothing is deleted.",
+    "operationId": "import_backup_api_backup_import_post",
+    "parameters": [
+     {
+      "description": "Imported records have no owner",
+      "in": "query",
+      "name": "shared",
+      "required": false,
+      "schema": {
+       "default": false,
+       "description": "Imported records have no owner",
+       "title": "Shared",
+       "type": "boolean"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "additionalProperties": true,
+        "title": "Payload",
+        "type": "object"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ImportResult"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Import Backup",
+    "tags": [
+     "backup"
+    ]
+   }
+  },
+  "/api/discogs/callback": {
+   "get": {
+    "description": "Discogs sends the browser back here. Always ends with a redirect to Settings.",
+    "operationId": "callback_api_discogs_callback_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "oauth_token",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Oauth Token"
+      }
+     },
+     {
+      "in": "query",
+      "name": "oauth_verifier",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Oauth Verifier"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Callback",
+    "tags": [
+     "discogs"
+    ]
+   }
+  },
+  "/api/discogs/connect": {
+   "post": {
+    "operationId": "connect_api_discogs_connect_post",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ConnectOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Connect",
+    "tags": [
+     "discogs"
+    ]
+   }
+  },
+  "/api/discogs/connection": {
+   "delete": {
+    "description": "Remove the stored authorisation. Records already imported stay.",
+    "operationId": "disconnect_api_discogs_connection_delete",
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Disconnect",
+    "tags": [
+     "discogs"
+    ]
+   }
+  },
+  "/api/discogs/import": {
+   "post": {
+    "operationId": "start_import_api_discogs_import_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ImportStart"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "202": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ImportJobOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Start Import",
+    "tags": [
+     "discogs"
+    ]
+   }
+  },
+  "/api/discogs/import/latest": {
+   "get": {
+    "operationId": "latest_import_api_discogs_import_latest_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "anyOf": [
+          {
+           "$ref": "#/components/schemas/ImportJobOut"
+          },
+          {
+           "type": "null"
+          }
+         ],
+         "title": "Response Latest Import Api Discogs Import Latest Get"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Latest Import",
+    "tags": [
+     "discogs"
+    ]
+   }
+  },
+  "/api/discogs/records/{record_id}/cover": {
+   "post": {
+    "description": "Keep a copy of a Discogs cover on the record. Only Discogs image hosts are fetched.",
+    "operationId": "cover_from_discogs_api_discogs_records__record_id__cover_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "record_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Record Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CoverFromDiscogs"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RecordOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Cover From Discogs",
+    "tags": [
+     "discogs"
+    ]
+   }
+  },
+  "/api/discogs/records/{record_id}/tracklist": {
+   "get": {
+    "description": "Fetched from Discogs the first time, then saved on the record and reused.",
+    "operationId": "tracklist_api_discogs_records__record_id__tracklist_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "record_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Record Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/TracklistOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Tracklist",
+    "tags": [
+     "discogs"
+    ]
+   }
+  },
+  "/api/discogs/releases/{release_id}/value": {
+   "get": {
+    "description": "Current market value of a release: lowest price for sale, with the member's authorisation.",
+    "operationId": "release_value_api_discogs_releases__release_id__value_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "release_id",
+      "required": true,
+      "schema": {
+       "title": "Release Id",
+       "type": "integer"
+      }
+     },
+     {
+      "in": "query",
+      "name": "currency",
+      "required": false,
+      "schema": {
+       "default": "EUR",
+       "maxLength": 3,
+       "minLength": 3,
+       "title": "Currency",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ReleaseValue"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Release Value",
+    "tags": [
+     "discogs"
+    ]
+   }
+  },
+  "/api/discogs/search": {
+   "get": {
+    "operationId": "search_api_discogs_search_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "q",
+      "required": true,
+      "schema": {
+       "maxLength": 200,
+       "minLength": 2,
+       "title": "Q",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "page",
+      "required": false,
+      "schema": {
+       "default": 1,
+       "maximum": 100,
+       "minimum": 1,
+       "title": "Page",
+       "type": "integer"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/SearchOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Search",
+    "tags": [
+     "discogs"
+    ]
+   }
+  },
+  "/api/discogs/status": {
+   "get": {
+    "operationId": "status_api_discogs_status_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DiscogsStatus"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Status",
+    "tags": [
+     "discogs"
+    ]
+   }
+  },
+  "/api/health": {
+   "get": {
+    "operationId": "health_api_health_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "additionalProperties": {
+          "type": "string"
+         },
+         "title": "Response Health Api Health Get",
+         "type": "object"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Health"
+   }
+  },
+  "/api/household": {
+   "get": {
+    "operationId": "household_api_household_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HouseholdDetail"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Household",
+    "tags": [
+     "household"
+    ]
+   }
+  },
+  "/api/household/leave": {
+   "post": {
+    "description": "Leave the household: the leaver's records stay and become shared.",
+    "operationId": "leave_api_household_leave_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/LeaveIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Leave",
+    "tags": [
+     "household"
+    ]
+   }
+  },
+  "/api/household/members/{member_id}/password-reset": {
+   "post": {
+    "description": "A one-time link to give to a family member who forgot their password.",
+    "operationId": "create_password_reset_api_household_members__member_id__password_reset_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "member_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Member Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PasswordResetCreated"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Create Password Reset",
+    "tags": [
+     "household"
+    ]
+   }
+  },
+  "/api/invites": {
+   "get": {
+    "operationId": "list_invites_api_invites_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/InviteOut"
+         },
+         "title": "Response List Invites Api Invites Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "List Invites",
+    "tags": [
+     "invites"
+    ]
+   },
+   "post": {
+    "operationId": "create_invite_api_invites_post",
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InviteCreated"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Create Invite",
+    "tags": [
+     "invites"
+    ]
+   }
+  },
+  "/api/invites/check": {
+   "get": {
+    "description": "Public: lets the join page say whether a link can still be used.",
+    "operationId": "check_invite_api_invites_check_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "token",
+      "required": true,
+      "schema": {
+       "maxLength": 128,
+       "minLength": 1,
+       "title": "Token",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/InviteCheck"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Check Invite",
+    "tags": [
+     "invites"
+    ]
+   }
+  },
+  "/api/invites/{invite_id}": {
+   "delete": {
+    "operationId": "revoke_invite_api_invites__invite_id__delete",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "invite_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Invite Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Revoke Invite",
+    "tags": [
+     "invites"
+    ]
+   }
+  },
+  "/api/locations": {
+   "get": {
+    "operationId": "list_locations_api_locations_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "q",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maxLength": 100,
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Q"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/LocationOut"
+         },
+         "title": "Response List Locations Api Locations Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "List Locations",
+    "tags": [
+     "locations"
+    ]
+   },
+   "post": {
+    "operationId": "create_location_api_locations_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/LocationIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/LocationOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Create Location",
+    "tags": [
+     "locations"
+    ]
+   }
+  },
+  "/api/locations/{location_id}": {
+   "delete": {
+    "operationId": "delete_location_api_locations__location_id__delete",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "location_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Location Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Delete Location",
+    "tags": [
+     "locations"
+    ]
+   },
+   "patch": {
+    "operationId": "update_location_api_locations__location_id__patch",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "location_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Location Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/LocationUpdate"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/LocationOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Update Location",
+    "tags": [
+     "locations"
+    ]
+   }
+  },
+  "/api/locations/{location_id}/reassign": {
+   "post": {
+    "description": "Move every purchase of this location to another one (so the first can be deleted).",
+    "operationId": "reassign_api_locations__location_id__reassign_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "location_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Location Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ReassignIn"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Reassign",
+    "tags": [
+     "locations"
+    ]
+   }
+  },
+  "/api/purchases/places": {
+   "get": {
+    "description": "Places with purchases, grouped for the map: physical with coordinates, without, online.",
+    "operationId": "places_api_purchases_places_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "year",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maximum": 2100,
+         "minimum": 1800,
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Year"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PlacesOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Places",
+    "tags": [
+     "purchases"
+    ]
+   }
+  },
+  "/api/records": {
+   "get": {
+    "operationId": "list_records_api_records_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "sort",
+      "required": false,
+      "schema": {
+       "default": "artist",
+       "pattern": "^(title|artist|year|added)$",
+       "title": "Sort",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "order",
+      "required": false,
+      "schema": {
+       "default": "asc",
+       "pattern": "^(asc|desc)$",
+       "title": "Order",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "offset",
+      "required": false,
+      "schema": {
+       "default": 0,
+       "minimum": 0,
+       "title": "Offset",
+       "type": "integer"
+      }
+     },
+     {
+      "in": "query",
+      "name": "limit",
+      "required": false,
+      "schema": {
+       "default": 10,
+       "maximum": 100,
+       "minimum": 1,
+       "title": "Limit",
+       "type": "integer"
+      }
+     },
+     {
+      "in": "query",
+      "name": "q",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maxLength": 200,
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Q"
+      }
+     },
+     {
+      "in": "query",
+      "name": "owner",
+      "required": false,
+      "schema": {
+       "default": "any",
+       "title": "Owner",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "genre",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Genre"
+      }
+     },
+     {
+      "in": "query",
+      "name": "decade",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maximum": 2100,
+         "minimum": 1800,
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Decade"
+      }
+     },
+     {
+      "in": "query",
+      "name": "label",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Label"
+      }
+     },
+     {
+      "in": "query",
+      "name": "country",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Country"
+      }
+     },
+     {
+      "in": "query",
+      "name": "format",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Format"
+      }
+     },
+     {
+      "in": "query",
+      "name": "year",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maximum": 2100,
+         "minimum": 1800,
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Year"
+      }
+     },
+     {
+      "in": "query",
+      "name": "discogs",
+      "required": false,
+      "schema": {
+       "default": false,
+       "title": "Discogs",
+       "type": "boolean"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RecordList"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "List Records",
+    "tags": [
+     "records"
+    ]
+   },
+   "post": {
+    "operationId": "create_record_api_records_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RecordCreate"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RecordOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Create Record",
+    "tags": [
+     "records"
+    ]
+   }
+  },
+  "/api/records/options": {
+   "get": {
+    "description": "Values for the filter controls, taken from what is actually in the collection.",
+    "operationId": "record_options_api_records_options_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RecordOptions"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Record Options",
+    "tags": [
+     "records"
+    ]
+   }
+  },
+  "/api/records/random": {
+   "get": {
+    "description": "A random pick that follows the filters and avoids `exclude` whenever enough others exist.",
+    "operationId": "random_records_api_records_random_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "count",
+      "required": false,
+      "schema": {
+       "default": 8,
+       "maximum": 50,
+       "minimum": 1,
+       "title": "Count",
+       "type": "integer"
+      }
+     },
+     {
+      "description": "Comma-separated ids to avoid (e.g. the last pick)",
+      "in": "query",
+      "name": "exclude",
+      "required": false,
+      "schema": {
+       "default": "",
+       "description": "Comma-separated ids to avoid (e.g. the last pick)",
+       "title": "Exclude",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "q",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maxLength": 200,
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Q"
+      }
+     },
+     {
+      "in": "query",
+      "name": "owner",
+      "required": false,
+      "schema": {
+       "default": "any",
+       "title": "Owner",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "genre",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Genre"
+      }
+     },
+     {
+      "in": "query",
+      "name": "decade",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maximum": 2100,
+         "minimum": 1800,
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Decade"
+      }
+     },
+     {
+      "in": "query",
+      "name": "label",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Label"
+      }
+     },
+     {
+      "in": "query",
+      "name": "country",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Country"
+      }
+     },
+     {
+      "in": "query",
+      "name": "format",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Format"
+      }
+     },
+     {
+      "in": "query",
+      "name": "year",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maximum": 2100,
+         "minimum": 1800,
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Year"
+      }
+     },
+     {
+      "in": "query",
+      "name": "discogs",
+      "required": false,
+      "schema": {
+       "default": false,
+       "title": "Discogs",
+       "type": "boolean"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/RecordOut"
+         },
+         "title": "Response Random Records Api Records Random Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Random Records",
+    "tags": [
+     "records"
+    ]
+   }
+  },
+  "/api/records/summary": {
+   "get": {
+    "description": "Spent, value and difference per currency over ALL matching records (not just one page).",
+    "operationId": "record_summary_api_records_summary_get",
+    "parameters": [
+     {
+      "in": "query",
+      "name": "q",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maxLength": 200,
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Q"
+      }
+     },
+     {
+      "in": "query",
+      "name": "owner",
+      "required": false,
+      "schema": {
+       "default": "any",
+       "title": "Owner",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "genre",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Genre"
+      }
+     },
+     {
+      "in": "query",
+      "name": "decade",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maximum": 2100,
+         "minimum": 1800,
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Decade"
+      }
+     },
+     {
+      "in": "query",
+      "name": "label",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Label"
+      }
+     },
+     {
+      "in": "query",
+      "name": "country",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Country"
+      }
+     },
+     {
+      "in": "query",
+      "name": "format",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Format"
+      }
+     },
+     {
+      "in": "query",
+      "name": "year",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maximum": 2100,
+         "minimum": 1800,
+         "type": "integer"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Year"
+      }
+     },
+     {
+      "in": "query",
+      "name": "discogs",
+      "required": false,
+      "schema": {
+       "default": false,
+       "title": "Discogs",
+       "type": "boolean"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RecordSummary"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Record Summary",
+    "tags": [
+     "records"
+    ]
+   }
+  },
+  "/api/records/{record_id}": {
+   "delete": {
+    "description": "Soft delete: the record stays recoverable for a short time (see /restore).",
+    "operationId": "delete_record_api_records__record_id__delete",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "record_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Record Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "204": {
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Delete Record",
+    "tags": [
+     "records"
+    ]
+   },
+   "get": {
+    "operationId": "read_record_api_records__record_id__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "record_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Record Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RecordOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Read Record",
+    "tags": [
+     "records"
+    ]
+   },
+   "patch": {
+    "operationId": "update_record_api_records__record_id__patch",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "record_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Record Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RecordUpdate"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RecordOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Update Record",
+    "tags": [
+     "records"
+    ]
+   }
+  },
+  "/api/records/{record_id}/back-cover": {
+   "get": {
+    "description": "The back of the sleeve, served like the front: members only, cached privately.",
+    "operationId": "read_back_cover_api_records__record_id__back_cover_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "record_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Record Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Read Back Cover",
+    "tags": [
+     "records"
+    ]
+   },
+   "post": {
+    "operationId": "upload_back_cover_api_records__record_id__back_cover_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "record_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Record Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_upload_back_cover_api_records__record_id__back_cover_post"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RecordOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Upload Back Cover",
+    "tags": [
+     "records"
+    ]
+   }
+  },
+  "/api/records/{record_id}/cover": {
+   "get": {
+    "description": "Only signed-in members can fetch a cover; browsers may cache it privately.",
+    "operationId": "read_cover_api_records__record_id__cover_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "record_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Record Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Read Cover",
+    "tags": [
+     "records"
+    ]
+   },
+   "post": {
+    "operationId": "upload_cover_api_records__record_id__cover_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "record_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Record Id",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_upload_cover_api_records__record_id__cover_post"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RecordOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Upload Cover",
+    "tags": [
+     "records"
+    ]
+   }
+  },
+  "/api/records/{record_id}/refresh-value": {
+   "post": {
+    "description": "Update the value from Discogs. A value set by hand is never replaced unless asked.",
+    "operationId": "refresh_value_api_records__record_id__refresh_value_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "record_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Record Id",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "currency",
+      "required": false,
+      "schema": {
+       "anyOf": [
+        {
+         "maxLength": 3,
+         "minLength": 3,
+         "type": "string"
+        },
+        {
+         "type": "null"
+        }
+       ],
+       "title": "Currency"
+      }
+     },
+     {
+      "in": "query",
+      "name": "replace_manual",
+      "required": false,
+      "schema": {
+       "default": false,
+       "title": "Replace Manual",
+       "type": "boolean"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RefreshOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Refresh Value",
+    "tags": [
+     "records"
+    ]
+   }
+  },
+  "/api/records/{record_id}/restore": {
+   "post": {
+    "operationId": "restore_record_api_records__record_id__restore_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "record_id",
+      "required": true,
+      "schema": {
+       "format": "uuid",
+       "title": "Record Id",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RecordOut"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Restore Record",
+    "tags": [
+     "records"
+    ]
+   }
+  }
+ }
+}

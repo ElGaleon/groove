@@ -1,0 +1,182 @@
+# Checks every push and pull request; on main, a green run publishes the images and deploys them
+# to the VPS. Secrets and setup: see .github/DEPLOY.md.
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  api:
+    name: API · ruff + pytest
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: groove
+          POSTGRES_PASSWORD: groove
+          POSTGRES_DB: groove
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U groove" --health-interval 3s --health-timeout 3s
+          --health-retries 20
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.13.8"
+          enable-cache: true
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check . || echo "::warning::ruff format would change files"
+      - run: uv run pytest -q
+
+  web:
+    name: Web · lint + test + build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            web/package-lock.json
+            web/tools/schema-gen/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+      - name: Generated API schemas are up to date
+        run: npm run schemas:check
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    # Reports known vulnerabilities; it does not block deploys (a fix may not exist yet).
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm audit --omit=dev --audit-level=high
+        working-directory: web
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.13.8"
+      - name: pip-audit
+        working-directory: api
+        run: |
+          uv export --frozen --no-dev --no-hashes --no-emit-project > /tmp/requirements.txt
+          uvx pip-audit --strict -r /tmp/requirements.txt
+
+  images:
+    name: Build images
+    needs: [api, web]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      PUSH: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Image names
+        id: names
+        run: |
+          owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          echo "api=ghcr.io/$owner/groove-api" >> "$GITHUB_OUTPUT"
+          echo "web=ghcr.io/$owner/groove-web" >> "$GITHUB_OUTPUT"
+      - uses: docker/login-action@v3
+        if: env.PUSH == 'true'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: API image
+        uses: docker/build-push-action@v6
+        with:
+          context: api
+          push: ${{ env.PUSH == 'true' }}
+          tags: |
+            ${{ steps.names.outputs.api }}:${{ github.sha }}
+            ${{ steps.names.outputs.api }}:latest
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,scope=api,mode=max
+      - name: Web image
+        uses: docker/build-push-action@v6
+        with:
+          context: web
+          push: ${{ env.PUSH == 'true' }}
+          tags: |
+            ${{ steps.names.outputs.web }}:${{ github.sha }}
+            ${{ steps.names.outputs.web }}:latest
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,scope=web,mode=max
+
+  deploy:
+    name: Deploy to VPS
+    needs: images
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # Add protection rules (required reviewer) to this environment in the repo settings if wanted.
+    environment: production
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      packages: read
+    env:
+      SSH_TARGET: ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}
+      SSH_PORT: ${{ secrets.VPS_PORT || '22' }}
+      DEPLOY_PATH: ${{ secrets.VPS_PATH }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: SSH key and pinned host key
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "${{ secrets.VPS_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          cat > ~/.ssh/config <<EOF
+          Host vps
+            HostName ${{ secrets.VPS_HOST }}
+            User ${{ secrets.VPS_USER }}
+            Port $SSH_PORT
+            IdentityFile ~/.ssh/id_deploy
+            IdentitiesOnly yes
+            StrictHostKeyChecking yes
+          EOF
+      - name: Copy compose file and scripts
+        run: |
+          ssh vps "mkdir -p '$DEPLOY_PATH/scripts'"
+          scp docker-compose.yml vps:"$DEPLOY_PATH/docker-compose.yml"
+          scp scripts/*.sh vps:"$DEPLOY_PATH/scripts/"
+      - name: Pull images, migrate and restart
+        run: |
+          owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          # The job token is valid only while this job runs; the VPS logs out right after pulling.
+          printf '%s' "${{ secrets.GITHUB_TOKEN }}" | ssh vps \
+            "cd '$DEPLOY_PATH' && sh scripts/deploy.sh '${{ github.sha }}' 'ghcr.io/$owner' '${{ github.actor }}'"
+      - name: Remove SSH key
+        if: always()
+        run: rm -f ~/.ssh/id_deploy

@@ -1,0 +1,10 @@
+// Public surface of the `records` feature: other features import from here only.
+export * from './components/Cover'
+export * from './components/Delta'
+export * from './components/OwnerBadge'
+export * from './components/OwnerSelect'
+export * from './components/RecordDialogProvider'
+export * from './components/RefreshDialog'
+export * from './pages/AddRecord'
+export * from './pages/RecordDetail'
+export * from './records'

@@ -1,0 +1,21 @@
+# Only the database, published on localhost:5432, for running the API and the tests outside Docker.
+# Start with: docker compose -f docker-compose.dev.yml up -d
+name: groove-dev
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: groove
+      POSTGRES_PASSWORD: groove
+      POSTGRES_DB: groove
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - devdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U groove"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+volumes:
+  devdata:

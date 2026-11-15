@@ -1,0 +1,40 @@
+# SITE_ADDRESS is ":80" by default (plain HTTP, local use). On a server set it to your domain,
+# e.g. vinili.example.com: Caddy then gets and renews the HTTPS certificate by itself.
+{$SITE_ADDRESS::80} {
+	root * /srv/www
+	encode zstd gzip
+
+	# Security headers for every answer (front end and API).
+	header {
+		# Browsers ignore HSTS on plain HTTP, so this is harmless on the local ":80" setup.
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), payment=(), usb=(), interest-cohort=()"
+		Cross-Origin-Opener-Policy "same-origin"
+		-Server
+	}
+
+	# API and covers share the origin with the front end, so there is no CORS.
+	handle /api/* {
+		# Largest legitimate body: a 10 MB backup file. Refused here before it reaches the API.
+		request_body {
+			max_size 11MB
+		}
+		reverse_proxy api:8000
+	}
+
+	# Hashed file names: safe to cache for a year.
+	handle /assets/* {
+		header Cache-Control "public, max-age=31536000, immutable"
+		file_server
+	}
+
+	handle {
+		# index.html must always be checked, or a deploy leaves members on the old bundle.
+		header Cache-Control "no-cache"
+		try_files {path} /index.html
+		file_server
+	}
+}
