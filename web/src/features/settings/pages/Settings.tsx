@@ -14,8 +14,14 @@ import { useLanguageSetting } from '@/features/auth'
 import { isLanguage, LANGUAGES, t } from '@/i18n'
 import { languageName } from '@/shared/components/LanguageSelect'
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
-  AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from '@/shared/ui/alert-dialog'
 import { Badge } from '@/shared/ui/badge'
 import { Button, buttonVariants } from '@/shared/ui/button'
@@ -31,9 +37,7 @@ export function Settings() {
   const { search } = useLocation()
   const clean = new URLSearchParams(search)
   clean.delete('discogs')
-  return (
-    <SettingsDialog onClose={() => navigate({ pathname: '/', search: clean.size ? `?${clean}` : '' })} />
-  )
+  return <SettingsDialog onClose={() => navigate({ pathname: '/', search: clean.size ? `?${clean}` : '' })} />
 }
 
 export function SettingsDialog({ onClose }: { onClose: () => void }) {
@@ -68,38 +72,59 @@ export function SettingsDialog({ onClose }: { onClose: () => void }) {
         onOpenChange={(o) => !o && onClose()}
         title={t.nav.settings}
         description={t.prefs.description}
-        footer={<Button className="h-12 sm:h-9" onClick={onClose}>{t.prefs.close}</Button>}
+        footer={
+          <Button className="h-12 sm:h-9" onClick={onClose}>
+            {t.prefs.close}
+          </Button>
+        }
       >
         <FieldGroup className="pb-2">
           <FieldSet>
             <FieldLegend>{t.discogs.title}</FieldLegend>
             <p className="text-sm text-muted-foreground">{t.discogs.intro}</p>
-            {result && t.discogs.result[result] && <Notice kind={result === 'connected' ? 'ok' : 'error'}>{t.discogs.result[result]}</Notice>}
+            {result && t.discogs.result[result] && (
+              <Notice kind={result === 'connected' ? 'ok' : 'error'}>{t.discogs.result[result]}</Notice>
+            )}
             {error && <Notice kind="error">{error}</Notice>}
             {status.isLoading && <Skeleton className="h-9 w-48" />}
             {s && !s.configured && <p className="text-sm text-muted-foreground">{t.discogs.notConfigured}</p>}
             {s && s.configured && !s.connected && (
               <div className="flex flex-wrap items-center gap-3">
                 <Badge variant="outline">{t.discogs.notConnected}</Badge>
-                <Button className="h-11 md:h-9" disabled={connect.isPending} onClick={() => connect.mutate()}>{t.discogs.connect}</Button>
+                <Button className="h-11 md:h-9" disabled={connect.isPending} onClick={() => connect.mutate()}>
+                  {t.discogs.connect}
+                </Button>
               </div>
             )}
             {s && s.connected && s.status === 'expired' && (
               <div className="grid gap-3">
                 <Notice kind="error">{t.discogs.expired}</Notice>
                 <div className="flex gap-2">
-                  <Button className="h-11 md:h-9" disabled={connect.isPending} onClick={() => connect.mutate()}>{t.discogs.reconnect}</Button>
-                  <Button variant="outline" className="h-11 md:h-9" onClick={() => setConfirming(true)}>{t.discogs.disconnect}</Button>
+                  <Button className="h-11 md:h-9" disabled={connect.isPending} onClick={() => connect.mutate()}>
+                    {t.discogs.reconnect}
+                  </Button>
+                  <Button variant="outline" className="h-11 md:h-9" onClick={() => setConfirming(true)}>
+                    {t.discogs.disconnect}
+                  </Button>
                 </div>
               </div>
             )}
             {s && s.connected && s.status === 'active' && (
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="grid gap-1">
-                  <span className="flex items-center gap-2 text-sm font-medium">{t.prefs.connected} <Badge variant="secondary">{s.username}</Badge></span>
-                  <Link className={cn(buttonVariants({ variant: 'link' }), 'h-auto justify-start p-0')} to={routes.import}>{t.discogs.importLink}</Link>
+                  <span className="flex items-center gap-2 text-sm font-medium">
+                    {t.prefs.connected} <Badge variant="secondary">{s.username}</Badge>
+                  </span>
+                  <Link
+                    className={cn(buttonVariants({ variant: 'link' }), 'h-auto justify-start p-0')}
+                    to={routes.import}
+                  >
+                    {t.discogs.importLink}
+                  </Link>
                 </div>
-                <Button variant="outline" className="h-11 md:h-9" onClick={() => setConfirming(true)}>{t.discogs.disconnect}</Button>
+                <Button variant="outline" className="h-11 md:h-9" onClick={() => setConfirming(true)}>
+                  {t.discogs.disconnect}
+                </Button>
               </div>
             )}
           </FieldSet>
@@ -112,11 +137,21 @@ export function SettingsDialog({ onClose }: { onClose: () => void }) {
               value={language}
               onValueChange={(l) => {
                 if (!isLanguage(l)) return
-                void setLanguage(l).then(() => toast.success(t.prefs.languageSaved)).catch((e) => setError(errorMessage(e, t.errors.generic)))
+                void setLanguage(l)
+                  .then(() => toast.success(t.prefs.languageSaved))
+                  .catch((e) => setError(errorMessage(e, t.errors.generic)))
               }}
             >
-              <SelectTrigger aria-label={t.prefs.languageLabel} className="h-11 w-full text-base md:h-9 md:text-sm"><SelectValue /></SelectTrigger>
-              <SelectContent>{LANGUAGES.map((l) => <SelectItem key={l} value={l}>{languageName(l)}</SelectItem>)}</SelectContent>
+              <SelectTrigger aria-label={t.prefs.languageLabel} className="h-11 w-full text-base md:h-9 md:text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {LANGUAGES.map((l) => (
+                  <SelectItem key={l} value={l}>
+                    {languageName(l)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
           </FieldSet>
 
@@ -127,11 +162,21 @@ export function SettingsDialog({ onClose }: { onClose: () => void }) {
               value={currency}
               onValueChange={(c) => {
                 if (!c) return
-                void setCurrency(c).then(() => toast.success(t.prefs.currencySaved)).catch((e) => setError(errorMessage(e, t.errors.generic)))
+                void setCurrency(c)
+                  .then(() => toast.success(t.prefs.currencySaved))
+                  .catch((e) => setError(errorMessage(e, t.errors.generic)))
               }}
             >
-              <SelectTrigger aria-label={t.prefs.currencyLabel} className="h-11 w-full text-base md:h-9 md:text-sm"><SelectValue /></SelectTrigger>
-              <SelectContent>{CURRENCIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+              <SelectTrigger aria-label={t.prefs.currencyLabel} className="h-11 w-full text-base md:h-9 md:text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {CURRENCIES.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
           </FieldSet>
 
@@ -147,7 +192,13 @@ export function SettingsDialog({ onClose }: { onClose: () => void }) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t.record.cancel}</AlertDialogCancel>
-            <AlertDialogAction variant="destructive" disabled={disconnect.isPending} onClick={() => disconnect.mutate()}>{t.discogs.disconnectConfirm}</AlertDialogAction>
+            <AlertDialogAction
+              variant="destructive"
+              disabled={disconnect.isPending}
+              onClick={() => disconnect.mutate()}
+            >
+              {t.discogs.disconnectConfirm}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

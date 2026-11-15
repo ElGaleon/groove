@@ -19,7 +19,10 @@ async function signInAsAnna(page: Page) {
   await page.goto('/?view=list')
 }
 
-async function fillRecord(page: Page, f: { title?: string; artist?: string; year?: string; label?: string; genres?: string }) {
+async function fillRecord(
+  page: Page,
+  f: { title?: string; artist?: string; year?: string; label?: string; genres?: string },
+) {
   const dialog = page.getByRole('dialog') // the page behind has filters with the same names
   if (f.title !== undefined) await dialog.getByLabel('Titolo', { exact: true }).fill(f.title)
   if (f.artist !== undefined) await dialog.getByLabel('Artista', { exact: true }).fill(f.artist)
@@ -37,7 +40,8 @@ async function openAdd(page: Page) {
 }
 
 /** How many records the collection holds (optionally matching a search), from the API. */
-const total = async (page: Page, q = '') => (await (await page.request.get(`/api/records?limit=1&q=${encodeURIComponent(q)}`)).json()).total as number
+const total = async (page: Page, q = '') =>
+  (await (await page.request.get(`/api/records?limit=1&q=${encodeURIComponent(q)}`)).json()).total as number
 
 const save = (page: Page) => page.getByRole('button', { name: 'Salva', exact: true })
 
@@ -47,7 +51,13 @@ test('add records by hand with and without an owner, with duplicate warning', as
 
   // --- without an owner: it is shared ---------------------------------------------------
   await page.getByRole('button', { name: 'Aggiungi', exact: true }).first().click()
-  await fillRecord(page, { title: 'Kind of Blue', artist: 'Miles Davis', year: '1959', label: 'Columbia', genres: 'Jazz, Modal' })
+  await fillRecord(page, {
+    title: 'Kind of Blue',
+    artist: 'Miles Davis',
+    year: '1959',
+    label: 'Columbia',
+    genres: 'Jazz, Modal',
+  })
   await expect(page.getByRole('combobox', { name: 'Proprietario' })).toContainText('Condiviso')
   await save(page).click()
   await expect(page.getByText('Disco aggiunto')).toBeVisible()
@@ -98,7 +108,10 @@ test('add records by hand with and without an owner, with duplicate warning', as
 test('a different pressing of the same album is not a duplicate', async ({ browser }) => {
   const page = await (await browser.newContext()).newPage()
   await signInAsAnna(page)
-  for (const [catalog, country] of [['PCS 7088', 'UK'], ['B0030', 'Europe']]) {
+  for (const [catalog, country] of [
+    ['PCS 7088', 'UK'],
+    ['B0030', 'Europe'],
+  ]) {
     await openAdd(page)
     await fillRecord(page, { title: 'Abbey Road', artist: 'The Beatles', year: '1969' })
     await page.getByRole('dialog').getByLabel('N. catalogo', { exact: true }).fill(catalog)
@@ -120,7 +133,7 @@ test('price, value and place of a purchase show up with the gain', async ({ brow
   await save(page).click()
   await expect(page.getByText('Disco aggiunto')).toBeVisible()
   await page.goto('/?view=list&q=Joni')
-  await expect(page.getByRole('listitem').filter({ hasText: 'Blue' })).toContainText('+15,00 € (+75%)')
+  await expect(page.getByRole('row').filter({ hasText: 'Blue' })).toContainText('+15,00 € (+75%)')
   await page.getByRole('button', { name: 'Blue' }).click()
   await expect(page.getByText('Pagato')).toBeVisible()
   await expect(page.getByText('manuale')).toBeVisible()
@@ -154,7 +167,11 @@ test('upload a cover, then remove a record and undo within ten seconds', async (
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4nGP4z8DwHwAFAAH/q842iQAAAABJRU5ErkJggg==',
     'base64',
   )
-  await page.getByRole('dialog').getByLabel('Copertina (JPEG, PNG o WebP, max 5 MB)').first().setInputFiles({ name: 'c.png', mimeType: 'image/png', buffer: png })
+  await page
+    .getByRole('dialog')
+    .getByLabel('Copertina (JPEG, PNG o WebP, max 5 MB)')
+    .first()
+    .setInputFiles({ name: 'c.png', mimeType: 'image/png', buffer: png })
   const img = page.getByRole('dialog').locator('img.cover').first()
   await expect(img).toBeVisible()
   await expect.poll(() => img.evaluate((el: HTMLImageElement) => el.naturalWidth)).toBeGreaterThan(0)

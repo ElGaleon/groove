@@ -7,15 +7,31 @@ import { useFilters } from '@/features/collection/filters'
 
 vi.mock('@/features/records', () => ({ useRecordDialog: () => ({ openAdd: () => {}, openEdit: () => {} }) }))
 
-
 function Where() {
   return <output data-testid="url">{useLocation().search}</output>
 }
 
 function renderAt(url: string) {
-  vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify({
-    genres: ['Jazz', 'Rock'], decades: [1960, 1970], labels: [], countries: [], formats: [], years: [], owners: [], shared_count: 0, total: 0,
-  }), { status: 200 })))
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            genres: ['Jazz', 'Rock'],
+            decades: [1960, 1970],
+            labels: [],
+            countries: [],
+            formats: [],
+            years: [],
+            owners: [],
+            shared_count: 0,
+            total: 0,
+          }),
+          { status: 200 },
+        ),
+    ),
+  )
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   return render(
     <QueryClientProvider client={client}>
@@ -75,7 +91,9 @@ describe('page and size follow what is shown', () => {
     const client = new QueryClient()
     return renderHook(() => ({ f: useFilters(), search: useLocation().search }), {
       wrapper: ({ children }) => (
-        <QueryClientProvider client={client}><MemoryRouter initialEntries={[url]}>{children}</MemoryRouter></QueryClientProvider>
+        <QueryClientProvider client={client}>
+          <MemoryRouter initialEntries={[url]}>{children}</MemoryRouter>
+        </QueryClientProvider>
       ),
     })
   }

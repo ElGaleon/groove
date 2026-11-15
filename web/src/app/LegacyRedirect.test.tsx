@@ -13,7 +13,9 @@ function renderAt(url: string) {
   render(
     <MemoryRouter initialEntries={[url]}>
       <Routes>
-        {legacyRedirects.map((r) => <Route key={r.from} path={r.from} element={<LegacyRedirect to={r.to} />} />)}
+        {legacyRedirects.map((r) => (
+          <Route key={r.from} path={r.from} element={<LegacyRedirect to={r.to} />} />
+        ))}
         <Route path="*" element={<Where />} />
       </Routes>
     </MemoryRouter>,

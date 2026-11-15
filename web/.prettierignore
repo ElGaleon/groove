@@ -1,0 +1,10 @@
+src/shared/schemas/generated/
+src/shared/schemas/openapi.json
+dist/
+node_modules/
+tools/
+test-results/
+playwright-report/
+screenshots/
+package-lock.json
+*.md

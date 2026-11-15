@@ -13,15 +13,23 @@ export function ShelfHoverCard({ record, anchor }: { record: VinylRecord; anchor
     const margin = 16
     const x = Math.max(margin, Math.min(anchor.x + 20, stage.clientWidth - card.offsetWidth - margin))
     const below = anchor.y + 20
-    const y = Math.max(margin, Math.min(
-      below + card.offsetHeight <= stage.clientHeight - margin ? below : anchor.y - card.offsetHeight - 20,
-      stage.clientHeight - card.offsetHeight - margin,
-    ))
+    const y = Math.max(
+      margin,
+      Math.min(
+        below + card.offsetHeight <= stage.clientHeight - margin ? below : anchor.y - card.offsetHeight - 20,
+        stage.clientHeight - card.offsetHeight - margin,
+      ),
+    )
     card.style.transform = `translate3d(${x}px, ${y}px, 0)`
   }, [anchor, record])
 
   return (
-    <div ref={cardRef} id="shelf-record-preview" role="tooltip" className="pointer-events-none absolute top-0 left-0 z-10 w-68 max-w-[calc(100%-2rem)] animate-in rounded-2xl border border-white/70 bg-white/90 p-4 text-neutral-900 shadow-lg ring-1 ring-black/5 backdrop-blur-xl duration-600 ease-out fade-in-0 supports-backdrop-filter:bg-white/65 motion-reduce:animate-none">
+    <div
+      ref={cardRef}
+      id="shelf-record-preview"
+      role="tooltip"
+      className="pointer-events-none absolute top-0 left-0 z-10 w-68 max-w-[calc(100%-2rem)] animate-in rounded-2xl border border-white/70 bg-white/90 p-4 text-neutral-900 shadow-lg ring-1 ring-black/5 backdrop-blur-xl duration-600 ease-out fade-in-0 supports-backdrop-filter:bg-white/65 motion-reduce:animate-none"
+    >
       {(record.format || record.year != null) && (
         <div className="mb-2 flex items-center justify-between gap-3 text-xs font-medium tracking-wide text-neutral-600">
           {record.format && <span>{mainFormat(record.format)}</span>}

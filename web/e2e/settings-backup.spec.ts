@@ -6,7 +6,10 @@ const H = { 'X-Requested-With': 'groove' }
 const FILE = path.join(process.cwd(), 'e2e', 'fixtures', 'prototype-backup.json')
 
 async function signInAsAnna(page: Page) {
-  const login = await page.request.post('/api/auth/login', { headers: H, data: { email: 'anna@example.com', password: PASSWORD } })
+  const login = await page.request.post('/api/auth/login', {
+    headers: H,
+    data: { email: 'anna@example.com', password: PASSWORD },
+  })
   if (!login.ok()) {
     const created = await page.request.post('/api/auth/register', {
       headers: H,
@@ -16,7 +19,9 @@ async function signInAsAnna(page: Page) {
   }
 }
 
-test('settings: default currency follows the member; backup export and import of a prototype file', async ({ browser }) => {
+test('settings: default currency follows the member; backup export and import of a prototype file', async ({
+  browser,
+}) => {
   const page = await (await browser.newContext({ acceptDownloads: true })).newPage()
   await signInAsAnna(page)
 
@@ -54,5 +59,7 @@ test('settings: default currency follows the member; backup export and import of
   await download.saveAs(saved)
   const data = JSON.parse(await (await import('node:fs/promises')).readFile(saved, 'utf8'))
   expect(data.version).toBe(1)
-  expect(data.vinyls.map((v: { title: string }) => v.title)).toEqual(expect.arrayContaining(['Kind of Blue', 'Homogénic']))
+  expect(data.vinyls.map((v: { title: string }) => v.title)).toEqual(
+    expect.arrayContaining(['Kind of Blue', 'Homogénic']),
+  )
 })

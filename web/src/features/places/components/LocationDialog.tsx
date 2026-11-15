@@ -17,7 +17,7 @@ type Errors = Partial<Record<'name' | 'address' | 'url', string>>
 const URL_RE = /^https?:\/\/[^\s./]+\.[^\s]+$/i
 
 /** Validation that mirrors the API, so mistakes show next to the field before saving. */
-export function validateLocation(i: LocationInput): Errors {
+function validateLocation(i: LocationInput): Errors {
   const e: Errors = {}
   if (!i.name.trim()) e.name = t.places.form.nameRequired
   if (i.kind !== 'online' && !i.address?.trim()) e.address = t.places.form.addressRequired
@@ -28,7 +28,12 @@ export function validateLocation(i: LocationInput): Errors {
   return e
 }
 
-export function LocationDialog({ open, onOpenChange, location, onSave }: {
+export function LocationDialog({
+  open,
+  onOpenChange,
+  location,
+  onSave,
+}: {
   open: boolean
   onOpenChange: (open: boolean) => void
   location?: Location
@@ -58,12 +63,18 @@ export function LocationDialog({ open, onOpenChange, location, onSave }: {
   const online = kind !== 'physical'
 
   async function find() {
-    if (!address.trim()) { setErrors((e) => ({ ...e, address: t.places.form.addressRequired })); return }
+    if (!address.trim()) {
+      setErrors((e) => ({ ...e, address: t.places.form.addressRequired }))
+      return
+    }
     setBusy(true)
     setGeoMsg('')
     try {
       const r = await geocode(address)
-      if (r) { setPt({ lat: r.lat, lng: r.lng }); setGeoMsg(t.places.form.found) } else setGeoMsg(t.places.form.notFound)
+      if (r) {
+        setPt({ lat: r.lat, lng: r.lng })
+        setGeoMsg(t.places.form.found)
+      } else setGeoMsg(t.places.form.notFound)
     } catch {
       setGeoMsg(t.places.form.geoDown)
     } finally {
@@ -73,7 +84,8 @@ export function LocationDialog({ open, onOpenChange, location, onSave }: {
 
   async function submit() {
     const input: LocationInput = {
-      name: name.trim(), kind,
+      name: name.trim(),
+      kind,
       address: physical ? address.trim() : null,
       url: online ? url.trim() : null,
       lat: physical ? pt.lat : null,
@@ -94,20 +106,53 @@ export function LocationDialog({ open, onOpenChange, location, onSave }: {
   }
 
   return (
-    <ResponsiveModal open={open} onOpenChange={onOpenChange} title={location ? t.places.form.editTitle : t.places.form.newTitle} description={t.places.form.desc}
-      footer={<><Button variant="outline" className="h-12 sm:h-9" onClick={() => onOpenChange(false)}>{t.record.cancel}</Button><Button className="h-12 sm:h-9" disabled={busy} onClick={submit}>{t.record.save}</Button></>}>
+    <ResponsiveModal
+      open={open}
+      onOpenChange={onOpenChange}
+      title={location ? t.places.form.editTitle : t.places.form.newTitle}
+      description={t.places.form.desc}
+      footer={
+        <>
+          <Button variant="outline" className="h-12 sm:h-9" onClick={() => onOpenChange(false)}>
+            {t.record.cancel}
+          </Button>
+          <Button className="h-12 sm:h-9" disabled={busy} onClick={submit}>
+            {t.record.save}
+          </Button>
+        </>
+      }
+    >
       <FieldGroup className="pb-2">
         <Field data-invalid={!!errors.name}>
           <FieldLabel htmlFor="loc-name">{t.places.form.name}</FieldLabel>
-          <Input id="loc-name" className="h-11 text-base md:h-9 md:text-sm" value={name} aria-invalid={!!errors.name} onChange={(e) => setName(e.target.value)} placeholder={t.places.form.namePlaceholder} />
+          <Input
+            id="loc-name"
+            className="h-11 text-base md:h-9 md:text-sm"
+            value={name}
+            aria-invalid={!!errors.name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={t.places.form.namePlaceholder}
+          />
           {errors.name && <FieldError>{errors.name}</FieldError>}
         </Field>
         <Field>
           <FieldLabel>{t.places.form.type}</FieldLabel>
-          <ToggleGroup variant="outline" value={[kind]} onValueChange={(v) => v[0] && setKind(v[0] as LocationKind)} aria-label={t.places.form.type} className="w-full">
-            <ToggleGroupItem value="physical" className="h-11 flex-1 md:h-9">{t.places.kind.physical}</ToggleGroupItem>
-            <ToggleGroupItem value="online" className="h-11 flex-1 md:h-9">{t.places.kind.online}</ToggleGroupItem>
-            <ToggleGroupItem value="both" className="h-11 flex-1 md:h-9">{t.places.kind.both}</ToggleGroupItem>
+          <ToggleGroup
+            variant="outline"
+            value={[kind]}
+            onValueChange={(v) => v[0] && setKind(v[0] as LocationKind)}
+            aria-label={t.places.form.type}
+            className="w-full"
+          >
+            <ToggleGroupItem value="physical" className="h-11 flex-1 md:h-9">
+              {t.places.kind.physical}
+            </ToggleGroupItem>
+            <ToggleGroupItem value="online" className="h-11 flex-1 md:h-9">
+              {t.places.kind.online}
+            </ToggleGroupItem>
+            <ToggleGroupItem value="both" className="h-11 flex-1 md:h-9">
+              {t.places.kind.both}
+            </ToggleGroupItem>
           </ToggleGroup>
         </Field>
         {physical && (
@@ -115,25 +160,53 @@ export function LocationDialog({ open, onOpenChange, location, onSave }: {
             <Field data-invalid={!!errors.address}>
               <FieldLabel htmlFor="loc-address">{t.places.form.address}</FieldLabel>
               <div className="flex gap-2">
-                <Input id="loc-address" className="h-11 flex-1 text-base md:h-9 md:text-sm" value={address} aria-invalid={!!errors.address} onChange={(e) => setAddress(e.target.value)} placeholder={t.places.form.addressPlaceholder} />
-                <Button type="button" variant="outline" className="h-11 md:h-9" disabled={busy} onClick={find}><LocateFixedIcon /> {t.places.form.find}</Button>
+                <Input
+                  id="loc-address"
+                  className="h-11 flex-1 text-base md:h-9 md:text-sm"
+                  value={address}
+                  aria-invalid={!!errors.address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder={t.places.form.addressPlaceholder}
+                />
+                <Button type="button" variant="outline" className="h-11 md:h-9" disabled={busy} onClick={find}>
+                  <LocateFixedIcon /> {t.places.form.find}
+                </Button>
               </div>
               {errors.address && <FieldError>{errors.address}</FieldError>}
               {geoMsg && <FieldDescription role="status">{geoMsg}</FieldDescription>}
             </Field>
             <Field>
-              <FieldLabel>{t.places.form.point} {pt.lat == null && <span className="font-normal text-muted-foreground">{t.places.form.optional}</span>}</FieldLabel>
+              <FieldLabel>
+                {t.places.form.point}{' '}
+                {pt.lat == null && <span className="font-normal text-muted-foreground">{t.places.form.optional}</span>}
+              </FieldLabel>
               <Suspense fallback={<Skeleton className="h-56 w-full rounded-lg" />}>
-                <PointPicker lat={pt.lat ?? undefined} lng={pt.lng ?? undefined} onChange={(lat, lng) => setPt({ lat, lng })} className="h-56 w-full rounded-lg border" />
+                <PointPicker
+                  lat={pt.lat ?? undefined}
+                  lng={pt.lng ?? undefined}
+                  onChange={(lat, lng) => setPt({ lat, lng })}
+                  className="h-56 w-full rounded-lg border"
+                />
               </Suspense>
-              <FieldDescription>{pt.lat != null && pt.lng != null ? t.places.form.coords(pt.lat, pt.lng) : t.places.form.noCoords}</FieldDescription>
+              <FieldDescription>
+                {pt.lat != null && pt.lng != null ? t.places.form.coords(pt.lat, pt.lng) : t.places.form.noCoords}
+              </FieldDescription>
             </Field>
           </>
         )}
         {online && (
           <Field data-invalid={!!errors.url}>
             <FieldLabel htmlFor="loc-url">{t.places.form.url}</FieldLabel>
-            <Input id="loc-url" type="url" inputMode="url" className="h-11 text-base md:h-9 md:text-sm" value={url} aria-invalid={!!errors.url} onChange={(e) => setUrl(e.target.value)} placeholder={t.places.form.urlPlaceholder} />
+            <Input
+              id="loc-url"
+              type="url"
+              inputMode="url"
+              className="h-11 text-base md:h-9 md:text-sm"
+              value={url}
+              aria-invalid={!!errors.url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder={t.places.form.urlPlaceholder}
+            />
             {errors.url && <FieldError>{errors.url}</FieldError>}
           </Field>
         )}

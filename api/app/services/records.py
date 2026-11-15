@@ -176,38 +176,6 @@ def effective_channel(location: Location, channel: str | None) -> str:
     return channel or "physical"
 
 
-def compute_summary(rows: list[tuple]) -> RecordSummary:
-    """rows: (purchase_amount, purchase_currency, value_amount, value_currency) per record.
-
-    Totals are per currency and only count records with both amounts in that same currency.
-    """
-    by_currency: dict[str, CurrencyTotals] = {}
-    without_data = 0
-    for p_amount, p_cur, v_amount, v_cur in rows:
-        if p_amount is None and v_amount is None:
-            without_data += 1
-            continue
-        key = p_cur if p_amount is not None else v_cur
-        if key is None:
-            without_data += 1
-            continue
-        totals = by_currency.setdefault(
-            key, CurrencyTotals(currency=key, spent=0, value=0, diff=0, included=0, excluded=0)
-        )
-        if p_amount is not None and v_amount is not None and p_cur == v_cur:
-            totals.included += 1
-            totals.spent += p_amount
-            totals.value += v_amount
-            totals.diff += v_amount - p_amount
-        else:
-            totals.excluded += 1
-    return RecordSummary(
-        total=len(rows),
-        totals=sorted(by_currency.values(), key=lambda t: t.currency),
-        without_data=without_data,
-    )
-
-
 @dataclass
 class RecordFilters:
     """Search and filters shared by the list and the random endpoints."""
@@ -381,7 +349,8 @@ def collection_summary(
 ) -> RecordSummary:
     """Spent, value and difference per currency over ALL matching records (not just one page).
 
-    One GROUP BY in the database; the rule is the same as `compute_summary` (tests compare them).
+    One GROUP BY in the database. Per currency, only records with a price and a value in that same
+    currency are totalled; tests compare it with a plain-Python version of the rule.
     """
     base = apply_filters(select(Record), household_id, filters).subquery()
     p_amount, p_cur = base.c.purchase_amount_minor, base.c.purchase_currency

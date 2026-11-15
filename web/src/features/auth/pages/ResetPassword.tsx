@@ -29,7 +29,12 @@ export function ResetPassword() {
   const [busy, setBusy] = useState(false)
 
   if (user) return <Navigate to="/" replace />
-  if (check.isLoading) return <AuthLayout><p className="text-muted-foreground">{t.resetPassword.checking}</p></AuthLayout>
+  if (check.isLoading)
+    return (
+      <AuthLayout>
+        <p className="text-muted-foreground">{t.resetPassword.checking}</p>
+      </AuthLayout>
+    )
 
   const status = check.data?.status ?? 'invalid'
   if (status !== 'valid') {
@@ -37,7 +42,11 @@ export function ResetPassword() {
     return (
       <AuthLayout>
         <Notice kind="error">{message ?? t.resetPassword.invalid}</Notice>
-        <p><Link className="font-medium text-foreground underline underline-offset-4" to={routes.signIn}>{t.resetPassword.toSignIn}</Link></p>
+        <p>
+          <Link className="font-medium text-foreground underline underline-offset-4" to={routes.signIn}>
+            {t.resetPassword.toSignIn}
+          </Link>
+        </p>
       </AuthLayout>
     )
   }
@@ -62,7 +71,14 @@ export function ResetPassword() {
   return (
     <AuthLayout title={t.resetPassword.title} subtitle={t.resetPassword.subtitle(check.data?.display_name ?? '')}>
       <form onSubmit={onSubmit} noValidate className="grid gap-4">
-        <PasswordField label={t.resetPassword.password} autoComplete="new-password" required error={errors.new_password} value={password} onChange={(e) => setPassword(e.target.value)} />
+        <PasswordField
+          label={t.resetPassword.password}
+          autoComplete="new-password"
+          required
+          error={errors.new_password}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         {error && <Notice kind="error">{error}</Notice>}
         <SubmitButton busy={busy}>{t.resetPassword.submit}</SubmitButton>
       </form>

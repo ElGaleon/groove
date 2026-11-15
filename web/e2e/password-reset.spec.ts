@@ -7,7 +7,10 @@ const H = { 'X-Requested-With': 'groove' }
 // Runs after invite-flow: Anna and Bob exist. Bob ends with the password he started with.
 test('a member generates a reset link for another who forgot the password', async ({ browser }) => {
   const anna = await (await browser.newContext()).newPage()
-  const login = await anna.request.post('/api/auth/login', { headers: H, data: { email: 'anna@example.com', password: PASSWORD } })
+  const login = await anna.request.post('/api/auth/login', {
+    headers: H,
+    data: { email: 'anna@example.com', password: PASSWORD },
+  })
   expect(login.ok()).toBeTruthy()
   await anna.goto('/family')
   const bobRow = anna.getByRole('listitem').filter({ hasText: 'bob@example.com' })
@@ -15,7 +18,12 @@ test('a member generates a reset link for another who forgot the password', asyn
   const link = await anna.getByLabel('Link per reimpostare la password').inputValue()
   expect(link).toMatch(/\/reset-password\/.+/)
   // nobody can reset themselves
-  await expect(anna.getByRole('listitem').filter({ hasText: 'anna@example.com' }).getByRole('button', { name: 'Reimposta la password' })).toHaveCount(0)
+  await expect(
+    anna
+      .getByRole('listitem')
+      .filter({ hasText: 'anna@example.com' })
+      .getByRole('button', { name: 'Reimposta la password' }),
+  ).toHaveCount(0)
 
   const bob = await (await browser.newContext()).newPage()
   await bob.goto(new URL(link).pathname)
@@ -32,7 +40,10 @@ test('a member generates a reset link for another who forgot the password', asyn
   await expect(again.getByLabel(/^Nuova password/)).toHaveCount(0)
 
   // leave the shared database as it was
-  const restore = await bob.request.post('/api/auth/password', { headers: H, data: { current_password: NEW, new_password: PASSWORD } })
+  const restore = await bob.request.post('/api/auth/password', {
+    headers: H,
+    data: { current_password: NEW, new_password: PASSWORD },
+  })
   expect(restore.ok()).toBeTruthy()
 })
 

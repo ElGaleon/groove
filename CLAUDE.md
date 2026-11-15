@@ -27,8 +27,8 @@ docker compose up --build                        # root: full stack on http://lo
 Checks before calling a change done — run the ones for the side you touched:
 
 ```bash
-cd api && uv run ruff check . && uv run pytest
-cd web && npm run lint && npm test && npm run build
+cd api && uv run ruff check . && uv run ruff format --check . && uv run pytest
+cd web && npm run format:check && npm run lint && npm test && npm run build
 cd web && npm run schemas:check                  # after any Pydantic model / endpoint change
 cd web && npm run e2e                            # browser flows (slow; when UI flows change)
 ```

@@ -2,11 +2,29 @@ import { act, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useDiscogsSearch } from './use-discogs-search'
 
-const result = (id: number) => ({ release_id: id, title: 'T' + id, artist: 'A', year: null, label: null, catalog_no: null, country: null, genres: [], format: null, cover_url: null, in_collection: null })
-const page = (ids: number[], p = 1, pages = 1) => new Response(JSON.stringify({ results: ids.map(result), page: p, pages }), { status: 200 })
+const result = (id: number) => ({
+  release_id: id,
+  title: 'T' + id,
+  artist: 'A',
+  year: null,
+  label: null,
+  catalog_no: null,
+  country: null,
+  genres: [],
+  format: null,
+  cover_url: null,
+  in_collection: null,
+})
+const page = (ids: number[], p = 1, pages = 1) =>
+  new Response(JSON.stringify({ results: ids.map(result), page: p, pages }), { status: 200 })
 
-beforeEach(() => { vi.useFakeTimers() })
-afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks() })
+beforeEach(() => {
+  vi.useFakeTimers()
+})
+afterEach(() => {
+  vi.useRealTimers()
+  vi.restoreAllMocks()
+})
 
 describe('useDiscogsSearch', () => {
   it('does not search under 3 characters', async () => {
@@ -33,13 +51,21 @@ describe('useDiscogsSearch', () => {
 
   it('a late answer of a superseded query does not replace the latest', async () => {
     const waiting: Record<string, (r: Response) => void> = {}
-    vi.spyOn(globalThis, 'fetch').mockImplementation((url) => new Promise((res) => { waiting[String(url).includes('nuova') ? 'nuova' : 'vecchia'] = res }))
+    vi.spyOn(globalThis, 'fetch').mockImplementation(
+      (url) =>
+        new Promise((res) => {
+          waiting[String(url).includes('nuova') ? 'nuova' : 'vecchia'] = res
+        }),
+    )
     const { result: r } = renderHook(() => useDiscogsSearch(10))
     act(() => r.current.setQ('vecchia'))
     await act(() => vi.advanceTimersByTimeAsync(20))
     act(() => r.current.setQ('nuova'))
     await act(() => vi.advanceTimersByTimeAsync(20))
-    await act(async () => { waiting['nuova'](page([2])); waiting['vecchia']?.(page([1])) })
+    await act(async () => {
+      waiting['nuova'](page([2]))
+      waiting['vecchia']?.(page([1]))
+    })
     expect(r.current.results.map((x) => x.release_id)).toEqual([2])
   })
 
@@ -59,7 +85,9 @@ describe('useDiscogsSearch', () => {
     await act(() => vi.advanceTimersByTimeAsync(30))
     expect(r.current.results).toHaveLength(2)
     expect(r.current.hasMore).toBe(true)
-    await act(async () => { await r.current.loadMore() })
+    await act(async () => {
+      await r.current.loadMore()
+    })
     expect(r.current.results.map((x) => x.release_id)).toEqual([10, 11, 20, 21])
     expect(r.current.hasMore).toBe(false)
   })

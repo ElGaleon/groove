@@ -11,12 +11,16 @@ describe('errorMessage', () => {
   })
 
   it('names the field of a validation error', () => {
-    expect(errorMessage(err(422, { code: 'required', field: 'title', detail: 'Field title is required' }), 'x')).toBe('Manca il titolo.')
+    expect(errorMessage(err(422, { code: 'required', field: 'title', detail: 'Field title is required' }), 'x')).toBe(
+      'Manca il titolo.',
+    )
     expect(errorMessage(err(422, { code: 'invalid', field: 'year', detail: '' }), 'x')).toContain('l’anno')
   })
 
   it('uses the values that travel with a code', () => {
-    expect(errorMessage(err(422, { code: 'password_too_short', field: 'password', min_length: 12, detail: '' }), 'x')).toContain('12')
+    expect(
+      errorMessage(err(422, { code: 'password_too_short', field: 'password', min_length: 12, detail: '' }), 'x'),
+    ).toContain('12')
     expect(errorMessage(err(409, { code: 'in_use', count: 1, detail: '' }), 'x')).toContain('1 disco')
     expect(errorMessage(err(409, { code: 'in_use', count: 3, detail: '' }), 'x')).toContain('3 dischi')
   })

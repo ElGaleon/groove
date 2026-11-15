@@ -5,42 +5,30 @@ import { MemoryRouter } from 'react-router-dom'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { useRecordPage, useRecordPages, useSummary, type Filters } from '@/features/collection/filters'
 import { invalidateCollection } from '@/shared/lib/queries'
+import { fakeApi, lists, offsets } from './test-fakes'
 
-vi.mock('@/features/collection/components/ShelfView', () => ({ ShelfView: ({ count }: { count?: number }) => <p>shelf {count}</p> }))
+vi.mock('@/features/collection/components/ShelfView', () => ({
+  ShelfView: ({ count }: { count?: number }) => <p>shelf {count}</p>,
+}))
 
-const NONE: Filters = { q: '', owner: 'any', genre: '', decade: '', label: '', country: '', format: '', year: '', sort: 'artist', order: 'asc' }
-
-export function fakeRecord(i: number) {
-  return {
-    id: `00000000-0000-4000-8000-${String(i).padStart(12, '0')}`, title: `Album ${i}`, artist: 'Artist', year: 1970, label: 'Label', genres: [],
-    format: 'LP', note: null, catalog_no: null, country: 'UK', purchase: null, value: null, owner_id: null, has_cover: false, cover_version: null,
-    has_back_cover: false, discogs_release_id: null, created_by: null, created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z',
-  }
+const NONE: Filters = {
+  q: '',
+  owner: 'any',
+  genre: '',
+  decade: '',
+  label: '',
+  country: '',
+  format: '',
+  year: '',
+  sort: 'artist',
+  order: 'asc',
 }
-
-/** A fake API holding `total` records; it answers lists, the summary and options, and logs every URL. */
-function fakeApi(total: number) {
-  const calls: string[] = []
-  vi.stubGlobal('fetch', vi.fn(async (input: RequestInfo | URL) => {
-    const url = new URL(String(input), 'http://x')
-    calls.push(url.pathname + url.search)
-    if (url.pathname === '/api/records/summary') return new Response(JSON.stringify({ total, totals: [], without_data: total }))
-    if (url.pathname === '/api/records/options') return new Response(JSON.stringify({ genres: [], decades: [], labels: [], countries: [], formats: [], years: [], owners: [], shared_count: total, total }))
-    if (url.pathname === '/api/household') return new Response(JSON.stringify({ id: 'h', name: 'F', members: [] }))
-    const offset = Number(url.searchParams.get('offset') ?? 0)
-    const limit = Number(url.searchParams.get('limit') ?? 10)
-    const items = Array.from({ length: Math.max(0, Math.min(limit, total - offset)) }, (_, k) => fakeRecord(offset + k))
-    return new Response(JSON.stringify({ items, total, offset, limit }))
-  }))
-  return calls
-}
-
-const lists = (calls: string[]) => calls.filter((c) => c.startsWith('/api/records?'))
-const offsets = (calls: string[]) => lists(calls).map((c) => new URLSearchParams(c.split('?')[1]).get('offset'))
 
 function wrapper(client: QueryClient) {
   return ({ children }: { children: ReactNode }) => (
-    <QueryClientProvider client={client}><MemoryRouter>{children}</MemoryRouter></QueryClientProvider>
+    <QueryClientProvider client={client}>
+      <MemoryRouter>{children}</MemoryRouter>
+    </QueryClientProvider>
   )
 }
 const newClient = () => new QueryClient({ defaultOptions: { queries: { retry: false } } })
@@ -71,18 +59,21 @@ describe('grid blocks', () => {
     expect(result.current.data?.pages).toHaveLength(8)
     const before = lists(calls).length
     await act(() => invalidateCollection(client))
+    await waitFor(() => expect(result.current.data?.pages).toHaveLength(1))
     expect(lists(calls).length - before).toBe(1)
-    expect(result.current.data?.pages).toHaveLength(1)
   })
 })
 
 describe('table pages', () => {
   it('changing page fetches that page and prefetches the next, but not the summary again', async () => {
     const calls = fakeApi(37)
-    const { result } = renderHook(() => {
-      const [page, setPage] = useState(1)
-      return { page: useRecordPage(NONE, page, 10), summary: useSummary(NONE), setPage }
-    }, { wrapper: wrapper(newClient()) })
+    const { result } = renderHook(
+      () => {
+        const [page, setPage] = useState(1)
+        return { page: useRecordPage(NONE, page, 10), summary: useSummary(NONE), setPage }
+      },
+      { wrapper: wrapper(newClient()) },
+    )
     await waitFor(() => expect(result.current.page.data?.total).toBe(37))
     await waitFor(() => expect(offsets(calls)).toContain('10')) // page 2 prefetched
     act(() => result.current.setPage(2))
@@ -94,10 +85,13 @@ describe('table pages', () => {
 
   it('keeps the previous page on screen while the next one loads', async () => {
     fakeApi(37)
-    const { result } = renderHook(() => {
-      const [page, setPage] = useState(1)
-      return { page: useRecordPage(NONE, page, 25), setPage }
-    }, { wrapper: wrapper(newClient()) })
+    const { result } = renderHook(
+      () => {
+        const [page, setPage] = useState(1)
+        return { page: useRecordPage(NONE, page, 25), setPage }
+      },
+      { wrapper: wrapper(newClient()) },
+    )
     await waitFor(() => expect(result.current.page.data?.offset).toBe(0))
     act(() => result.current.setPage(3)) // not prefetched
     expect(result.current.page.data?.offset).toBe(0)

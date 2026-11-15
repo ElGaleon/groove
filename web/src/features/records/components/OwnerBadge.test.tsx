@@ -6,15 +6,26 @@ import { OwnerBadge } from './OwnerBadge'
 
 const ANNA = '11111111-1111-4111-8111-111111111111'
 const BOB = '33333333-3333-4333-8333-333333333333'
-const household = { id: '22222222-2222-4222-8222-222222222222', name: 'F', members: [
-  { id: ANNA, display_name: 'Anna', email: 'a@x.it' },
-  { id: BOB, display_name: 'Bob', email: 'b@x.it' },
-] }
+const household = {
+  id: '22222222-2222-4222-8222-222222222222',
+  name: 'F',
+  members: [
+    { id: ANNA, display_name: 'Anna', email: 'a@x.it' },
+    { id: BOB, display_name: 'Bob', email: 'b@x.it' },
+  ],
+}
 
 function renderBadge(ownerId: string | null) {
-  vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(household))))
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async () => new Response(JSON.stringify(household))),
+  )
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-  return render(<QueryClientProvider client={client}><OwnerBadge ownerId={ownerId} /></QueryClientProvider>)
+  return render(
+    <QueryClientProvider client={client}>
+      <OwnerBadge ownerId={ownerId} />
+    </QueryClientProvider>,
+  )
 }
 
 afterEach(() => vi.unstubAllGlobals())

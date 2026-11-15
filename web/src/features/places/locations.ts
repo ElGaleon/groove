@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { api } from '@/shared/lib/api'
-import { LocationListSchema, PlacesSchema, type Location, type LocationKind } from '@/shared/schemas'
+import { LocationListSchema, PlacesSchema, type LocationKind } from '@/shared/schemas'
 
 export type { Location, LocationKind } from '@/shared/schemas'
 
@@ -24,6 +24,8 @@ export const usePlaces = (year: string) =>
     queryFn: () => api(`/api/purchases/places${year === 'all' ? '' : `?year=${year}`}`, { schema: PlacesSchema }),
   })
 
-export const KIND_LABEL: Record<LocationKind, string> = { physical: 'Fisico', online: 'Online', both: 'Fisico + online' }
-
-export const kindOf = (l: Location) => l.kind
+export const KIND_LABEL: Record<LocationKind, string> = {
+  physical: 'Fisico',
+  online: 'Online',
+  both: 'Fisico + online',
+}

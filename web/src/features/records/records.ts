@@ -4,7 +4,7 @@ import { delta, type Delta } from '@/shared/lib/money'
 
 export type { Purchase, RecordList, RecordValue, VinylRecord } from '@/shared/schemas'
 
-export interface PurchaseInput {
+interface PurchaseInput {
   amount_minor: number | null
   currency: string
   date: string | null

@@ -1,3 +1,4 @@
+/* oxlint-disable vitest/no-conditional-expect -- one test walks every entry of both catalogues */
 import { afterEach, describe, expect, it } from 'vitest'
 import { formatMoney } from '@/shared/lib/money'
 import { formatDate } from './format'
@@ -23,7 +24,9 @@ describe('language detection', () => {
     expect(detectLanguage(null)).toBe('en')
     expect(detectLanguage('it')).toBe('it') // the saved member language wins over the browser's
     localStorage.clear()
-    expect(detectLanguage(null)).toBe(['it', 'en'].includes(navigator.language.slice(0, 2)) ? navigator.language.slice(0, 2) : 'it')
+    expect(detectLanguage(null)).toBe(
+      ['it', 'en'].includes(navigator.language.slice(0, 2)) ? navigator.language.slice(0, 2) : 'it',
+    )
     expect(detectLanguage('fr')).not.toBe('fr') // unknown languages are ignored
   })
 })
@@ -51,7 +54,8 @@ describe('switching', () => {
 })
 
 describe('catalogs', () => {
-  const it_ = rawCatalog('it'), en = rawCatalog('en')
+  const it_ = rawCatalog('it'),
+    en = rawCatalog('en')
 
   it('English and Italian define exactly the same keys', () => {
     expect(keysOf(en).sort()).toEqual(keysOf(it_).sort())
@@ -80,7 +84,7 @@ describe('catalogs', () => {
 })
 
 describe('formatting follows the language', () => {
-  it('writes the same amount with each language\'s conventions', () => {
+  it("writes the same amount with each language's conventions", () => {
     expect(formatMoney(1234567, 'EUR')).toMatch(/12\.345,67\s€/)
     setLanguage('en', false)
     expect(formatMoney(1234567, 'EUR')).toBe('€12,345.67')

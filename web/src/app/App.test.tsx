@@ -50,11 +50,32 @@ describe('App', () => {
     mockApi({
       '/api/auth/me': {
         status: 200,
-        body: { id: '11111111-1111-4111-8111-111111111111', email: 'a@x.it', display_name: 'Anna', household: { id: '22222222-2222-4222-8222-222222222222', name: 'Famiglia Rossi' } },
+        body: {
+          id: '11111111-1111-4111-8111-111111111111',
+          email: 'a@x.it',
+          display_name: 'Anna',
+          household: { id: '22222222-2222-4222-8222-222222222222', name: 'Famiglia Rossi' },
+        },
       },
       '/api/auth/status': { status: 200, body: { needs_setup: false, min_password_length: 10 } },
-      '/api/records?sort=artist&order=asc&offset=0&limit=10': { status: 200, body: { items: [], total: 0, offset: 0, limit: 10 } },
-      '/api/records/options': { status: 200, body: { genres: [], decades: [], labels: [], countries: [], formats: [], years: [], owners: [], shared_count: 0, total: 0 } },
+      '/api/records?sort=artist&order=asc&offset=0&limit=10': {
+        status: 200,
+        body: { items: [], total: 0, offset: 0, limit: 10 },
+      },
+      '/api/records/options': {
+        status: 200,
+        body: {
+          genres: [],
+          decades: [],
+          labels: [],
+          countries: [],
+          formats: [],
+          years: [],
+          owners: [],
+          shared_count: 0,
+          total: 0,
+        },
+      },
       '/api/household': { status: 200, body: { id: '22222222-2222-4222-8222-222222222222', name: 'F', members: [] } },
     })
     renderAt('/?view=list')

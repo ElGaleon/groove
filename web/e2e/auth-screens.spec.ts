@@ -27,7 +27,10 @@ for (const size of SIZES) {
 
     test('the sign-in screen looks as designed', async ({ page }) => {
       await openSignIn(page, size)
-      await expect(page).toHaveScreenshot(`sign-in-${size.name}.png`, { animations: 'disabled', maxDiffPixelRatio: 0.02 })
+      await expect(page).toHaveScreenshot(`sign-in-${size.name}.png`, {
+        animations: 'disabled',
+        maxDiffPixelRatio: 0.02,
+      })
     })
   })
 }
@@ -75,7 +78,9 @@ test('the screens follow a dark system theme and download no shelf fonts', async
   const context = await browser.newContext({ colorScheme: 'dark', locale: 'it-IT' })
   const page = await context.newPage()
   const fontRequests: string[] = []
-  page.on('request', (r) => { if (/fonts\.(googleapis|gstatic)\.com/.test(r.url())) fontRequests.push(r.url()) })
+  page.on('request', (r) => {
+    if (/fonts\.(googleapis|gstatic)\.com/.test(r.url())) fontRequests.push(r.url())
+  })
   await openSignIn(page, SIZES[0])
   await expect(page.locator('div.dark').first()).toBeVisible()
   const bg = await page.evaluate(() => getComputedStyle(document.querySelector('div.dark')!).backgroundColor)

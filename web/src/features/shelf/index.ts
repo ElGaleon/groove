@@ -31,7 +31,11 @@ function ensureCoverFonts() {
 let fontsReady: Promise<void> | null = null
 const loadFonts = () => {
   ensureCoverFonts()
-  return (fontsReady ??= Promise.all(['500 40px Inter', '400 40px Anton', '400 40px Yellowtail', '400 20px "IBM Plex Mono"'].map((f) => document.fonts.load(f))).then(
+  return (fontsReady ??= Promise.all(
+    ['500 40px Inter', '400 40px Anton', '400 40px Yellowtail', '400 20px "IBM Plex Mono"'].map((f) =>
+      document.fonts.load(f),
+    ),
+  ).then(
     () => undefined,
     () => undefined,
   ))
@@ -116,24 +120,27 @@ export function mountShelf(host: HTMLElement, options: ShelfOptions = {}): Shelf
       current = records.slice(0, SHELF_SLOTS)
       if (current.length === 0) return
       const snapshot = current
-      void Promise.all([loadFonts(), Promise.all(snapshot.map(frontFor)), Promise.all(snapshot.map(backFor))]).then(([, fronts, backs]) => {
-        if (mine !== token) return
-        scene = createShelf(
-          host,
-          {
-            onSelect: (i) => {
-              selectedIndex = i
-              flipped = false
-              options.onSelect?.(i === null ? null : snapshot[i].id)
+      void Promise.all([loadFonts(), Promise.all(snapshot.map(frontFor)), Promise.all(snapshot.map(backFor))]).then(
+        ([, fronts, backs]) => {
+          if (mine !== token) return
+          scene = createShelf(
+            host,
+            {
+              onSelect: (i) => {
+                selectedIndex = i
+                flipped = false
+                options.onSelect?.(i === null ? null : snapshot[i].id)
+              },
+              onReady: (ready) => options.onReady?.(ready),
+              onCursor: (pointer) => options.onCursor?.(pointer),
+              onPills: (p) => options.onPills?.(p),
+              onHover: (hover) =>
+                options.onHover?.(hover ? { id: snapshot[hover.i].id, x: hover.x, y: hover.y } : null),
             },
-            onReady: (ready) => options.onReady?.(ready),
-            onCursor: (pointer) => options.onCursor?.(pointer),
-            onPills: (p) => options.onPills?.(p),
-            onHover: (hover) => options.onHover?.(hover ? { id: snapshot[hover.i].id, x: hover.x, y: hover.y } : null),
-          },
-          { count: snapshot.length, front: (i) => fronts[i], back: (i) => backs[i] },
-        )
-      })
+            { count: snapshot.length, front: (i) => fronts[i], back: (i) => backs[i] },
+          )
+        },
+      )
     },
     select(id) {
       if (!scene) return

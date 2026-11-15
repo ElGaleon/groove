@@ -228,7 +228,3 @@ class DiscogsClient:
         except DiscogsError:
             return None
         return response.content
-
-
-def client_for(settings: Settings, token: str | None = None, secret: str | None = None):
-    return DiscogsClient(settings, token, secret)

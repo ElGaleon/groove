@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { lazy, Suspense, type ReactNode } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { AuthProvider } from '@/features/auth'
 import { LanguageProvider } from './LanguageProvider'
@@ -6,24 +6,32 @@ import { Layout } from './Layout'
 import { LegacyRedirect } from './LegacyRedirect'
 import { legacyRedirects, patterns, routes } from '@/shared/lib/routes'
 import { RequireAuth } from './RequireAuth'
-import { AddRecord } from '@/features/records'
-import { Import } from '@/features/discogs'
-import { Settings } from '@/features/settings'
-import { Family } from '@/features/family'
 import { Home } from '@/features/collection'
 import { Join } from '@/features/auth'
-import { Purchases } from '@/features/places'
 import { RecordDetail } from '@/features/records'
 import { Register } from '@/features/auth'
 import { ResetPassword } from '@/features/auth'
 import { SignIn } from '@/features/auth'
+import { VinylSpinner } from '@/shared/components/VinylSpinner'
+
+// Pages a member opens now and then load on demand, so the collection appears sooner.
+const AddRecord = lazy(() => import('@/features/records').then((m) => ({ default: m.AddRecord })))
+const Settings = lazy(() => import('@/features/settings').then((m) => ({ default: m.Settings })))
+const Import = lazy(() => import('@/features/discogs').then((m) => ({ default: m.Import })))
+const Family = lazy(() => import('@/features/family').then((m) => ({ default: m.Family })))
+const Purchases = lazy(() => import('@/features/places').then((m) => ({ default: m.Purchases })))
+
+function PageLoading() {
+  return <div className="flex justify-center py-16"><VinylSpinner className="size-6" /></div>
+}
 
 /** Dialog routes keep the collection visible behind them. */
 function OnCollection({ children }: { children: ReactNode }) {
   return (
     <>
       <Home />
-      {children}
+      {/* The dialog may still be loading: the collection stays visible meanwhile. */}
+      <Suspense fallback={null}>{children}</Suspense>
     </>
   )
 }
@@ -32,6 +40,7 @@ export default function App() {
   return (
     <AuthProvider>
       <LanguageProvider>
+        <Suspense fallback={<PageLoading />}>
         <Routes>
           {legacyRedirects.map((r) => (
             <Route key={r.from} path={r.from} element={<LegacyRedirect to={r.to} />} />
@@ -52,6 +61,7 @@ export default function App() {
             </Route>
           </Route>
         </Routes>
+        </Suspense>
       </LanguageProvider>
     </AuthProvider>
   )

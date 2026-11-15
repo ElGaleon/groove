@@ -4,7 +4,10 @@ const PASSWORD = 'correct horse battery'
 const H = { 'X-Requested-With': 'groove' }
 
 async function signInAsAnna(page: Page) {
-  const login = await page.request.post('/api/auth/login', { headers: H, data: { email: 'anna@example.com', password: PASSWORD } })
+  const login = await page.request.post('/api/auth/login', {
+    headers: H,
+    data: { email: 'anna@example.com', password: PASSWORD },
+  })
   if (!login.ok()) {
     const created = await page.request.post('/api/auth/register', {
       headers: H,
@@ -20,7 +23,13 @@ async function seed(page: Page) {
   for (let i = 1; i <= 30; i++) {
     const r = await page.request.post('/api/records', {
       headers: H,
-      data: { title: `Shelfalbum ${String(i).padStart(2, '0')}`, artist: `Shelfartist ${i % 7}`, year: 1960 + i, genres: ['Rock'], allow_duplicate: true },
+      data: {
+        title: `Shelfalbum ${String(i).padStart(2, '0')}`,
+        artist: `Shelfartist ${i % 7}`,
+        year: 1960 + i,
+        genres: ['Rock'],
+        allow_duplicate: true,
+      },
     })
     expect(r.ok()).toBeTruthy()
   }
@@ -73,7 +82,12 @@ test.describe('3D shelf', () => {
     await open(page, 'q=Shelfalbum')
     await timeline(page).first().click()
     await page.getByRole('button', { name: 'Dettagli' }).click({ timeout: 15_000 })
-    await expect(page.getByRole('dialog').getByText(/Shelfalbum \d\d/).first()).toBeVisible()
+    await expect(
+      page
+        .getByRole('dialog')
+        .getByText(/Shelfalbum \d\d/)
+        .first(),
+    ).toBeVisible()
     await expect(page).toHaveURL(/\/records\//)
   })
 

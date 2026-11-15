@@ -4,7 +4,11 @@ import { Input } from '@/shared/ui/input'
 import { Label } from '@/shared/ui/label'
 
 /** A password field with a control that shows or hides what was typed. */
-export function PasswordField({ label, error, ...props }: { label: string; error?: string } & Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>) {
+export function PasswordField({
+  label,
+  error,
+  ...props
+}: { label: string; error?: string } & Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>) {
   const generated = useId()
   const id = props.id ?? generated
   const [shown, setShown] = useState(false)
@@ -12,7 +16,17 @@ export function PasswordField({ label, error, ...props }: { label: string; error
     <div className="grid gap-1.5">
       <Label htmlFor={id}>{label}</Label>
       <div className="relative">
-        <Input id={id} type={shown ? 'text' : 'password'} aria-invalid={error ? true : undefined} aria-describedby={error ? `${id}-error` : undefined} autoCapitalize="off" autoCorrect="off" spellCheck={false} className="pr-20" {...props} />
+        <Input
+          id={id}
+          type={shown ? 'text' : 'password'}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${id}-error` : undefined}
+          autoCapitalize="off"
+          autoCorrect="off"
+          spellCheck={false}
+          className="pr-20"
+          {...props}
+        />
         <button
           type="button"
           aria-pressed={shown}
@@ -23,7 +37,11 @@ export function PasswordField({ label, error, ...props }: { label: string; error
           {shown ? t.auth.hidePassword : t.auth.showPassword}
         </button>
       </div>
-      {error && <p id={`${id}-error`} className="text-sm text-destructive">{error}</p>}
+      {error && (
+        <p id={`${id}-error`} className="text-sm text-destructive">
+          {error}
+        </p>
+      )}
     </div>
   )
 }

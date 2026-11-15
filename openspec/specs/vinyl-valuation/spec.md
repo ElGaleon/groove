@@ -55,3 +55,14 @@ Il sistema SHALL mostrare il totale speso, il valore attuale totale e la differe
 #### Scenario: Totali con esclusi
 - **WHEN** 8 vinili su 10 hanno prezzo e valore nella stessa valuta
 - **THEN** i totali sono calcolati su 8 e il sistema indica "2 esclusi per dati mancanti"
+
+### Requirement: Totals ignore paging
+I totali della collezione SHALL essere calcolati su tutti i vinili che rispettano ricerca e filtri correnti, indipendentemente dalla pagina della tabella, dai blocchi caricati in griglia e dalla dimensione scelta.
+
+#### Scenario: Totali con 10 per pagina
+- **WHEN** 30 vinili in EUR rispettano i filtri e la tabella ne mostra 10
+- **THEN** il riepilogo somma prezzo e valore di tutti i 30 vinili
+
+#### Scenario: Cambio pagina
+- **WHEN** l'utente passa da pagina 1 a pagina 2 senza cambiare filtri
+- **THEN** i totali del riepilogo non cambiano e non vengono richiesti di nuovo

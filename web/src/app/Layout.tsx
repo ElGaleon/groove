@@ -15,7 +15,13 @@ export function Layout() {
         <SiteHeader />
         <main className="mx-auto max-w-7xl px-3 py-4 sm:px-5">
           {/* Keeps the header on screen while a page loaded on demand arrives. */}
-          <Suspense fallback={<div className="flex justify-center py-16"><VinylSpinner className="size-6" /></div>}>
+          <Suspense
+            fallback={
+              <div className="flex justify-center py-16">
+                <VinylSpinner className="size-6" />
+              </div>
+            }
+          >
             <Outlet />
           </Suspense>
         </main>

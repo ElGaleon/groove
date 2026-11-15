@@ -6,7 +6,13 @@ import { Badge } from '@/shared/ui/badge'
 
 /** A coloured dot with the member's name: the same colour for that member on every screen. */
 export function OwnerDot({ color, className }: { color: string; className?: string }) {
-  return <span aria-hidden="true" className={cn('inline-block size-2.5 shrink-0 rounded-full', className)} style={{ backgroundColor: color }} />
+  return (
+    <span
+      aria-hidden="true"
+      className={cn('inline-block size-2.5 shrink-0 rounded-full', className)}
+      style={{ backgroundColor: color }}
+    />
+  )
 }
 
 /**
@@ -14,7 +20,15 @@ export function OwnerDot({ color, className }: { color: string; className?: stri
  * "shared", a member's record has their coloured dot and name. Never colour alone.
  * `overlay` is the version laid on top of a cover.
  */
-export function OwnerBadge({ ownerId, overlay, className }: { ownerId: string | null; overlay?: boolean; className?: string }) {
+export function OwnerBadge({
+  ownerId,
+  overlay,
+  className,
+}: {
+  ownerId: string | null
+  overlay?: boolean
+  className?: string
+}) {
   const owner = useOwner(ownerId)
   if (!owner) return null
   const skin = overlay ? 'border-transparent bg-background/90 text-foreground shadow-sm backdrop-blur' : undefined

@@ -17,5 +17,4 @@ export const setupForm = (min: number) =>
 
 export const joinForm = (min: number) => setupForm(min).omit({ household_name: true })
 
-export const resetForm = (min: number) =>
-  z.object({ new_password: PasswordResetInSchema.shape.new_password.min(min) })
+export const resetForm = (min: number) => z.object({ new_password: PasswordResetInSchema.shape.new_password.min(min) })

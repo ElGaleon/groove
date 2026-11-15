@@ -4,7 +4,10 @@ const PASSWORD = 'correct horse battery'
 const H = { 'X-Requested-With': 'groove' }
 
 async function ensureAnna(page: Page) {
-  const login = await page.request.post('/api/auth/login', { headers: H, data: { email: 'anna@example.com', password: PASSWORD } })
+  const login = await page.request.post('/api/auth/login', {
+    headers: H,
+    data: { email: 'anna@example.com', password: PASSWORD },
+  })
   if (!login.ok()) {
     const created = await page.request.post('/api/auth/register', {
       headers: H,

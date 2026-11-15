@@ -4,7 +4,10 @@ import { api, ApiError, ResponseShapeError } from './api'
 import { listOf, RecordListSchema } from '@/shared/schemas'
 
 const answer = (status: number, body?: unknown) =>
-  vi.stubGlobal('fetch', vi.fn(async () => ({ status, ok: status < 400, json: async () => body })))
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async () => ({ status, ok: status < 400, json: async () => body })),
+  )
 
 const Thing = z.object({ id: z.string(), year: z.number().nullable() })
 
@@ -54,13 +57,22 @@ describe('api() with a schema', () => {
 describe('listOf', () => {
   it('drops a row with the wrong shape and keeps the others', () => {
     const log = vi.spyOn(console, 'error').mockImplementation(() => undefined)
-    const parsed = listOf(Thing).parse([{ id: 'a', year: 1 }, { id: 2, year: 1 }, { id: 'c', year: null }])
+    const parsed = listOf(Thing).parse([
+      { id: 'a', year: 1 },
+      { id: 2, year: 1 },
+      { id: 'c', year: null },
+    ])
     expect(parsed.map((r) => r.id)).toEqual(['a', 'c'])
     expect(log).toHaveBeenCalledTimes(1)
   })
 
   it('is what the record list uses', () => {
     vi.spyOn(console, 'error').mockImplementation(() => undefined)
-    expect(RecordListSchema.parse({ items: [{ nope: true }], total: 5, offset: 0, limit: 10 })).toEqual({ items: [], total: 5, offset: 0, limit: 10 })
+    expect(RecordListSchema.parse({ items: [{ nope: true }], total: 5, offset: 0, limit: 10 })).toEqual({
+      items: [],
+      total: 5,
+      offset: 0,
+      limit: 10,
+    })
   })
 })

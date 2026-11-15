@@ -26,9 +26,46 @@ export function CollectionSummary() {
       <Card size="sm">
         <CardContent className="grid grid-cols-2 gap-x-4 gap-y-4 px-3 sm:grid-cols-4">
           <Stat label={t.money.records} value={formatNumber(s.total)} />
-          <Stat label={t.money.spent} value={totals.length ? totals.map((c) => <span key={c.currency} className="block">{formatMoney(c.spent, c.currency)}</span>) : t.money.unavailable} />
-          <Stat label={t.money.amount} value={totals.length ? totals.map((c) => <span key={c.currency} className="block">{formatMoney(c.value, c.currency)}</span>) : t.money.unavailable} />
-          <Stat label={t.money.difference} value={totals.length ? totals.map((c) => <span key={c.currency} className="block">{formatDelta({ abs: c.diff, pct: c.spent ? (c.diff / c.spent) * 100 : null, currency: c.currency })}</span>) : t.money.unavailable} />
+          <Stat
+            label={t.money.spent}
+            value={
+              totals.length
+                ? totals.map((c) => (
+                    <span key={c.currency} className="block">
+                      {formatMoney(c.spent, c.currency)}
+                    </span>
+                  ))
+                : t.money.unavailable
+            }
+          />
+          <Stat
+            label={t.money.amount}
+            value={
+              totals.length
+                ? totals.map((c) => (
+                    <span key={c.currency} className="block">
+                      {formatMoney(c.value, c.currency)}
+                    </span>
+                  ))
+                : t.money.unavailable
+            }
+          />
+          <Stat
+            label={t.money.difference}
+            value={
+              totals.length
+                ? totals.map((c) => (
+                    <span key={c.currency} className="block">
+                      {formatDelta({
+                        abs: c.diff,
+                        pct: c.spent ? (c.diff / c.spent) * 100 : null,
+                        currency: c.currency,
+                      })}
+                    </span>
+                  ))
+                : t.money.unavailable
+            }
+          />
         </CardContent>
       </Card>
     </section>

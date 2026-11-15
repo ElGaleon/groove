@@ -4,7 +4,10 @@ const PASSWORD = 'correct horse battery'
 const H = { 'X-Requested-With': 'groove' }
 
 async function signInAsAnna(page: Page) {
-  const login = await page.request.post('/api/auth/login', { headers: H, data: { email: 'anna@example.com', password: PASSWORD } })
+  const login = await page.request.post('/api/auth/login', {
+    headers: H,
+    data: { email: 'anna@example.com', password: PASSWORD },
+  })
   if (!login.ok()) {
     const created = await page.request.post('/api/auth/register', {
       headers: H,
@@ -15,7 +18,9 @@ async function signInAsAnna(page: Page) {
 }
 
 // Places and purchases are created through the API; the map itself is what is under test.
-test('purchase map: markers, place detail by mouse and keyboard, online list, reassign before delete', async ({ browser }) => {
+test('purchase map: markers, place detail by mouse and keyboard, online list, reassign before delete', async ({
+  browser,
+}) => {
   const page = await (await browser.newContext({ viewport: { width: 1280, height: 900 } })).newPage()
   await signInAsAnna(page)
   const post = async (url: string, data: unknown) => {
@@ -23,12 +28,34 @@ test('purchase map: markers, place detail by mouse and keyboard, online list, re
     expect(r.ok(), await r.text()).toBeTruthy()
     return r.json()
   }
-  const shop = await post('/api/locations', { name: 'Disco Club Mappa', kind: 'physical', address: 'Via Savona 1, Milano', lat: 45.4527, lng: 9.1676 })
-  const other = await post('/api/locations', { name: 'Rhythm Mappa', kind: 'physical', address: 'Via del Pigneto 12, Roma', lat: 41.8873, lng: 12.5295 })
+  const shop = await post('/api/locations', {
+    name: 'Disco Club Mappa',
+    kind: 'physical',
+    address: 'Via Savona 1, Milano',
+    lat: 45.4527,
+    lng: 9.1676,
+  })
+  const other = await post('/api/locations', {
+    name: 'Rhythm Mappa',
+    kind: 'physical',
+    address: 'Via del Pigneto 12, Roma',
+    lat: 41.8873,
+    lng: 12.5295,
+  })
   await post('/api/locations', { name: 'Bandcamp Mappa', kind: 'online', url: 'https://bandcamp.com' })
   const web = (await (await page.request.get('/api/locations?q=Bandcamp Mappa')).json())[0]
-  for (const [title, loc, amount] of [['Mappa A', shop.id, 1000], ['Mappa B', shop.id, 2000], ['Mappa C', other.id, 500], ['Mappa D', web.id, 700]] as const) {
-    await post('/api/records', { title, artist: 'Artista Mappa', allow_duplicate: true, purchase: { amount_minor: amount, currency: 'EUR', date: '2025-05-01', location_id: loc } })
+  for (const [title, loc, amount] of [
+    ['Mappa A', shop.id, 1000],
+    ['Mappa B', shop.id, 2000],
+    ['Mappa C', other.id, 500],
+    ['Mappa D', web.id, 700],
+  ] as const) {
+    await post('/api/records', {
+      title,
+      artist: 'Artista Mappa',
+      allow_duplicate: true,
+      purchase: { amount_minor: amount, currency: 'EUR', date: '2025-05-01', location_id: loc },
+    })
   }
 
   await page.goto('/map')
@@ -36,7 +63,10 @@ test('purchase map: markers, place detail by mouse and keyboard, online list, re
   // other specs share this database, so look only at the places created here
   const markers = page.locator('.leaflet-marker-icon[title*="Mappa:"]')
   await expect(markers).toHaveCount(2, { timeout: 20_000 })
-  await expect(markers.first()).toHaveAttribute('title', /Disco Club Mappa: 2 (dischi|vinili)|Rhythm Mappa: 1 (disco|vinile)/)
+  await expect(markers.first()).toHaveAttribute(
+    'title',
+    /Disco Club Mappa: 2 (dischi|vinili)|Rhythm Mappa: 1 (disco|vinile)/,
+  )
 
   // the list holds the same places and totals (it is the non-visual equivalent of the map)
   await expect(page.getByRole('button', { name: /Disco Club Mappa/ })).toContainText('2 vinili')
@@ -82,7 +112,9 @@ test('purchase map: markers, place detail by mouse and keyboard, online list, re
 })
 
 test('the phone map does not take over scrolling until asked, and the filters fit', async ({ browser }) => {
-  const page = await (await browser.newContext({ viewport: { width: 375, height: 800 }, hasTouch: true, isMobile: true })).newPage()
+  const page = await (
+    await browser.newContext({ viewport: { width: 375, height: 800 }, hasTouch: true, isMobile: true })
+  ).newPage()
   await signInAsAnna(page)
   await page.goto('/map')
   await expect(page.getByRole('switch', { name: 'Sposta la mappa' })).toBeVisible()

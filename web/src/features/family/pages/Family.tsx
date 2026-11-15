@@ -4,7 +4,13 @@ import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { api, errorMessage } from '@/shared/lib/api'
 import { checkForm, type FormErrors } from '@/shared/lib/form'
-import { HouseholdSchema, InviteCreatedSchema, InviteListSchema, PasswordResetCreatedSchema, type Member } from '@/shared/schemas'
+import {
+  HouseholdSchema,
+  InviteCreatedSchema,
+  InviteListSchema,
+  PasswordResetCreatedSchema,
+  type Member,
+} from '@/shared/schemas'
 import { changePasswordForm } from '@/features/family/schemas'
 import { useAuth } from '@/features/auth'
 import { PasswordField } from '@/shared/components/PasswordField'
@@ -13,8 +19,14 @@ import { Page, Section } from '@/shared/components/Page'
 import { t } from '@/i18n'
 import { formatDate } from '@/i18n/format'
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
-  AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
 } from '@/shared/ui/alert-dialog'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
@@ -24,7 +36,10 @@ import { routes } from '@/shared/lib/routes'
 export function Family() {
   const { user } = useAuth()
   const queryClient = useQueryClient()
-  const household = useQuery({ queryKey: ['household'], queryFn: () => api('/api/household', { schema: HouseholdSchema }) })
+  const household = useQuery({
+    queryKey: ['household'],
+    queryFn: () => api('/api/household', { schema: HouseholdSchema }),
+  })
   const invites = useQuery({ queryKey: ['invites'], queryFn: () => api('/api/invites', { schema: InviteListSchema }) })
   const [newLink, setNewLink] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
@@ -41,7 +56,10 @@ export function Family() {
   })
   const createReset = useMutation({
     mutationFn: (member: Member) =>
-      api(`/api/household/members/${member.id}/password-reset`, { method: 'POST', schema: PasswordResetCreatedSchema }).then((r) => ({ member, token: r.token })),
+      api(`/api/household/members/${member.id}/password-reset`, {
+        method: 'POST',
+        schema: PasswordResetCreatedSchema,
+      }).then((r) => ({ member, token: r.token })),
     onSuccess: ({ member, token }) => {
       setResetCopied(false)
       setResetLink({ name: member.display_name, url: `${window.location.origin}${routes.resetPassword(token)}` })
@@ -57,7 +75,9 @@ export function Family() {
 
   return (
     <Page className="max-w-2xl">
-      <h1 className="text-2xl font-semibold tracking-tight">{t.family.title}: {household.data?.name}</h1>
+      <h1 className="text-2xl font-semibold tracking-tight">
+        {t.family.title}: {household.data?.name}
+      </h1>
 
       <Section title={t.family.members}>
         <ul className="grid gap-2">
@@ -67,7 +87,15 @@ export function Family() {
               <span className="text-muted-foreground">{m.email}</span>
               {m.id === user?.id && <Badge variant="secondary">{t.family.you}</Badge>}
               {m.id !== user?.id && (
-                <Button type="button" variant="link" size="sm" className="ml-auto" onClick={() => createReset.mutate(m)}>{t.family.resetPassword}</Button>
+                <Button
+                  type="button"
+                  variant="link"
+                  size="sm"
+                  className="ml-auto"
+                  onClick={() => createReset.mutate(m)}
+                >
+                  {t.family.resetPassword}
+                </Button>
               )}
             </li>
           ))}
@@ -77,7 +105,12 @@ export function Family() {
           <div className="grid gap-2 rounded-lg border bg-muted/40 p-3">
             <p className="text-sm">{t.family.resetCreated(resetLink.name)}</p>
             <div className="flex gap-2">
-              <Input readOnly value={resetLink.url} aria-label={t.family.resetLinkLabel} onFocus={(e) => e.currentTarget.select()} />
+              <Input
+                readOnly
+                value={resetLink.url}
+                aria-label={t.family.resetLinkLabel}
+                onFocus={(e) => e.currentTarget.select()}
+              />
               <Button
                 type="button"
                 variant="secondary"
@@ -94,12 +127,21 @@ export function Family() {
       </Section>
 
       <Section title={t.family.invites}>
-        <div><Button type="button" onClick={() => createInvite.mutate()}>{t.family.createInvite}</Button></div>
+        <div>
+          <Button type="button" onClick={() => createInvite.mutate()}>
+            {t.family.createInvite}
+          </Button>
+        </div>
         {newLink && (
           <div className="grid gap-2 rounded-lg border bg-muted/40 p-3">
             <p className="text-sm">{t.family.inviteCreated}</p>
             <div className="flex gap-2">
-              <Input readOnly value={newLink} aria-label={t.family.inviteLinkLabel} onFocus={(e) => e.currentTarget.select()} />
+              <Input
+                readOnly
+                value={newLink}
+                aria-label={t.family.inviteLinkLabel}
+                onFocus={(e) => e.currentTarget.select()}
+              />
               <Button
                 type="button"
                 variant="secondary"
@@ -120,9 +162,13 @@ export function Family() {
             {invites.data?.map((i) => (
               <li key={i.id} className="flex items-center gap-3 text-sm">
                 <span>{formatDate(i.created_at, { dateStyle: 'medium' })}</span>
-                <Badge variant={i.status === 'valid' ? 'default' : 'outline'}>{t.family.status[i.status] ?? i.status}</Badge>
+                <Badge variant={i.status === 'valid' ? 'default' : 'outline'}>
+                  {t.family.status[i.status] ?? i.status}
+                </Badge>
                 {i.status === 'valid' && (
-                  <Button type="button" variant="link" size="sm" onClick={() => revoke.mutate(i.id)}>{t.family.revoke}</Button>
+                  <Button type="button" variant="link" size="sm" onClick={() => revoke.mutate(i.id)}>
+                    {t.family.revoke}
+                  </Button>
                 )}
               </li>
             ))}
@@ -162,10 +208,26 @@ function ChangePassword() {
   return (
     <Section title={t.family.password}>
       <form onSubmit={onSubmit} noValidate className="grid max-w-sm gap-4">
-        <PasswordField label={t.family.currentPassword} autoComplete="current-password" required error={errors.current_password} value={current} onChange={(e) => setCurrent(e.target.value)} />
-        <PasswordField label={t.family.newPassword} autoComplete="new-password" required error={errors.new_password} value={next} onChange={(e) => setNext(e.target.value)} />
+        <PasswordField
+          label={t.family.currentPassword}
+          autoComplete="current-password"
+          required
+          error={errors.current_password}
+          value={current}
+          onChange={(e) => setCurrent(e.target.value)}
+        />
+        <PasswordField
+          label={t.family.newPassword}
+          autoComplete="new-password"
+          required
+          error={errors.new_password}
+          value={next}
+          onChange={(e) => setNext(e.target.value)}
+        />
         {message && <Notice kind={message.ok ? 'ok' : 'error'}>{message.text}</Notice>}
-        <div><Button type="submit">{t.family.changePassword}</Button></div>
+        <div>
+          <Button type="submit">{t.family.changePassword}</Button>
+        </div>
       </form>
     </Section>
   )
@@ -180,7 +242,11 @@ function Leave({ lastMember }: { lastMember: boolean }) {
 
   async function leave() {
     try {
-      await api('/api/household/leave', { method: 'POST', body: { confirm_delete_collection: lastMember }, schema: z.void() })
+      await api('/api/household/leave', {
+        method: 'POST',
+        body: { confirm_delete_collection: lastMember },
+        schema: z.void(),
+      })
       queryClient.clear()
       await refresh()
       navigate(routes.signIn)
@@ -191,7 +257,11 @@ function Leave({ lastMember }: { lastMember: boolean }) {
 
   return (
     <Section>
-      <div><Button type="button" variant="destructive" onClick={() => setAsking(true)}>{t.family.leave}</Button></div>
+      <div>
+        <Button type="button" variant="destructive" onClick={() => setAsking(true)}>
+          {t.family.leave}
+        </Button>
+      </div>
       <AlertDialog open={asking} onOpenChange={setAsking}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -201,7 +271,9 @@ function Leave({ lastMember }: { lastMember: boolean }) {
           {error && <Notice kind="error">{error}</Notice>}
           <AlertDialogFooter>
             <AlertDialogCancel>{t.family.cancel}</AlertDialogCancel>
-            <AlertDialogAction variant="destructive" onClick={leave}>{t.family.leaveConfirm}</AlertDialogAction>
+            <AlertDialogAction variant="destructive" onClick={leave}>
+              {t.family.leaveConfirm}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

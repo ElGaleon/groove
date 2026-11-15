@@ -37,7 +37,10 @@ interface ApiOptions {
  * a wrong shape throws `ResponseShapeError` (and is logged without its values). A call that
  * answers with nothing (204) uses `z.void()`.
  */
-export async function api<S extends z.ZodType>(path: string, options: ApiOptions & { schema: S }): Promise<z.output<S>> {
+export async function api<S extends z.ZodType>(
+  path: string,
+  options: ApiOptions & { schema: S },
+): Promise<z.output<S>> {
   const method = options.method ?? 'GET'
   const headers: Record<string, string> = {}
   if (method !== 'GET') headers['X-Requested-With'] = 'groove'
@@ -49,8 +52,7 @@ export async function api<S extends z.ZodType>(path: string, options: ApiOptions
     headers,
     credentials: 'same-origin',
     signal: options.signal,
-    body:
-      options.body === undefined ? undefined : isForm ? (options.body as FormData) : JSON.stringify(options.body),
+    body: options.body === undefined ? undefined : isForm ? (options.body as FormData) : JSON.stringify(options.body),
   })
   const data = response.status === 204 ? undefined : await response.json().catch(() => null)
   if (!response.ok) {
@@ -60,7 +62,9 @@ export async function api<S extends z.ZodType>(path: string, options: ApiOptions
   const parsed = options.schema.safeParse(data)
   if (!parsed.success) {
     const issue = parsed.error.issues[0]
-    console.error(`[api] unexpected response from ${method} ${path}: ${issue?.path.join('.') || '(root)'} ${issue?.code ?? ''}`)
+    console.error(
+      `[api] unexpected response from ${method} ${path}: ${issue?.path.join('.') || '(root)'} ${issue?.code ?? ''}`,
+    )
     throw new ResponseShapeError(response.status, path)
   }
   return parsed.data

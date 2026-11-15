@@ -6,14 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint",
+    "lint": "oxlint --deny-warnings",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "schemas": "node scripts/gen-schemas.mjs",
     "schemas:check": "node scripts/gen-schemas.mjs --check",
     "e2e": "playwright test",
-    "e2e:release": "E2E_RELEASE=1 playwright test"
+    "e2e:release": "E2E_RELEASE=1 playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -63,6 +65,7 @@
     "@vitejs/plugin-react": "^6.1.2",
     "jsdom": "^29.1.1",
     "oxlint": "^1.90.0",
+    "prettier": "3.10.1",
     "typescript": "~7.0.2",
     "vite": "^8.3.6",
     "vitest": "^4.1.12"

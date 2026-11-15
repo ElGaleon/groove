@@ -14,6 +14,7 @@ import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } fro
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table'
 import { routes } from '@/shared/lib/routes'
 import { cn } from '@/shared/lib/utils'
+import { useIsMobile } from '@/shared/hooks/use-mobile'
 
 /** The records for the current filters: a grid that loads as you scroll, or a paginated table. */
 export function RecordViews({ forceView }: { forceView?: 'list' | 'grid' } = {}) {
@@ -25,7 +26,9 @@ export function RecordViews({ forceView }: { forceView?: 'list' | 'grid' } = {})
 function Loading() {
   return (
     <>
-      <p className="mb-3 text-sm text-muted-foreground" role="status">{t.loading}</p>
+      <p className="mb-3 text-sm text-muted-foreground" role="status">
+        {t.loading}
+      </p>
       <Skeleton className="h-40 w-full" />
     </>
   )
@@ -36,7 +39,11 @@ function Empty() {
   return (
     <div className="rounded-xl border border-dashed p-10 text-center text-base text-muted-foreground">
       {active ? t.views.noMatches : t.home.empty}
-      {active && <button type="button" className="mt-2 block w-full font-medium text-foreground underline" onClick={reset}>{t.views.reset}</button>}
+      {active && (
+        <button type="button" className="mt-2 block w-full font-medium text-foreground underline" onClick={reset}>
+          {t.views.reset}
+        </button>
+      )}
     </div>
   )
 }
@@ -63,7 +70,7 @@ function GridBrowser() {
     <>
       <GridView items={items} listRef={gridRef} />
       <LoadMore
-        hasMore={!!pages.hasNextPage}
+        hasMore={pages.hasNextPage}
         loading={pages.isFetchingNextPage}
         onMore={(fromKeyboard) => {
           if (fromKeyboard) setFocusFrom(items.length)
@@ -74,13 +81,24 @@ function GridBrowser() {
   )
 }
 
-function LoadMore({ hasMore, loading, onMore }: { hasMore: boolean; loading: boolean; onMore: (fromKeyboard: boolean) => void }) {
+function LoadMore({
+  hasMore,
+  loading,
+  onMore,
+}: {
+  hasMore: boolean
+  loading: boolean
+  onMore: (fromKeyboard: boolean) => void
+}) {
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (!hasMore || loading || !ref.current || typeof IntersectionObserver === 'undefined') return
-    const observer = new IntersectionObserver((entries) => {
-      if (entries.some((e) => e.isIntersecting)) onMore(false)
-    }, { rootMargin: '400px' })
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) onMore(false)
+      },
+      { rootMargin: '400px' },
+    )
     observer.observe(ref.current)
     return () => observer.disconnect()
   }, [hasMore, loading, onMore])
@@ -88,7 +106,12 @@ function LoadMore({ hasMore, loading, onMore }: { hasMore: boolean; loading: boo
   return (
     <div ref={ref} className="my-4 flex justify-center">
       {/* aria-disabled, not disabled: a disabled button would drop the keyboard focus. */}
-      <Button type="button" variant="outline" aria-disabled={loading} onClick={(e) => !loading && onMore(e.detail === 0)}>
+      <Button
+        type="button"
+        variant="outline"
+        aria-disabled={loading}
+        onClick={(e) => !loading && onMore(e.detail === 0)}
+      >
         {loading ? t.loading : t.views.loadMore}
       </Button>
     </div>
@@ -103,20 +126,35 @@ export function useOpenRecord() {
 }
 
 /** Cover (with the owner on it), title, artist and value: the version lives in the table and the detail. */
-export function GridView({ items, listRef }: { items: VinylRecord[]; listRef?: React.Ref<HTMLUListElement> }) {
+function GridView({ items, listRef }: { items: VinylRecord[]; listRef?: React.Ref<HTMLUListElement> }) {
   const open = useOpenRecord()
   return (
-    <ul ref={listRef} className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4 xl:grid-cols-5">
+    <ul
+      ref={listRef}
+      className="grid grid-cols-2 gap-x-3 gap-y-6 sm:grid-cols-3 sm:gap-x-4 lg:grid-cols-4 xl:grid-cols-5"
+    >
       {items.map((r) => (
         <li key={r.id}>
-          <button type="button" data-card onClick={() => open(r.id)} className="group block w-full rounded-xl text-left outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <button
+            type="button"
+            data-card
+            onClick={() => open(r.id)}
+            className="group block w-full rounded-xl text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
             <span className="relative block transition-transform group-hover:-translate-y-1 group-active:scale-[.98]">
-              <Cover record={r} className="aspect-square w-full rounded-xl object-cover shadow-md ring-1 ring-black/5" />
+              <Cover
+                record={r}
+                className="aspect-square w-full rounded-xl object-cover shadow-md ring-1 ring-black/5"
+              />
               <OwnerBadge ownerId={r.owner_id} overlay className="absolute bottom-2 left-2" />
             </span>
             <span className="mt-2 block text-base leading-tight font-medium">{r.title}</span>
             <span className="block truncate text-sm text-muted-foreground">{r.artist}</span>
-            {r.value && <span className="mt-1 block text-sm font-medium">{formatMoney(r.value.amount_minor, r.value.currency)}</span>}
+            {r.value && (
+              <span className="mt-1 block text-sm font-medium">
+                {formatMoney(r.value.amount_minor, r.value.currency)}
+              </span>
+            )}
           </button>
         </li>
       ))}
@@ -149,7 +187,10 @@ function TableBrowser() {
   const to = data.offset + data.items.length
   return (
     <div ref={topRef} className="grid gap-3">
-      <div aria-busy={query.isPlaceholderData} className={cn('transition-opacity', query.isPlaceholderData && 'opacity-60')}>
+      <div
+        aria-busy={query.isPlaceholderData}
+        className={cn('transition-opacity', query.isPlaceholderData && 'opacity-60')}
+      >
         <RecordTable items={data.items} />
       </div>
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -164,7 +205,9 @@ function TableBrowser() {
 
 /** First, last, the current page and its neighbours; gaps become an ellipsis. */
 export function pageNumbers(page: number, last: number): (number | 'gap')[] {
-  const wanted = [...new Set([1, page - 1, page, page + 1, last])].filter((n) => n >= 1 && n <= last).sort((a, b) => a - b)
+  const wanted = [...new Set([1, page - 1, page, page + 1, last])]
+    .filter((n) => n >= 1 && n <= last)
+    .sort((a, b) => a - b)
   const out: (number | 'gap')[] = []
   wanted.forEach((n, i) => {
     if (i > 0 && n - wanted[i - 1] > 1) out.push('gap')
@@ -173,10 +216,30 @@ export function pageNumbers(page: number, last: number): (number | 'gap')[] {
   return out
 }
 
-function PageButton({ label, disabled, onClick, children, current }: { label: string; disabled?: boolean; onClick: () => void; children: ReactNode; current?: boolean }) {
+function PageButton({
+  label,
+  disabled,
+  onClick,
+  children,
+  current,
+}: {
+  label: string
+  disabled?: boolean
+  onClick: () => void
+  children: ReactNode
+  current?: boolean
+}) {
   return (
-    <Button type="button" variant={current ? 'outline' : 'ghost'} size="icon" className="size-10 md:size-8" aria-label={label}
-      aria-current={current ? 'page' : undefined} disabled={disabled} onClick={onClick}>
+    <Button
+      type="button"
+      variant={current ? 'outline' : 'ghost'}
+      size="icon"
+      className="size-10 md:size-8"
+      aria-label={label}
+      aria-current={current ? 'page' : undefined}
+      disabled={disabled}
+      onClick={onClick}
+    >
       {children}
     </Button>
   )
@@ -188,80 +251,159 @@ function PageControls({ page, lastPage, onPage }: { page: number; lastPage: numb
   return (
     <Pagination aria-label={t.views.pages} className="mx-0 w-auto">
       <PaginationContent className="flex-wrap">
-        <PaginationItem><PageButton label={t.views.first} disabled={atStart} onClick={() => onPage(1)}><ChevronFirstIcon /></PageButton></PaginationItem>
-        <PaginationItem><PageButton label={t.views.previous} disabled={atStart} onClick={() => onPage(page - 1)}><ChevronLeftIcon /></PageButton></PaginationItem>
+        <PaginationItem>
+          <PageButton label={t.views.first} disabled={atStart} onClick={() => onPage(1)}>
+            <ChevronFirstIcon />
+          </PageButton>
+        </PaginationItem>
+        <PaginationItem>
+          <PageButton label={t.views.previous} disabled={atStart} onClick={() => onPage(page - 1)}>
+            <ChevronLeftIcon />
+          </PageButton>
+        </PaginationItem>
         {pageNumbers(page, lastPage).map((n, i) => (
-          <PaginationItem key={n === 'gap' ? `gap-${i}` : n} className={cn(n !== page && n !== 'gap' && 'max-sm:hidden')}>
-            {n === 'gap'
-              ? <PaginationEllipsis className="max-sm:hidden"><span className="sr-only">{t.views.morePages}</span></PaginationEllipsis>
-              : <PageButton label={t.views.page(n)} current={n === page} onClick={() => onPage(n)}><span className="tabular-nums">{n}</span></PageButton>}
+          <PaginationItem
+            key={n === 'gap' ? `gap-${i}` : n}
+            className={cn(n !== page && n !== 'gap' && 'max-sm:hidden')}
+          >
+            {n === 'gap' ? (
+              <PaginationEllipsis className="max-sm:hidden">
+                <span className="sr-only">{t.views.morePages}</span>
+              </PaginationEllipsis>
+            ) : (
+              <PageButton label={t.views.page(n)} current={n === page} onClick={() => onPage(n)}>
+                <span className="tabular-nums">{n}</span>
+              </PageButton>
+            )}
           </PaginationItem>
         ))}
-        <PaginationItem><PageButton label={t.views.next} disabled={atEnd} onClick={() => onPage(page + 1)}><ChevronRightIcon /></PageButton></PaginationItem>
-        <PaginationItem><PageButton label={t.views.last} disabled={atEnd} onClick={() => onPage(lastPage)}><ChevronLastIcon /></PageButton></PaginationItem>
+        <PaginationItem>
+          <PageButton label={t.views.next} disabled={atEnd} onClick={() => onPage(page + 1)}>
+            <ChevronRightIcon />
+          </PageButton>
+        </PaginationItem>
+        <PaginationItem>
+          <PageButton label={t.views.last} disabled={atEnd} onClick={() => onPage(lastPage)}>
+            <ChevronLastIcon />
+          </PageButton>
+        </PaginationItem>
       </PaginationContent>
     </Pagination>
   )
 }
 
 function Money({ amount, currency }: { amount: number | null | undefined; currency: string | undefined }) {
-  return amount != null && currency ? <>{formatMoney(amount, currency)}</> : <span className="text-muted-foreground">—</span>
+  return amount != null && currency ? (
+    <>{formatMoney(amount, currency)}</>
+  ) : (
+    <span className="text-muted-foreground">—</span>
+  )
 }
 
 /**
- * One row per record. On phones the version, owner and amounts sit under the title (their columns
- * are hidden), so the page never scrolls sideways; the title is the button that opens the record.
+ * One row per record. On phones the version, owner and amounts sit under the title instead of in
+ * their own columns, so the page never scrolls sideways; the title is the button that opens the record.
+ * The layout is picked in script (not just CSS) so each value is in the page once.
  */
-export function RecordTable({ items }: { items: VinylRecord[] }) {
+function RecordTable({ items }: { items: VinylRecord[] }) {
   const open = useOpenRecord()
+  const wide = !useIsMobile()
   const c = t.views.columns
   return (
     <div className="rounded-xl border bg-card">
-      <Table className="table-fixed md:table-auto">
+      <Table className={wide ? undefined : 'table-fixed'}>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead className="w-20 md:w-16"><span className="sr-only">{c.cover}</span></TableHead>
+            <TableHead className={wide ? 'w-16' : 'w-20'}>
+              <span className="sr-only">{c.cover}</span>
+            </TableHead>
             <TableHead>{c.title}</TableHead>
-            <TableHead className="max-md:hidden">{c.version}</TableHead>
-            <TableHead className="max-md:hidden">{c.owner}</TableHead>
-            <TableHead className="text-right max-md:hidden">{c.paid}</TableHead>
-            <TableHead className="text-right max-md:hidden">{c.value}</TableHead>
-            <TableHead className="text-right max-md:hidden">{c.difference}</TableHead>
+            {wide && (
+              <>
+                <TableHead>{c.version}</TableHead>
+                <TableHead>{c.owner}</TableHead>
+                <TableHead className="text-right">{c.paid}</TableHead>
+                <TableHead className="text-right">{c.value}</TableHead>
+                <TableHead className="text-right">{c.difference}</TableHead>
+              </>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
           {items.map((r) => (
             <TableRow key={r.id} className="cursor-pointer" onClick={() => open(r.id)}>
               <TableCell className="py-3">
-                <Cover record={r} className="size-16 rounded-lg object-cover shadow-sm ring-1 ring-black/5 md:size-12" />
+                <Cover
+                  record={r}
+                  className={cn('rounded-lg object-cover shadow-sm ring-1 ring-black/5', wide ? 'size-12' : 'size-16')}
+                />
               </TableCell>
               <TableCell className="py-3 whitespace-normal">
-                <button type="button" onClick={(e) => { e.stopPropagation(); open(r.id) }}
-                  className="block text-left text-base leading-tight font-medium outline-none hover:underline focus-visible:rounded focus-visible:ring-2 focus-visible:ring-ring md:text-sm">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    open(r.id)
+                  }}
+                  className={cn(
+                    'block text-left leading-tight font-medium outline-none hover:underline focus-visible:rounded focus-visible:ring-2 focus-visible:ring-ring',
+                    wide ? 'text-sm' : 'text-base',
+                  )}
+                >
                   {r.title}
                 </button>
                 <span className="block text-sm text-muted-foreground">{r.artist}</span>
-                <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground md:hidden">
-                  {versionSummary(r) || null}
-                  {isIncompleteVersion(r) && <Badge variant="outline">{t.version.incompleteShort}</Badge>}
-                  <OwnerBadge ownerId={r.owner_id} />
-                </span>
-                <span className="mt-1 flex flex-wrap items-center gap-x-3 text-sm md:hidden">
-                  {r.purchase?.amount_minor != null && <span className="text-muted-foreground">{t.money.paid} {formatMoney(r.purchase.amount_minor, r.purchase.currency)}</span>}
-                  {r.value && <span className="font-medium">{t.money.worth} {formatMoney(r.value.amount_minor, r.value.currency)}</span>}
-                  {r.purchase?.amount_minor != null && r.value && <DeltaText record={r} />}
-                </span>
+                {!wide && (
+                  <>
+                    <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+                      {versionSummary(r) || null}
+                      {isIncompleteVersion(r) && <Badge variant="outline">{t.version.incompleteShort}</Badge>}
+                      <OwnerBadge ownerId={r.owner_id} />
+                    </span>
+                    <span className="mt-1 flex flex-wrap items-center gap-x-3 text-sm">
+                      {r.purchase?.amount_minor != null && (
+                        <span className="text-muted-foreground">
+                          {t.money.paid} {formatMoney(r.purchase.amount_minor, r.purchase.currency)}
+                        </span>
+                      )}
+                      {r.value && (
+                        <span className="font-medium">
+                          {t.money.worth} {formatMoney(r.value.amount_minor, r.value.currency)}
+                        </span>
+                      )}
+                      {r.purchase?.amount_minor != null && r.value && <DeltaText record={r} />}
+                    </span>
+                  </>
+                )}
               </TableCell>
-              <TableCell className="whitespace-normal text-muted-foreground max-md:hidden">
-                {versionSummary(r) || null}
-                {isIncompleteVersion(r) && <Badge variant="outline" className="ml-1">{t.version.incompleteShort}</Badge>}
-              </TableCell>
-              <TableCell className="max-md:hidden"><OwnerBadge ownerId={r.owner_id} /></TableCell>
-              <TableCell className="text-right tabular-nums max-md:hidden"><Money amount={r.purchase?.amount_minor} currency={r.purchase?.currency} /></TableCell>
-              <TableCell className="text-right font-medium tabular-nums max-md:hidden"><Money amount={r.value?.amount_minor} currency={r.value?.currency} /></TableCell>
-              <TableCell className="text-right max-md:hidden">
-                {r.purchase?.amount_minor != null && r.value ? <DeltaText record={r} /> : <span className="text-muted-foreground">—</span>}
-              </TableCell>
+              {wide && (
+                <>
+                  <TableCell className="whitespace-normal text-muted-foreground">
+                    {versionSummary(r) || null}
+                    {isIncompleteVersion(r) && (
+                      <Badge variant="outline" className="ml-1">
+                        {t.version.incompleteShort}
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <OwnerBadge ownerId={r.owner_id} />
+                  </TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    <Money amount={r.purchase?.amount_minor} currency={r.purchase?.currency} />
+                  </TableCell>
+                  <TableCell className="text-right font-medium tabular-nums">
+                    <Money amount={r.value?.amount_minor} currency={r.value?.currency} />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {r.purchase?.amount_minor != null && r.value ? (
+                      <DeltaText record={r} />
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    )}
+                  </TableCell>
+                </>
+              )}
             </TableRow>
           ))}
         </TableBody>

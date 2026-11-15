@@ -3,32 +3,74 @@
   "exportedAt": "2026-11-10T09:30:00.000Z",
   "settings": { "currency": "EUR", "discogsUser": "anna_d" },
   "locations": [
-    { "id": "loc-1", "name": "Disco Club", "kind": "physical", "address": "Via Roma 1, Torino", "lat": 45.07, "lng": 7.68 },
+    {
+      "id": "loc-1",
+      "name": "Disco Club",
+      "kind": "physical",
+      "address": "Via Roma 1, Torino",
+      "lat": 45.07,
+      "lng": 7.68
+    },
     { "id": "loc-2", "name": "Discogs Marketplace", "kind": "online", "url": "https://www.discogs.com" },
-    { "id": "loc-3", "name": "Mercatino Mix", "kind": "both", "address": "Piazza Grande, Modena", "url": "https://mix.example.com" }
+    {
+      "id": "loc-3",
+      "name": "Mercatino Mix",
+      "kind": "both",
+      "address": "Piazza Grande, Modena",
+      "url": "https://mix.example.com"
+    }
   ],
   "vinyls": [
     {
-      "id": "v-1", "title": "Kind of Blue", "artist": "Miles Davis",
-      "version": { "label": "Columbia", "catalogNo": "CL 1355", "year": 1959, "country": "US", "format": "LP", "notes": "Prima stampa" },
+      "id": "v-1",
+      "title": "Kind of Blue",
+      "artist": "Miles Davis",
+      "version": {
+        "label": "Columbia",
+        "catalogNo": "CL 1355",
+        "year": 1959,
+        "country": "US",
+        "format": "LP",
+        "notes": "Prima stampa"
+      },
       "purchase": { "amountMinor": 2500, "currency": "EUR", "date": "2024-05-12", "locationId": "loc-1" },
-      "value": { "amountMinor": 12000, "currency": "EUR", "source": "discogs", "measure": "prezzo più basso", "fetchedAt": "2026-11-01T10:00:00.000Z", "numForSale": 14 },
+      "value": {
+        "amountMinor": 12000,
+        "currency": "EUR",
+        "source": "discogs",
+        "measure": "prezzo più basso",
+        "fetchedAt": "2026-11-01T10:00:00.000Z",
+        "numForSale": 14
+      },
       "discogs": { "releaseId": 1234567, "coverUrl": "https://i.discogs.com/x.jpg" },
-      "coverKey": 3, "createdAt": "2026-01-01T10:00:00.000Z"
+      "coverKey": 3,
+      "createdAt": "2026-01-01T10:00:00.000Z"
     },
     {
-      "id": "v-2", "title": "Homogénic", "artist": "Björk",
+      "id": "v-2",
+      "title": "Homogénic",
+      "artist": "Björk",
       "version": { "label": "One Little Indian", "year": 1997, "country": "UK", "format": "LP" },
-      "purchase": { "amountMinor": 3000, "currency": "EUR", "date": "2025-02-02", "locationId": "loc-3", "channel": "online" },
+      "purchase": {
+        "amountMinor": 3000,
+        "currency": "EUR",
+        "date": "2025-02-02",
+        "locationId": "loc-3",
+        "channel": "online"
+      },
       "createdAt": "2026-01-02T10:00:00.000Z"
     },
     {
-      "id": "v-3", "title": "Senza acquisto", "artist": "Qualcuno",
+      "id": "v-3",
+      "title": "Senza acquisto",
+      "artist": "Qualcuno",
       "version": {},
       "createdAt": "2026-01-03T10:00:00.000Z"
     },
     {
-      "id": "v-4", "title": "Comprato online", "artist": "Altri",
+      "id": "v-4",
+      "title": "Comprato online",
+      "artist": "Altri",
       "version": { "year": 2001 },
       "purchase": { "amountMinor": 1500, "currency": "USD", "date": "2023-11-30", "locationId": "loc-2" },
       "value": { "amountMinor": 2000, "currency": "USD", "source": "manual", "fetchedAt": "2026-02-02T10:00:00.000Z" },

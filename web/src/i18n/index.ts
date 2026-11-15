@@ -5,7 +5,7 @@ import { it } from './locales/it'
 
 export const LANGUAGES = ['it', 'en'] as const
 export type Language = (typeof LANGUAGES)[number]
-export const DEFAULT_LANGUAGE: Language = 'it'
+const DEFAULT_LANGUAGE: Language = 'it'
 const STORAGE_KEY = 'groove.language'
 
 const catalogs: Record<Language, unknown> = { it, en } // a new language must be listed here

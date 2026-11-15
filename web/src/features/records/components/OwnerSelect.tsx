@@ -24,27 +24,52 @@ export function OwnerSelect({ record }: { record: Pick<VinylRecord, 'id' | 'owne
     onSuccess: async (saved) => {
       queryClient.setQueryData(['record', record.id], saved)
       await invalidateCollection(queryClient)
-      toast.success(t.record.ownerUpdated(saved.owner_id ? (members.find((m) => m.id === saved.owner_id)?.display_name ?? '') : null))
+      toast.success(
+        t.record.ownerUpdated(
+          saved.owner_id ? (members.find((m) => m.id === saved.owner_id)?.display_name ?? '') : null,
+        ),
+      )
     },
     onError: (e) => toast.error(errorMessage(e, t.errors.generic)),
   })
 
   const shared = (
-    <span className="flex items-center gap-2"><UsersIcon aria-hidden="true" className="size-3.5 text-muted-foreground" />{t.record.sharedLabel}</span>
+    <span className="flex items-center gap-2">
+      <UsersIcon aria-hidden="true" className="size-3.5 text-muted-foreground" />
+      {t.record.sharedLabel}
+    </span>
   )
   const items = [
     { value: SHARED, label: shared },
     ...members.map((m, i) => ({
       value: m.id,
-      label: <span className="flex items-center gap-2"><OwnerDot color={ownerColor(i)} />{m.display_name}</span>,
+      label: (
+        <span className="flex items-center gap-2">
+          <OwnerDot color={ownerColor(i)} />
+          {m.display_name}
+        </span>
+      ),
     })),
   ]
   const current = members.some((m) => m.id === record.owner_id) ? (record.owner_id as string) : SHARED
 
   return (
-    <Select items={items} value={current} disabled={change.isPending} onValueChange={(v) => v && v !== current && change.mutate(v === SHARED ? null : v)}>
-      <SelectTrigger aria-label={t.record.ownedBy} className="h-9 w-auto min-w-40 md:h-8"><SelectValue /></SelectTrigger>
-      <SelectContent>{items.map((i) => <SelectItem key={i.value} value={i.value}>{i.label}</SelectItem>)}</SelectContent>
+    <Select
+      items={items}
+      value={current}
+      disabled={change.isPending}
+      onValueChange={(v) => v && v !== current && change.mutate(v === SHARED ? null : v)}
+    >
+      <SelectTrigger aria-label={t.record.ownedBy} className="h-9 w-auto min-w-40 md:h-8">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {items.map((i) => (
+          <SelectItem key={i.value} value={i.value}>
+            {i.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
     </Select>
   )
 }

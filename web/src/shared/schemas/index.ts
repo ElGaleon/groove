@@ -14,7 +14,9 @@ export function listOf<T extends z.ZodType>(item: T) {
     rows.flatMap((row, index) => {
       const parsed = item.safeParse(row)
       if (parsed.success) return [parsed.data]
-      console.error(`[schema] list row ${index} dropped: ${parsed.error.issues[0]?.path.join('.') ?? ''} ${parsed.error.issues[0]?.code ?? ''}`)
+      console.error(
+        `[schema] list row ${index} dropped: ${parsed.error.issues[0]?.path.join('.') ?? ''} ${parsed.error.issues[0]?.code ?? ''}`,
+      )
       return []
     }),
   ) as unknown as z.ZodType<z.output<T>[]>
@@ -25,20 +27,15 @@ export const LoginInSchema = g.zLoginIn
 export const RegisterInSchema = g.zRegisterIn
 export const ChangePasswordInSchema = g.zChangePasswordIn
 export const PasswordResetInSchema = g.zPasswordResetIn
-export const LocationInSchema = g.zLocationIn
 export const RecordCreateSchema = g.zRecordCreate
-export const PurchaseInSchema = g.zPurchaseIn
-export const ValueInSchema = g.zValueIn
 
 // --- accounts ---------------------------------------------------------------------------------
 export const UserSchema = g.zUserOut
 export type User = z.infer<typeof UserSchema>
 export const SetupStatusSchema = g.zSetupStatus
 export const HouseholdSchema = g.zHouseholdDetail
-export type Household = z.infer<typeof HouseholdSchema>
 export type Member = z.infer<typeof g.zMemberOut>
 export const InviteListSchema = z.array(g.zInviteOut)
-export type Invite = z.infer<typeof g.zInviteOut>
 export const InviteCreatedSchema = g.zInviteCreated
 export const InviteCheckSchema = g.zInviteCheck
 export const PasswordResetCreatedSchema = g.zPasswordResetCreated
@@ -49,7 +46,12 @@ export const RecordSchema = g.zRecordOut
 export type VinylRecord = z.infer<typeof RecordSchema>
 export type Purchase = z.infer<typeof g.zPurchaseOut>
 export type RecordValue = z.infer<typeof g.zValueOut>
-export const RecordListSchema = z.object({ items: listOf(g.zRecordOut), total: z.number().int(), offset: z.number().int(), limit: z.number().int() })
+export const RecordListSchema = z.object({
+  items: listOf(g.zRecordOut),
+  total: z.number().int(),
+  offset: z.number().int(),
+  limit: z.number().int(),
+})
 export type RecordList = { items: VinylRecord[]; total: number; offset: number; limit: number }
 export const RecordArraySchema = listOf(g.zRecordOut)
 export const RecordSummarySchema = g.zRecordSummary
@@ -57,7 +59,6 @@ export type RecordSummary = z.infer<typeof RecordSummarySchema>
 export const RecordOptionsSchema = g.zRecordOptions
 export type RecordOptions = z.infer<typeof RecordOptionsSchema>
 export const RefreshOutSchema = g.zRefreshOut
-export type RefreshOut = z.infer<typeof RefreshOutSchema>
 
 // --- locations and places -----------------------------------------------------------------------
 export const LocationSchema = g.zLocationOut
@@ -81,6 +82,5 @@ export const ReleaseValueSchema = g.zReleaseValue
 export type ReleaseValue = z.infer<typeof ReleaseValueSchema>
 export const ConnectSchema = g.zConnectOut
 export const ImportResultSchema = g.zImportResult
-export type ImportResult = z.infer<typeof ImportResultSchema>
 
 export { z }

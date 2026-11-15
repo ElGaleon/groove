@@ -20,8 +20,7 @@ export function Join() {
   const navigate = useNavigate()
   const check = useQuery({
     queryKey: ['invite-check', token],
-    queryFn: () =>
-      api(`/api/invites/check?token=${encodeURIComponent(token)}`, { schema: InviteCheckSchema }),
+    queryFn: () => api(`/api/invites/check?token=${encodeURIComponent(token)}`, { schema: InviteCheckSchema }),
   })
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
@@ -31,7 +30,12 @@ export function Join() {
   const [busy, setBusy] = useState(false)
 
   if (user) return <Navigate to="/" replace />
-  if (check.isLoading) return <AuthLayout><p className="text-muted-foreground">{t.invite.checking}</p></AuthLayout>
+  if (check.isLoading)
+    return (
+      <AuthLayout>
+        <p className="text-muted-foreground">{t.invite.checking}</p>
+      </AuthLayout>
+    )
 
   const status = check.data?.status ?? 'invalid'
   if (status !== 'valid') {
@@ -39,7 +43,11 @@ export function Join() {
     return (
       <AuthLayout>
         <Notice kind="error">{message ?? t.invite.invalid}</Notice>
-        <p><Link className="font-medium text-foreground underline underline-offset-4" to={routes.signIn}>{t.register.alreadyHave}</Link></p>
+        <p>
+          <Link className="font-medium text-foreground underline underline-offset-4" to={routes.signIn}>
+            {t.register.alreadyHave}
+          </Link>
+        </p>
       </AuthLayout>
     )
   }
@@ -52,7 +60,12 @@ export function Join() {
     if (checked.errors) return
     setBusy(true)
     try {
-      await register({ email: checked.data.email, password: checked.data.password, display_name: checked.data.display_name, invite_token: token })
+      await register({
+        email: checked.data.email,
+        password: checked.data.password,
+        display_name: checked.data.display_name,
+        invite_token: token,
+      })
       navigate('/')
     } catch (e) {
       setError(errorMessage(e, t.errors.generic))
@@ -64,9 +77,35 @@ export function Join() {
   return (
     <AuthLayout title={t.register.joinTitle} subtitle={t.invite.welcome(check.data?.household_name ?? '')}>
       <form onSubmit={onSubmit} noValidate className="grid gap-4">
-        <Field label={t.register.displayName} required error={errors.display_name} value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-        <Field label={t.register.email} type="email" autoComplete="email" autoCapitalize="off" autoCorrect="off" spellCheck={false} inputMode="email" enterKeyHint="next" required error={errors.email} value={email} onChange={(e) => setEmail(e.target.value)} />
-        <PasswordField label={t.register.password} autoComplete="new-password" required error={errors.password} value={password} onChange={(e) => setPassword(e.target.value)} />
+        <Field
+          label={t.register.displayName}
+          required
+          error={errors.display_name}
+          value={displayName}
+          onChange={(e) => setDisplayName(e.target.value)}
+        />
+        <Field
+          label={t.register.email}
+          type="email"
+          autoComplete="email"
+          autoCapitalize="off"
+          autoCorrect="off"
+          spellCheck={false}
+          inputMode="email"
+          enterKeyHint="next"
+          required
+          error={errors.email}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <PasswordField
+          label={t.register.password}
+          autoComplete="new-password"
+          required
+          error={errors.password}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         {error && <Notice kind="error">{error}</Notice>}
         <SubmitButton busy={busy}>{t.register.submit}</SubmitButton>
       </form>

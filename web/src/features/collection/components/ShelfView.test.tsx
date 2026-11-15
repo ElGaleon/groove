@@ -20,24 +20,61 @@ vi.mock('@/features/shelf', () => ({
 
 const recId = (n: number) => `00000000-0000-4000-8000-${String(n).padStart(12, '0')}`
 const rec = (n: number) => ({
-  id: recId(n), title: `Disco ${n}`, artist: 'A', year: 1990, label: null, genres: [], format: null, note: null,
-  catalog_no: null, country: null, purchase: null, value: null,
-  owner_id: null, has_cover: false, cover_version: null, has_back_cover: false, discogs_release_id: null,
-  created_by: null, created_at: '2026-11-14T10:00:00Z', updated_at: '2026-11-14T10:00:00Z',
+  id: recId(n),
+  title: `Disco ${n}`,
+  artist: 'A',
+  year: 1990,
+  label: null,
+  genres: [],
+  format: null,
+  note: null,
+  catalog_no: null,
+  country: null,
+  purchase: null,
+  value: null,
+  owner_id: null,
+  has_cover: false,
+  cover_version: null,
+  has_back_cover: false,
+  discogs_release_id: null,
+  created_by: null,
+  created_at: '2026-11-14T10:00:00Z',
+  updated_at: '2026-11-14T10:00:00Z',
 })
 
 function renderShelf(opts: { items: unknown[]; discogs: unknown; url?: string }) {
-  vi.stubGlobal('fetch', vi.fn(async (url: string) => {
-    if (url.startsWith('/api/records/random')) return new Response(JSON.stringify(opts.items))
-    if (url === '/api/household') return new Response(JSON.stringify({ id: '22222222-2222-4222-8222-222222222222', name: 'F', members: [] }))
-    if (url === '/api/discogs/status') return new Response(JSON.stringify(opts.discogs))
-    if (url === '/api/records/options') return new Response(JSON.stringify({ genres: [], decades: [], labels: [], countries: [], formats: [], years: [], owners: [], shared_count: 0, total: opts.items.length }))
-    return new Response('{}', { status: 404 })
-  }))
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (url: string) => {
+      if (url.startsWith('/api/records/random')) return new Response(JSON.stringify(opts.items))
+      if (url === '/api/household')
+        return new Response(JSON.stringify({ id: '22222222-2222-4222-8222-222222222222', name: 'F', members: [] }))
+      if (url === '/api/discogs/status') return new Response(JSON.stringify(opts.discogs))
+      if (url === '/api/records/options')
+        return new Response(
+          JSON.stringify({
+            genres: [],
+            decades: [],
+            labels: [],
+            countries: [],
+            formats: [],
+            years: [],
+            owners: [],
+            shared_count: 0,
+            total: opts.items.length,
+          }),
+        )
+      return new Response('{}', { status: 404 })
+    }),
+  )
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   render(
     <QueryClientProvider client={client}>
-      <MemoryRouter initialEntries={[opts.url ?? '/']}><RecordDialogProvider><ShelfView /></RecordDialogProvider></MemoryRouter>
+      <MemoryRouter initialEntries={[opts.url ?? '/']}>
+        <RecordDialogProvider>
+          <ShelfView />
+        </RecordDialogProvider>
+      </MemoryRouter>
     </QueryClientProvider>,
   )
 }
@@ -45,7 +82,10 @@ function renderShelf(opts: { items: unknown[]; discogs: unknown; url?: string })
 const none = { configured: true, connected: false, status: null, username: null }
 const linked = { configured: true, connected: true, status: 'active', username: 'anna' }
 
-afterEach(() => { vi.unstubAllGlobals(); setRecords.mockClear() })
+afterEach(() => {
+  vi.unstubAllGlobals()
+  setRecords.mockClear()
+})
 
 describe('ShelfView states', () => {
   it('empty collection: offers to add, no import without Discogs', async () => {
@@ -69,13 +109,20 @@ describe('ShelfView states', () => {
   it('fewer than 10 records: shows them all and says there are few', async () => {
     renderShelf({ items: [rec(1), rec(2), rec(3)], discogs: none })
     expect(await screen.findByText('Con questi filtri ci sono solo 3 dischi.')).toBeInTheDocument()
-    expect(await vi.waitFor(() => { expect(setRecords).toHaveBeenCalled(); return setRecords.mock.calls[0][0] })).toHaveLength(3)
+    expect(
+      await vi.waitFor(() => {
+        expect(setRecords).toHaveBeenCalled()
+        return setRecords.mock.calls[0][0]
+      }),
+    ).toHaveLength(3)
   })
 
   it('draws 10 others from the view controls, excluding the current records', async () => {
     renderShelf({ items: Array.from({ length: 10 }, (_, i) => rec(i)), discogs: none })
     const more = await screen.findByRole('button', { name: 'Mostra altri 10' })
-    expect(more.compareDocumentPosition(screen.getByRole('group', { name: 'Scaffale' })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(
+      more.compareDocumentPosition(screen.getByRole('group', { name: 'Scaffale' })) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
     expect(within(more.parentElement!).getByRole('group', { name: 'Vista' })).toBeInTheDocument()
     fireEvent.click(more)
     await vi.waitFor(() => {
@@ -89,7 +136,22 @@ describe('ShelfView states', () => {
   })
 
   it('previews the hovered record and clears the card on leave or selection', async () => {
-    const first = { ...rec(1), artist: 'Artista uno', label: 'Blue Note', country: 'IT', format: 'Vinyl, LP', catalog_no: 'BN-123', value: { amount_minor: 2500, currency: 'EUR', source: 'discogs', measure: null, fetched_at: '2026-11-14T10:00:00Z', num_for_sale: null } }
+    const first = {
+      ...rec(1),
+      artist: 'Artista uno',
+      label: 'Blue Note',
+      country: 'IT',
+      format: 'Vinyl, LP',
+      catalog_no: 'BN-123',
+      value: {
+        amount_minor: 2500,
+        currency: 'EUR',
+        source: 'discogs',
+        measure: null,
+        fetched_at: '2026-11-14T10:00:00Z',
+        num_for_sale: null,
+      },
+    }
     renderShelf({ items: [first, rec(2)], discogs: none })
     await screen.findByText('Con questi filtri ci sono solo 2 dischi.')
     act(() => sceneOptions.onHover?.({ id: recId(1), x: 100, y: 100 }))

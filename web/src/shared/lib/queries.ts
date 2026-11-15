@@ -1,9 +1,9 @@
 import type { InfiniteData, QueryClient } from '@tanstack/react-query'
 
-const KEYS = ['records', 'record', 'records-options', 'records-summary', 'places', 'locations', 'quick-search']
+const KEYS = ['records', 'record', 'records-options', 'records-summary', 'places', 'locations']
 
 /** Beyond this many loaded blocks, a refresh restarts the grid instead of reloading each block in turn. */
-export const MAX_REFETCH_BLOCKS = 5
+const MAX_REFETCH_BLOCKS = 5
 
 /** A long infinite list is cut back to its first block, so refreshing it costs one request, not dozens. */
 function trimLongGrids(queryClient: QueryClient) {

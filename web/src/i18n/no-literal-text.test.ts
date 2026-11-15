@@ -15,8 +15,12 @@ describe('user-facing text', () => {
     const offenders: string[] = []
     for (const file of sources(join(__dirname, '..'))) {
       const code = readFileSync(file, 'utf8')
-      const text = [...code.matchAll(/(?<=<[A-Za-z][\w.]*(?:\s[^<>]*)?[^=]>)([^<>{}\n]*[A-Za-zÀ-ú]{3,}[^<>{}\n]*)</g)].map((m) => m[1].trim())
-      const attrs = [...code.matchAll(/(?:aria-label|placeholder|title|alt)="([^"]*[A-Za-z]{3}[^"]*)"/g)].map((m) => m[1])
+      const text = [
+        ...code.matchAll(/(?<=<[A-Za-z][\w.]*(?:\s[^<>]*)?[^=]>)([^<>{}\n]*[A-Za-zÀ-ú]{3,}[^<>{}\n]*)</g),
+      ].map((m) => m[1].trim())
+      const attrs = [...code.matchAll(/(?:aria-label|placeholder|title|alt)="([^"]*[A-Za-z]{3}[^"]*)"/g)].map(
+        (m) => m[1],
+      )
       for (const found of [...text, ...attrs].filter(Boolean)) offenders.push(`${file}: ${found}`)
     }
     expect(offenders).toEqual([])

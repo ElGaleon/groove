@@ -19,8 +19,7 @@ if (!check && !process.argv.includes('--no-export')) {
   run('uv', ['run', 'python', '-m', 'scripts.export_openapi', spec], resolve(root, '../api'))
 }
 
-const generate = (dir) =>
-  run(join(tool, 'node_modules/.bin/openapi-ts'), ['-i', spec, '-o', dir, '-p', 'zod'])
+const generate = (dir) => run(join(tool, 'node_modules/.bin/openapi-ts'), ['-i', spec, '-o', dir, '-p', 'zod'])
 
 if (!check) {
   generate(out)

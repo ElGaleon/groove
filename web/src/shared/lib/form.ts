@@ -11,11 +11,16 @@ type Issue = z.core.$ZodIssue
 function asApiError(issue: Issue): ApiError {
   const field = String(issue.path[0] ?? '')
   // zod says "received undefined" for a missing value and e.g. "received NaN" for a wrong one
-  if (issue.code === 'invalid_type') return new ApiError(422, '', { code: /received (undefined|null)/.test(issue.message) ? 'required' : 'invalid', field })
+  if (issue.code === 'invalid_type')
+    return new ApiError(422, '', {
+      code: /received (undefined|null)/.test(issue.message) ? 'required' : 'invalid',
+      field,
+    })
   if (issue.code === 'too_small' && issue.origin === 'string') {
     const minimum = Number(issue.minimum)
     if (minimum <= 1) return new ApiError(422, '', { code: 'required', field })
-    if (field.endsWith('password')) return new ApiError(422, '', { code: 'password_too_short', field, min_length: minimum })
+    if (field.endsWith('password'))
+      return new ApiError(422, '', { code: 'password_too_short', field, min_length: minimum })
   }
   return new ApiError(422, '', { code: 'invalid', field })
 }

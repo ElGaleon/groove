@@ -4,7 +4,10 @@ import { cn } from '@/shared/lib/utils'
 export function BrandMark({ className }: { className?: string }) {
   return (
     <span
-      className={cn('inline-block size-4 shrink-0 rounded-full bg-[radial-gradient(circle,#e8a33d_0_30%,currentColor_32%)]', className)}
+      className={cn(
+        'inline-block size-4 shrink-0 rounded-full bg-[radial-gradient(circle,#e8a33d_0_30%,currentColor_32%)]',
+        className,
+      )}
       aria-hidden="true"
     />
   )

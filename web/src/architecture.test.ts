@@ -46,7 +46,8 @@ describe('folder structure rules', () => {
     for (const file of all) {
       const top = relative(ROOT, file).split(sep)[0]
       if (top !== 'shared' && top !== 'i18n') continue
-      for (const spec of importsOf(file)) if (/^@\/(features|app)(\/|$)/.test(spec)) offenders.push(`${relative(ROOT, file)} -> ${spec}`)
+      for (const spec of importsOf(file))
+        if (/^@\/(features|app)(\/|$)/.test(spec)) offenders.push(`${relative(ROOT, file)} -> ${spec}`)
     }
     expect(offenders).toEqual([])
   })

@@ -18,7 +18,11 @@ if (!window.matchMedia) {
   })) as typeof window.matchMedia
 }
 if (!('ResizeObserver' in globalThis)) {
-  globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} } as unknown as typeof ResizeObserver
+  globalThis.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver
 }
 
 // The app starts in Italian unless a test chooses otherwise (jsdom reports an English browser).

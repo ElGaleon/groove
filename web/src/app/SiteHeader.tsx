@@ -10,12 +10,30 @@ import { RefreshDialog } from '@/features/records'
 import { Avatar, AvatarFallback } from '@/shared/ui/avatar'
 import { Button } from '@/shared/ui/button'
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel,
-  DropdownMenuSeparator, DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu'
-import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuTriggerStyle } from '@/shared/ui/navigation-menu'
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from '@/shared/ui/navigation-menu'
 import { Separator } from '@/shared/ui/separator'
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/shared/ui/sheet'
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/shared/ui/sheet'
 import { cn } from '@/shared/lib/utils'
 import { routes } from '@/shared/lib/routes'
 
@@ -24,7 +42,13 @@ const SECTIONS = [
   { to: routes.map, label: t.nav.map, end: false },
 ] as const
 
-const initials = (name: string) => name.split(/\s+/).map((p) => p[0]).slice(0, 2).join('').toUpperCase() || '?'
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase() || '?'
 
 function Brand() {
   return (
@@ -46,8 +70,14 @@ function AccountMenu() {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger render={<Button variant="ghost" className="h-11 gap-2 rounded-full px-1.5 sm:h-10" aria-label={t.nav.account} />}>
-          <Avatar className="size-8"><AvatarFallback>{initials(user.display_name)}</AvatarFallback></Avatar>
+        <DropdownMenuTrigger
+          render={
+            <Button variant="ghost" className="h-11 gap-2 rounded-full px-1.5 sm:h-10" aria-label={t.nav.account} />
+          }
+        >
+          <Avatar className="size-8">
+            <AvatarFallback>{initials(user.display_name)}</AvatarFallback>
+          </Avatar>
           <ChevronDownIcon className="mr-1 hidden size-4 text-muted-foreground sm:block" aria-hidden="true" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-64">
@@ -59,31 +89,49 @@ function AccountMenu() {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem className="min-h-11 sm:min-h-0" onClick={() => navigate(routes.settings)}><SettingsIcon /> {t.nav.settings}</DropdownMenuItem>
+            <DropdownMenuItem className="min-h-11 sm:min-h-0" onClick={() => navigate(routes.settings)}>
+              <SettingsIcon /> {t.nav.settings}
+            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           {canRefresh && (
             <>
               <DropdownMenuGroup>
-                <DropdownMenuItem className="min-h-11 sm:min-h-0" onClick={() => setRefreshing(true)}><RefreshCwIcon /> {t.nav.refresh}</DropdownMenuItem>
+                <DropdownMenuItem className="min-h-11 sm:min-h-0" onClick={() => setRefreshing(true)}>
+                  <RefreshCwIcon /> {t.nav.refresh}
+                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
             </>
           )}
           <DropdownMenuGroup>
-            <DropdownMenuItem className="min-h-11 sm:min-h-0" onClick={() => navigate(routes.family)}><UsersIcon /> {t.nav.family}</DropdownMenuItem>
+            <DropdownMenuItem className="min-h-11 sm:min-h-0" onClick={() => navigate(routes.family)}>
+              <UsersIcon /> {t.nav.family}
+            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuLabel className="text-xs text-muted-foreground">{t.nav.language}</DropdownMenuLabel>
             {LANGUAGES.map((l) => (
-              <DropdownMenuItem key={l} className="min-h-11 sm:min-h-0" aria-current={l === language ? 'true' : undefined} onClick={() => void setLanguage(l)}>
+              <DropdownMenuItem
+                key={l}
+                className="min-h-11 sm:min-h-0"
+                aria-current={l === language ? 'true' : undefined}
+                onClick={() => void setLanguage(l)}
+              >
                 <CheckIcon className={l === language ? '' : 'invisible'} /> {languageName(l)}
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive" className="min-h-11 sm:min-h-0" onClick={async () => { await signOut(); navigate(routes.signIn) }}>
+          <DropdownMenuItem
+            variant="destructive"
+            className="min-h-11 sm:min-h-0"
+            onClick={async () => {
+              await signOut()
+              navigate(routes.signIn)
+            }}
+          >
             <LogOutIcon /> {t.nav.signOut}
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -100,7 +148,9 @@ export function SiteHeader() {
       <div className="mx-auto grid h-14 max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-2 px-3 sm:px-5">
         <div className="flex items-center">
           <Sheet>
-            <SheetTrigger render={<Button variant="ghost" size="icon" className="size-11 md:hidden" aria-label={t.nav.menu} />}>
+            <SheetTrigger
+              render={<Button variant="ghost" size="icon" className="size-11 md:hidden" aria-label={t.nav.menu} />}
+            >
               <MenuIcon className="size-5" />
             </SheetTrigger>
             <SheetContent side="left" className="w-[85vw] max-w-sm">
@@ -110,30 +160,60 @@ export function SiteHeader() {
               </SheetHeader>
               <nav className="flex flex-col gap-1 px-4" aria-label={t.nav.sections}>
                 {SECTIONS.map((s) => (
-                  <SheetClose key={s.to} render={<NavLink to={s.to} end={s.end} className={({ isActive }) => cn('flex h-12 items-center rounded-md px-3 text-base', isActive ? 'bg-secondary font-medium' : 'hover:bg-accent')} />}>
+                  <SheetClose
+                    key={s.to}
+                    render={
+                      <NavLink
+                        to={s.to}
+                        end={s.end}
+                        className={({ isActive }) =>
+                          cn(
+                            'flex h-12 items-center rounded-md px-3 text-base',
+                            isActive ? 'bg-secondary font-medium' : 'hover:bg-accent',
+                          )
+                        }
+                      />
+                    }
+                  >
                     {s.label}
                   </SheetClose>
                 ))}
               </nav>
               <Separator className="my-2" />
-              {user && <div className="px-4 pb-4 text-sm text-muted-foreground">{user.display_name} · {user.email}</div>}
+              {user && (
+                <div className="px-4 pb-4 text-sm text-muted-foreground">
+                  {user.display_name} · {user.email}
+                </div>
+              )}
             </SheetContent>
           </Sheet>
-          <div className="hidden md:block"><Brand /></div>
+          <div className="hidden md:block">
+            <Brand />
+          </div>
         </div>
 
-        <div className="md:hidden"><Brand /></div>
+        <div className="md:hidden">
+          <Brand />
+        </div>
         <NavigationMenu className="hidden md:flex">
           <NavigationMenuList>
             {SECTIONS.map((s) => (
               <NavigationMenuItem key={s.to}>
-                <NavLink to={s.to} end={s.end} className={({ isActive }) => cn(navigationMenuTriggerStyle(), isActive && 'bg-accent')}>{s.label}</NavLink>
+                <NavLink
+                  to={s.to}
+                  end={s.end}
+                  className={({ isActive }) => cn(navigationMenuTriggerStyle(), isActive && 'bg-accent')}
+                >
+                  {s.label}
+                </NavLink>
               </NavigationMenuItem>
             ))}
           </NavigationMenuList>
         </NavigationMenu>
 
-        <div className="flex justify-end"><AccountMenu /></div>
+        <div className="flex justify-end">
+          <AccountMenu />
+        </div>
       </div>
     </header>
   )

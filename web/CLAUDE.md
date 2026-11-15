@@ -9,7 +9,8 @@ npm install
 npm run dev              # http://localhost:5173, proxies /api -> http://localhost:8000 (API_PROXY overrides)
 npm test                 # vitest (jsdom), includes architecture and no-literal-text checks
 npx vitest run src/features/records   # subset
-npm run lint             # oxlint
+npm run lint             # oxlint --deny-warnings (config: .oxlintrc.json)
+npm run format           # prettier --write . (CI runs format:check)
 npm run build            # tsc -b + vite build — the type check
 npm run schemas          # regenerate zod schemas from the API (needs uv + api/)
 npm run schemas:check    # fail if generated schemas are stale

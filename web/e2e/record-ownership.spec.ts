@@ -5,7 +5,10 @@ const PASSWORD = 'correct horse battery'
 const H = { 'X-Requested-With': 'groove' }
 
 async function signInAsAnna(page: Page) {
-  const login = await page.request.post('/api/auth/login', { headers: H, data: { email: 'anna@example.com', password: PASSWORD } })
+  const login = await page.request.post('/api/auth/login', {
+    headers: H,
+    data: { email: 'anna@example.com', password: PASSWORD },
+  })
   if (!login.ok()) {
     const created = await page.request.post('/api/auth/register', {
       headers: H,
@@ -19,19 +22,26 @@ async function signInAsAnna(page: Page) {
 test('ownership is visible in every view and can be changed from the detail at any time', async ({ browser }) => {
   const page = await (await browser.newContext({ viewport: { width: 375, height: 812 } })).newPage()
   await signInAsAnna(page)
-  const members = (await (await page.request.get('/api/household')).json()).members as { id: string; display_name: string }[]
+  const members = (await (await page.request.get('/api/household')).json()).members as {
+    id: string
+    display_name: string
+  }[]
   const anna = members.find((m) => m.display_name === 'Anna')!.id
   const bob = members.find((m) => m.display_name === 'Bob')!.id
   const make = async (title: string, owner_id: string | null) =>
-    (await (await page.request.post('/api/records', { headers: H, data: { title, artist: 'Ownerlp Band', owner_id } })).json()).id as string
+    (
+      await (
+        await page.request.post('/api/records', { headers: H, data: { title, artist: 'Ownerlp Band', owner_id } })
+      ).json()
+    ).id as string
   const sharedId = await make('Ownerlp Shared', null)
   const annaId = await make('Ownerlp Anna', anna)
 
   try {
     // --- list and grid tell shared from owned -------------------------------------------------
     await page.goto('/?view=list&q=Ownerlp')
-    const sharedRow = page.locator('ul.divide-y li').filter({ hasText: 'Ownerlp Shared' })
-    const annaRow = page.locator('ul.divide-y li').filter({ hasText: 'Ownerlp Anna' })
+    const sharedRow = page.locator('tbody tr').filter({ hasText: 'Ownerlp Shared' })
+    const annaRow = page.locator('tbody tr').filter({ hasText: 'Ownerlp Anna' })
     await expect(sharedRow.getByText('Condiviso')).toBeVisible()
     await expect(annaRow.getByText('Anna', { exact: true })).toBeVisible()
     await expect(sharedRow.locator('[data-owner="shared"]')).toHaveCount(1)
@@ -39,8 +49,12 @@ test('ownership is visible in every view and can be changed from the detail at a
     await page.screenshot({ path: path.join('test-results', 'ownership-list-phone.png') })
 
     await page.goto('/?view=grid&q=Ownerlp')
-    await expect(page.locator('ul.grid li').filter({ hasText: 'Ownerlp Shared' }).locator('[data-owner="shared"]')).toBeVisible()
-    await expect(page.locator('ul.grid li').filter({ hasText: 'Ownerlp Anna' }).locator(`[data-owner="${anna}"]`)).toBeVisible()
+    await expect(
+      page.locator('ul.grid li').filter({ hasText: 'Ownerlp Shared' }).locator('[data-owner="shared"]'),
+    ).toBeVisible()
+    await expect(
+      page.locator('ul.grid li').filter({ hasText: 'Ownerlp Anna' }).locator(`[data-owner="${anna}"]`),
+    ).toBeVisible()
     await page.screenshot({ path: path.join('test-results', 'ownership-grid-phone.png') })
 
     // --- hand the shared record to Bob from its detail ----------------------------------------
@@ -54,7 +68,9 @@ test('ownership is visible in every view and can be changed from the detail at a
     await page.keyboard.press('Escape')
 
     // the views follow without reloading, and the owner filter finds it
-    await expect(page.locator('ul.grid li').filter({ hasText: 'Ownerlp Shared' }).locator(`[data-owner="${bob}"]`)).toBeVisible()
+    await expect(
+      page.locator('ul.grid li').filter({ hasText: 'Ownerlp Shared' }).locator(`[data-owner="${bob}"]`),
+    ).toBeVisible()
     expect((await (await page.request.get(`/api/records?owner=${bob}&q=Ownerlp`)).json()).total).toBe(1)
 
     // --- and back to the family, whenever we like -----------------------------------------------
@@ -69,12 +85,12 @@ test('ownership is visible in every view and can be changed from the detail at a
     const wide = await (await browser.newContext({ viewport: { width: 1280, height: 900 } })).newPage()
     await signInAsAnna(wide)
     await wide.goto('/?view=list&q=Ownerlp')
-    await expect(wide.locator('ul.divide-y li')).toHaveCount(2)
+    await expect(wide.locator('tbody tr')).toHaveCount(2)
     await wide.getByRole('combobox', { name: 'Proprietario' }).click()
     await wide.getByRole('option', { name: /^Anna/ }).click()
     await expect(wide).toHaveURL(new RegExp(`owner=${anna}`))
-    await expect(wide.locator('ul.divide-y li')).toHaveCount(1)
-    await expect(wide.locator('ul.divide-y li').first()).toContainText('Ownerlp Anna')
+    await expect(wide.locator('tbody tr')).toHaveCount(1)
+    await expect(wide.locator('tbody tr').first()).toContainText('Ownerlp Anna')
     await wide.screenshot({ path: path.join('test-results', 'ownership-filter-desktop.png') })
   } finally {
     await page.request.delete(`/api/records/${sharedId}`, { headers: H })

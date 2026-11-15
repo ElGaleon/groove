@@ -6,11 +6,16 @@ import type { RecordSummary } from '@/features/collection/filters'
 import { CollectionSummary } from './CollectionSummary'
 
 function renderSummary(summary: RecordSummary) {
-  vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(summary))))
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async () => new Response(JSON.stringify(summary))),
+  )
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } })
   render(
     <QueryClientProvider client={client}>
-      <MemoryRouter><CollectionSummary /></MemoryRouter>
+      <MemoryRouter>
+        <CollectionSummary />
+      </MemoryRouter>
     </QueryClientProvider>,
   )
 }
@@ -19,7 +24,11 @@ afterEach(() => vi.unstubAllGlobals())
 
 describe('CollectionSummary', () => {
   it('counts every record in the statistics, including records without price data', async () => {
-    renderSummary({ total: 12, totals: [{ currency: 'EUR', spent: 10000, value: 15000, diff: 5000, included: 10, excluded: 1 }], without_data: 1 })
+    renderSummary({
+      total: 12,
+      totals: [{ currency: 'EUR', spent: 10000, value: 15000, diff: 5000, included: 10, excluded: 1 }],
+      without_data: 1,
+    })
     const stats = await screen.findByRole('region', { name: 'Statistiche della collezione' })
     expect(within(stats).getByText('Vinili').parentElement).toHaveTextContent('12')
     expect(stats).toHaveTextContent('100,00')
@@ -37,10 +46,14 @@ describe('CollectionSummary', () => {
   })
 
   it('keeps currencies separate and shows the record count once', async () => {
-    renderSummary({ total: 20, without_data: 0, totals: [
-      { currency: 'EUR', spent: 10000, value: 15000, diff: 5000, included: 10, excluded: 0 },
-      { currency: 'USD', spent: 20000, value: 30000, diff: 10000, included: 10, excluded: 0 },
-    ] })
+    renderSummary({
+      total: 20,
+      without_data: 0,
+      totals: [
+        { currency: 'EUR', spent: 10000, value: 15000, diff: 5000, included: 10, excluded: 0 },
+        { currency: 'USD', spent: 20000, value: 30000, diff: 10000, included: 10, excluded: 0 },
+      ],
+    })
     const stats = await screen.findByRole('region', { name: 'Statistiche della collezione' })
     expect(within(stats).getAllByText('Vinili')).toHaveLength(1)
     expect(within(stats).getByText('Vinili').parentElement).toHaveTextContent('20')

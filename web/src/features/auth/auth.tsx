@@ -34,7 +34,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     mutationFn: (body: object) => api('/api/auth/register', { method: 'POST', body, schema: UserSchema }),
     onSuccess: (user) => {
       queryClient.setQueryData(['me'], user)
-      queryClient.setQueryData(['setup'], (old: z.infer<typeof SetupStatusSchema> | undefined) => ({ min_password_length: 10, ...old, needs_setup: false }))
+      queryClient.setQueryData(['setup'], (old: z.infer<typeof SetupStatusSchema> | undefined) => ({
+        min_password_length: 10,
+        ...old,
+        needs_setup: false,
+      }))
     },
   })
   const resetMutation = useMutation({

@@ -14,18 +14,28 @@ export function DiscogsSearchStep({ onPick, onManual }: { onPick: (r: SearchResu
   const s = useDiscogsSearch()
   return (
     <div className="grid gap-3 pb-2">
-      <SearchField autoFocus aria-label={t.add.searchTitle} value={s.q}
-        onChange={(e) => s.setQ(e.target.value)} placeholder={t.add.placeholder} />
+      <SearchField
+        autoFocus
+        aria-label={t.add.searchTitle}
+        value={s.q}
+        onChange={(e) => s.setQ(e.target.value)}
+        placeholder={t.add.placeholder}
+      />
 
       <div aria-live="polite" className="grid gap-3">
-        {s.status === 'idle' && <p className="text-sm text-muted-foreground">{t.add.hint.replace('3', String(MIN_CHARS))}</p>}
+        {s.status === 'idle' && (
+          <p className="text-sm text-muted-foreground">{t.add.hint.replace('3', String(MIN_CHARS))}</p>
+        )}
 
         {s.status === 'loading' && (
           <ul className="grid gap-2" aria-label={t.views.search}>
             {[0, 1, 2].map((i) => (
               <li key={i} className="flex gap-3">
                 <Skeleton className="size-16 shrink-0 rounded-lg" />
-                <div className="grid flex-1 content-center gap-2"><Skeleton className="h-4 w-2/3" /><Skeleton className="h-3 w-1/2" /></div>
+                <div className="grid flex-1 content-center gap-2">
+                  <Skeleton className="h-4 w-2/3" />
+                  <Skeleton className="h-3 w-1/2" />
+                </div>
               </li>
             ))}
           </ul>
@@ -35,8 +45,12 @@ export function DiscogsSearchStep({ onPick, onManual }: { onPick: (r: SearchResu
           <div role="alert" className="grid gap-2 rounded-lg border border-destructive/40 p-3 text-sm">
             <p className="text-destructive">{s.error}</p>
             <div className="flex flex-wrap gap-2">
-              <Button variant="outline" className="h-11 md:h-9" onClick={s.retry}><RotateCwIcon /> {t.add.retry}</Button>
-              <Button variant="outline" className="h-11 md:h-9" onClick={onManual}><PencilLineIcon /> {t.add.manual}</Button>
+              <Button variant="outline" className="h-11 md:h-9" onClick={s.retry}>
+                <RotateCwIcon /> {t.add.retry}
+              </Button>
+              <Button variant="outline" className="h-11 md:h-9" onClick={onManual}>
+                <PencilLineIcon /> {t.add.manual}
+              </Button>
             </div>
           </div>
         )}
@@ -44,7 +58,9 @@ export function DiscogsSearchStep({ onPick, onManual }: { onPick: (r: SearchResu
         {s.status === 'done' && s.results.length === 0 && (
           <div className="grid gap-2 rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
             <p>{t.add.none(s.q.trim())}</p>
-            <Button variant="outline" className="h-11 w-fit md:h-9" onClick={onManual}><PencilLineIcon /> {t.add.manual}</Button>
+            <Button variant="outline" className="h-11 w-fit md:h-9" onClick={onManual}>
+              <PencilLineIcon /> {t.add.manual}
+            </Button>
           </div>
         )}
 
@@ -53,23 +69,43 @@ export function DiscogsSearchStep({ onPick, onManual }: { onPick: (r: SearchResu
             <ul className="divide-y rounded-lg border">
               {s.results.map((r) => (
                 <li key={r.release_id}>
-                  <button type="button" onClick={() => onPick(r)}
-                    className="flex min-h-20 w-full items-center gap-3 p-2 text-left outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring active:bg-accent">
-                    {r.cover_url
-                      ? <img src={r.cover_url} alt="" loading="lazy" referrerPolicy="no-referrer" className="size-16 shrink-0 rounded-lg bg-muted object-cover" />
-                      : <div className="size-16 shrink-0 rounded-lg bg-muted" />}
+                  <button
+                    type="button"
+                    onClick={() => onPick(r)}
+                    className="flex min-h-20 w-full items-center gap-3 p-2 text-left outline-none hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring active:bg-accent"
+                  >
+                    {r.cover_url ? (
+                      <img
+                        src={r.cover_url}
+                        alt=""
+                        loading="lazy"
+                        referrerPolicy="no-referrer"
+                        className="size-16 shrink-0 rounded-lg bg-muted object-cover"
+                      />
+                    ) : (
+                      <div className="size-16 shrink-0 rounded-lg bg-muted" />
+                    )}
                     <span className="min-w-0 flex-1">
                       <span className="block text-base leading-tight font-medium">{r.title || '—'}</span>
                       <span className="block truncate text-sm text-muted-foreground">{r.artist}</span>
                       <span className="mt-0.5 block text-sm leading-snug text-muted-foreground">{details(r)}</span>
-                      {r.in_collection && <Badge variant="secondary" className="mt-1">{t.search.already(r.in_collection.owner_name)}</Badge>}
+                      {r.in_collection && (
+                        <Badge variant="secondary" className="mt-1">
+                          {t.search.already(r.in_collection.owner_name)}
+                        </Badge>
+                      )}
                     </span>
                   </button>
                 </li>
               ))}
             </ul>
             {s.hasMore && (
-              <Button variant="outline" className="h-11 md:h-9" disabled={s.loadingMore} onClick={() => void s.loadMore()}>
+              <Button
+                variant="outline"
+                className="h-11 md:h-9"
+                disabled={s.loadingMore}
+                onClick={() => void s.loadMore()}
+              >
                 {s.loadingMore ? t.add.loadingMore : t.add.more}
               </Button>
             )}

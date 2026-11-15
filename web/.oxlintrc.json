@@ -1,1 +1,40 @@
-{ "ignorePatterns": ["src/components/ui/**", "src/shared/schemas/generated/**"] }
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "import", "vitest"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "no-unused-vars": "error",
+    "no-unused-expressions": "error",
+    "react/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+    "react/jsx-key": "error",
+    "import/no-cycle": "error",
+    "vitest/valid-expect": [
+      "error",
+      {
+        "maxArgs": 2
+      }
+    ],
+    "vitest/require-mock-type-parameters": "off",
+    "react/set-state-in-effect": "off",
+    "react/refs": "off",
+    "react/immutability": "off"
+  },
+  "overrides": [
+    {
+      "files": ["src/shared/ui/**"],
+      "rules": {
+        "react-hooks/exhaustive-deps": "off"
+      }
+    },
+    {
+      "files": ["**/*.test.ts", "**/*.test.tsx"],
+      "rules": {
+        "react-hooks/rules-of-hooks": "off"
+      }
+    }
+  ],
+  "ignorePatterns": ["src/shared/schemas/generated/**", "dist/**", "tools/**", "test-results/**"]
+}

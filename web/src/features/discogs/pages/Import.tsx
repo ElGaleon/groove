@@ -49,7 +49,11 @@ export function Import() {
       <Page className="max-w-2xl">
         <h1 className="text-2xl font-semibold tracking-tight">{t.import.title}</h1>
         <p>{s.status === 'expired' ? t.discogs.lockedExpired : t.discogs.locked}</p>
-        <div><Link className={buttonVariants()} to={routes.settings}>{t.discogs.goSettings}</Link></div>
+        <div>
+          <Link className={buttonVariants()} to={routes.settings}>
+            {t.discogs.goSettings}
+          </Link>
+        </div>
       </Page>
     )
   }
@@ -63,20 +67,37 @@ export function Import() {
       {active(j) ? (
         <Section>
           <Progress value={pct} aria-label={t.import.title} />
-          <p role="status" className="text-sm font-medium">{t.import.running(j?.processed ?? 0, j?.total ?? null)}</p>
+          <p role="status" className="text-sm font-medium">
+            {t.import.running(j?.processed ?? 0, j?.total ?? null)}
+          </p>
           <p className="text-sm text-muted-foreground">{t.import.keepOpen}</p>
         </Section>
       ) : (
         <Section>
           {finished && j.status === 'done' && (
             <Notice kind="ok">
-              <span>{t.import.done(j.added)} {j.message ? t.import.messages[j.message] ?? '' : ''}</span>
-              <Link className="ml-2 underline" to="/">{t.import.toCollection}</Link>
+              <span>
+                {t.import.done(j.added)} {j.message ? (t.import.messages[j.message] ?? '') : ''}
+              </span>
+              <Link className="ml-2 underline" to="/">
+                {t.import.toCollection}
+              </Link>
             </Notice>
           )}
-          {finished && j.status === 'failed' && <Notice kind="error">{t.import.failed} {t.import.messages[j.message ?? ''] ?? t.errors.generic} {t.import.keptSoFar(j.added)}</Notice>}
+          {finished && j.status === 'failed' && (
+            <Notice kind="error">
+              {t.import.failed} {t.import.messages[j.message ?? ''] ?? t.errors.generic} {t.import.keptSoFar(j.added)}
+            </Notice>
+          )}
           <p className="text-sm text-muted-foreground">{t.import.intro}</p>
-          <form onSubmit={(e) => { e.preventDefault(); setError(null); start.mutate() }} className="grid gap-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              setError(null)
+              start.mutate()
+            }}
+            className="grid gap-4"
+          >
             <RadioGroup value={shared ? 'shared' : 'mine'} onValueChange={(v) => setShared(v === 'shared')}>
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="mine" id="own-mine" />
@@ -88,7 +109,11 @@ export function Import() {
               </div>
             </RadioGroup>
             {error && <Notice kind="error">{error}</Notice>}
-            <div><Button type="submit" disabled={start.isPending}>{finished ? t.import.again : t.import.start}</Button></div>
+            <div>
+              <Button type="submit" disabled={start.isPending}>
+                {finished ? t.import.again : t.import.start}
+              </Button>
+            </div>
           </form>
         </Section>
       )}

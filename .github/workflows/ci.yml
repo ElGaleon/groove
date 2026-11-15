@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   api:
-    name: API · ruff + pytest
+    name: API · ruff lint + format + pytest
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -40,12 +40,14 @@ jobs:
           version: "0.13.8"
           enable-cache: true
       - run: uv sync --frozen
-      - run: uv run ruff check .
-      - run: uv run ruff format --check . || echo "::warning::ruff format would change files"
+      - name: Lint (ruff check)
+        run: uv run ruff check --output-format=github .
+      - name: Formatting (ruff format)
+        run: uv run ruff format --check --diff .
       - run: uv run pytest -q
 
   web:
-    name: Web · lint + test + build
+    name: Web · prettier + lint + test + build
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -60,9 +62,13 @@ jobs:
             web/package-lock.json
             web/tools/schema-gen/package-lock.json
       - run: npm ci
-      - run: npm run lint
+      - name: Formatting (prettier)
+        run: npm run format:check
+      - name: Lint (oxlint, warnings fail the build)
+        run: npm run lint
       - run: npm test
-      - run: npm run build
+      - name: Type check and build
+        run: npm run build
       - name: Generated API schemas are up to date
         run: npm run schemas:check
 

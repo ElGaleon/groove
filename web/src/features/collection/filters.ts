@@ -17,7 +17,18 @@ const PAGE_STALE_MS = 30_000
 
 type Changes = Partial<Filters> & { view?: View; page?: number; size?: PageSize }
 
-const DEFAULTS: Filters = { q: '', owner: 'any', genre: '', decade: '', label: '', country: '', format: '', year: '', sort: 'artist', order: 'asc' }
+const DEFAULTS: Filters = {
+  q: '',
+  owner: 'any',
+  genre: '',
+  decade: '',
+  label: '',
+  country: '',
+  format: '',
+  year: '',
+  sort: 'artist',
+  order: 'asc',
+}
 
 /** Search, filters, sort and view live in the URL, so they survive switching views and reloads. */
 export function useFilters() {
@@ -36,11 +47,15 @@ export function useFilters() {
           const next = new URLSearchParams(current)
           for (const [key, value] of Object.entries(changes)) {
             const isDefault =
-              value === undefined || value === '' ||
-              (key === 'view' ? value === defaultView
-                : key === 'page' ? value === 1
-                : key === 'size' ? value === DEFAULT_PAGE_SIZE
-                : value === DEFAULTS[key as keyof Filters])
+              value === undefined ||
+              value === '' ||
+              (key === 'view'
+                ? value === defaultView
+                : key === 'page'
+                  ? value === 1
+                  : key === 'size'
+                    ? value === DEFAULT_PAGE_SIZE
+                    : value === DEFAULTS[key as keyof Filters])
             if (isDefault) next.delete(key)
             else next.set(key, String(value))
           }
@@ -53,14 +68,33 @@ export function useFilters() {
     },
     [setParams, defaultView],
   )
-  const reset = useCallback(() => update({ q: '', owner: 'any', genre: '', decade: '', label: '', country: '', format: '', year: '' }), [update])
-  const active = filters.q !== '' || filters.owner !== 'any' || filters.genre !== '' || filters.decade !== '' || filters.label !== '' || filters.country !== '' || filters.format !== '' || filters.year !== ''
+  const reset = useCallback(
+    () => update({ q: '', owner: 'any', genre: '', decade: '', label: '', country: '', format: '', year: '' }),
+    [update],
+  )
+  const active =
+    filters.q !== '' ||
+    filters.owner !== 'any' ||
+    filters.genre !== '' ||
+    filters.decade !== '' ||
+    filters.label !== '' ||
+    filters.country !== '' ||
+    filters.format !== '' ||
+    filters.year !== ''
   /** Filters other than the text search (the ones shown as a count on phones). */
-  const activeCount = [filters.owner !== 'any', filters.genre, filters.decade, filters.label, filters.country, filters.format, filters.year].filter(Boolean).length
+  const activeCount = [
+    filters.owner !== 'any',
+    filters.genre,
+    filters.decade,
+    filters.label,
+    filters.country,
+    filters.format,
+    filters.year,
+  ].filter(Boolean).length
   return { filters, view, browse, update, reset, active, activeCount }
 }
 
-export function filterQuery(f: Filters): URLSearchParams {
+function filterQuery(f: Filters): URLSearchParams {
   const p = new URLSearchParams()
   if (f.q) p.set('q', f.q)
   if (f.owner !== 'any') p.set('owner', f.owner)
@@ -130,10 +164,13 @@ export function randomQuery(f: Filters): URLSearchParams {
 }
 
 export const useOptions = () =>
-  useQuery({ queryKey: ['records-options'], staleTime: STALE_MS, queryFn: () => api('/api/records/options', { schema: RecordOptionsSchema }) })
+  useQuery({
+    queryKey: ['records-options'],
+    staleTime: STALE_MS,
+    queryFn: () => api('/api/records/options', { schema: RecordOptionsSchema }),
+  })
 
 export { useMembers, type Member } from '@/shared/lib/members'
-
 
 export type { RecordSummary } from '@/shared/schemas'
 
@@ -142,5 +179,9 @@ export function useSummary(f: Filters) {
   const p = filterQuery(f)
   p.delete('sort')
   p.delete('order')
-  return useQuery({ queryKey: ['records-summary', p.toString()], staleTime: STALE_MS, queryFn: () => api(`/api/records/summary?${p}`, { schema: RecordSummarySchema }) })
+  return useQuery({
+    queryKey: ['records-summary', p.toString()],
+    staleTime: STALE_MS,
+    queryFn: () => api(`/api/records/summary?${p}`, { schema: RecordSummarySchema }),
+  })
 }

@@ -4,7 +4,10 @@ const PASSWORD = 'correct horse battery'
 const H = { 'X-Requested-With': 'groove' }
 
 async function signInAsAnna(page: Page) {
-  const login = await page.request.post('/api/auth/login', { headers: H, data: { email: 'anna@example.com', password: PASSWORD } })
+  const login = await page.request.post('/api/auth/login', {
+    headers: H,
+    data: { email: 'anna@example.com', password: PASSWORD },
+  })
   if (!login.ok()) {
     const created = await page.request.post('/api/auth/register', {
       headers: H,
@@ -24,8 +27,11 @@ test.describe('browse the collection', () => {
       const r = await page.request.post('/api/records', {
         headers: H,
         data: {
-          title: `Seedalbum ${String(i).padStart(3, '0')}`, artist: `Seedartist ${i % 10}`,
-          year: 1950 + (i % 70), genres: [i % 2 ? 'Jazz' : 'Rock'], allow_duplicate: true,
+          title: `Seedalbum ${String(i).padStart(3, '0')}`,
+          artist: `Seedartist ${i % 10}`,
+          year: 1950 + (i % 70),
+          genres: [i % 2 ? 'Jazz' : 'Rock'],
+          allow_duplicate: true,
         },
       })
       expect(r.ok()).toBeTruthy()
@@ -58,7 +64,7 @@ test.describe('browse the collection', () => {
     await page.reload()
     await expect(page).toHaveURL(/year=1960/)
     await expect(page.getByRole('searchbox', { name: 'Cerca per titolo o artista' })).toHaveValue('Seedalbum')
-    await expect(page.locator('ul.divide-y li').first()).toBeVisible()
+    await expect(page.locator('tbody tr').first()).toBeVisible()
   })
 
   test('open a record from a list row and from a grid card', async ({ browser }) => {
@@ -78,7 +84,7 @@ test.describe('browse the collection', () => {
     await page.goto('/?view=list')
     const box = page.getByRole('searchbox', { name: 'Cerca per titolo o artista' })
     await box.fill('Seedalbum 042')
-    await expect(page.locator('ul.divide-y li')).toHaveCount(1)
+    await expect(page.locator('tbody tr')).toHaveCount(1)
     await box.fill('Album che non esiste zzz')
     await expect(page.getByText('Nessun disco corrisponde ai filtri.')).toBeVisible()
   })

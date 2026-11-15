@@ -53,17 +53,40 @@ export function AuthLayout({ title, subtitle, children }: { title?: string; subt
   return (
     <div className={cn('grid min-h-dvh bg-background text-foreground lg:grid-cols-2', dark && 'dark')}>
       <div className="flex min-h-dvh flex-col lg:min-h-0">
-        <header className={cn('relative shrink-0 overflow-hidden bg-neutral-950 text-white transition-[height] duration-200 lg:hidden', band)}>
-          <VinylArt className={cn('absolute -right-16 -bottom-20 w-56 transition-opacity sm:-right-10 sm:w-72', typing && 'opacity-0')} />
-          <div className={cn('relative flex h-full flex-col p-6 pt-[max(1.5rem,env(safe-area-inset-top))]', typing ? 'justify-center' : 'justify-between')}>
+        <header
+          className={cn(
+            'relative shrink-0 overflow-hidden bg-neutral-950 text-white transition-[height] duration-200 lg:hidden',
+            band,
+          )}
+        >
+          <VinylArt
+            className={cn(
+              'absolute -right-16 -bottom-20 w-56 transition-opacity sm:-right-10 sm:w-72',
+              typing && 'opacity-0',
+            )}
+          />
+          <div
+            className={cn(
+              'relative flex h-full flex-col p-6 pt-[max(1.5rem,env(safe-area-inset-top))]',
+              typing ? 'justify-center' : 'justify-between',
+            )}
+          >
             <Wordmark />
-            {!typing && <p className="max-w-[16ch] text-lg leading-tight font-semibold tracking-tight text-balance">{t.auth.tagline}</p>}
+            {!typing && (
+              <p className="max-w-[16ch] text-lg leading-tight font-semibold tracking-tight text-balance">
+                {t.auth.tagline}
+              </p>
+            )}
           </div>
         </header>
 
         <Wordmark className="hidden h-20 items-center px-8 lg:flex" />
 
-        <main onFocus={onFocus} onBlur={onBlur} className="flex flex-1 flex-col justify-center px-6 py-8 sm:items-center">
+        <main
+          onFocus={onFocus}
+          onBlur={onBlur}
+          className="flex flex-1 flex-col justify-center px-6 py-8 sm:items-center"
+        >
           <div className="w-full max-w-sm">
             {title && (
               <div className="mb-6 grid gap-1.5 text-center sm:text-left">
@@ -76,7 +99,12 @@ export function AuthLayout({ title, subtitle, children }: { title?: string; subt
         </main>
 
         {/* As tall as the band above it, so the form sits in the exact middle of the screen */}
-        <footer className={cn('flex shrink-0 items-center justify-center px-6 transition-[height] duration-200 lg:h-20', band)}>
+        <footer
+          className={cn(
+            'flex shrink-0 items-center justify-center px-6 transition-[height] duration-200 lg:h-20',
+            band,
+          )}
+        >
           <LanguageSwitch value={language} onChange={(l) => void setLanguage(l)} />
         </footer>
       </div>
@@ -85,7 +113,9 @@ export function AuthLayout({ title, subtitle, children }: { title?: string; subt
         <div className="absolute inset-0 bg-[radial-gradient(60%_50%_at_70%_35%,rgb(232_163_61/.16),transparent)]" />
         <VinylArt className="absolute top-[12%] -right-[18%] w-[88%] max-w-[44rem]" />
         <div className="absolute inset-x-0 bottom-0 grid gap-3 bg-gradient-to-t from-neutral-950 via-neutral-950/80 to-transparent p-12 pt-40">
-          <p className="max-w-[18ch] text-4xl leading-[1.05] font-semibold tracking-tight text-balance">{t.auth.tagline}</p>
+          <p className="max-w-[18ch] text-4xl leading-[1.05] font-semibold tracking-tight text-balance">
+            {t.auth.tagline}
+          </p>
           <p className="max-w-sm text-neutral-400">{t.auth.text}</p>
         </div>
       </aside>

@@ -3,7 +3,8 @@ import { locale as activeLocale } from '@/i18n/format'
 export const CURRENCIES = ['EUR', 'USD', 'GBP', 'JPY', 'CHF'] as const
 export type Money = { amountMinor: number; currency: string }
 
-export const fractionDigits = (cur: string) => new Intl.NumberFormat('en', { style: 'currency', currency: cur }).resolvedOptions().maximumFractionDigits ?? 2
+const fractionDigits = (cur: string) =>
+  new Intl.NumberFormat('en', { style: 'currency', currency: cur }).resolvedOptions().maximumFractionDigits ?? 2
 
 /** "24,90" / "24.90" → unità minori intere (2490). null se non valido o negativo. */
 export function parseAmount(input: string, currency: string): number | null {
@@ -31,7 +32,11 @@ export function delta(purchase?: Partial<Money>, value?: Partial<Money>): Delta 
   if (purchase?.amountMinor == null || value?.amountMinor == null) return null
   if (!purchase.currency || purchase.currency !== value.currency) return null
   const abs = value.amountMinor - purchase.amountMinor
-  return { abs, pct: purchase.amountMinor === 0 ? null : (abs / purchase.amountMinor) * 100, currency: purchase.currency }
+  return {
+    abs,
+    pct: purchase.amountMinor === 0 ? null : (abs / purchase.amountMinor) * 100,
+    currency: purchase.currency,
+  }
 }
 
 export function formatDelta(d: Delta | null): string {

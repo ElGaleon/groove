@@ -5,7 +5,10 @@ const MOCK = 'http://localhost:8020'
 
 // The whole journey on an empty database: set up the family, invite a second member, add a record
 // by hand, connect Discogs (a mock), import, browse the three views, then select and flip on the shelf.
-test('release path: register, invite, add by hand, connect Discogs, import, browse, shelf', async ({ browser, request }) => {
+test('release path: register, invite, add by hand, connect Discogs, import, browse, shelf', async ({
+  browser,
+  request,
+}) => {
   test.setTimeout(240_000)
   await request.get(`${MOCK}/__mode?cancel=0&delay=0.2`)
 
@@ -53,12 +56,13 @@ test('release path: register, invite, add by hand, connect Discogs, import, brow
   await expect(anna.getByText('Fatto: aggiunti 230 dischi.')).toBeVisible({ timeout: 60_000 })
 
   // 5. Browse in the three views
-  const total = async (q = '') => (await (await anna.request.get(`/api/records?limit=1&q=${encodeURIComponent(q)}`)).json()).total as number
+  const total = async (q = '') =>
+    (await (await anna.request.get(`/api/records?limit=1&q=${encodeURIComponent(q)}`)).json()).total as number
   expect(await total()).toBe(231)
   await anna.goto('/?view=list')
-  await expect(anna.locator('ul.divide-y li').first()).toBeVisible()
+  await expect(anna.locator('tbody tr').first()).toBeVisible()
   await anna.getByLabel('Cerca per titolo o artista').fill('Kind of Blue')
-  await expect(anna.locator('ul.divide-y li')).toHaveCount(1)
+  await expect(anna.locator('tbody tr')).toHaveCount(1)
   await anna.goto('/?view=grid')
   await expect(anna.locator('ul.grid li').first()).toBeVisible()
 

@@ -3,7 +3,7 @@ import { api } from '@/shared/lib/api'
 import { UserSchema } from '@/shared/schemas'
 import { AuthContext } from '@/features/auth'
 
-export const DEFAULT_CURRENCY = 'EUR'
+const DEFAULT_CURRENCY = 'EUR'
 export const CURRENCIES = ['EUR', 'USD', 'GBP', 'JPY', 'CHF'] as const
 
 /** The member's default currency for new prices: stored on the server, so it follows them across

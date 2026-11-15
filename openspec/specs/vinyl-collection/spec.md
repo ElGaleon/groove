@@ -35,7 +35,7 @@ Il sistema SHALL avvisare l'utente quando sta aggiungendo un vinile con stessa c
 - **THEN** il sistema chiede conferma indicando il vinile già presente
 
 ### Requirement: Search and filter by version
-Il sistema SHALL permettere di cercare per titolo, artista e numero di catalogo e di filtrare per etichetta, paese, anno e formato, combinando i filtri. Il numero di risultati SHALL essere sempre visibile.
+Il sistema SHALL permettere di cercare per titolo, artista e numero di catalogo e di filtrare per etichetta, paese, anno e formato, combinando i filtri. Ricerca e filtri SHALL valere su tutta la collezione del nucleo, non solo sui vinili già caricati o sulla pagina visibile. Il numero di risultati SHALL essere sempre visibile.
 
 #### Scenario: Ricerca per numero di catalogo
 - **WHEN** l'utente digita un numero di catalogo
@@ -49,6 +49,10 @@ Il sistema SHALL permettere di cercare per titolo, artista e numero di catalogo 
 - **WHEN** nessun vinile soddisfa i filtri
 - **THEN** il sistema mostra uno stato vuoto con l'azione per azzerare i filtri
 
+#### Scenario: Risultato oltre la pagina visibile
+- **WHEN** la tabella mostra la pagina 1 e l'unico vinile che corrisponde alla ricerca sarebbe a pagina 5 senza filtri
+- **THEN** la ricerca mostra quel vinile in pagina 1 con il conteggio "1"
+
 ### Requirement: Edit and delete a vinyl
 Il sistema SHALL permettere di modificare ogni campo di un vinile e di eliminarlo previa conferma esplicita.
 
@@ -57,8 +61,12 @@ Il sistema SHALL permettere di modificare ogni campo di un vinile e di eliminarl
 - **THEN** il vinile e i dati ad esso associati (prezzi, luogo di acquisto) non compaiono più nella collezione e nella mappa
 
 ### Requirement: Version visible in every view
-Il sistema SHALL mostrare la versione (almeno etichetta, anno e paese) nella lista, nella griglia e nella scheda dettaglio, in modo leggibile anche su mobile.
+Il sistema SHALL mostrare la versione (almeno etichetta, anno e paese) nella tabella e nella scheda dettaglio, in modo leggibile anche su mobile. La griglia NON mostra la versione: è pensata per riconoscere i dischi a colpo d'occhio dalla copertina.
 
 #### Scenario: Vista mobile
-- **WHEN** l'utente apre la lista su uno schermo largo 375px
+- **WHEN** l'utente apre la tabella su uno schermo largo 375px
 - **THEN** ogni riga mostra titolo, artista e un riepilogo della versione senza troncare il titolo
+
+#### Scenario: Griglia senza versione
+- **WHEN** l'utente apre la collezione in griglia
+- **THEN** le schede non mostrano etichetta, anno, paese né l'avviso di versione incompleta, che restano visibili in tabella e nel dettaglio

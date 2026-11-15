@@ -43,14 +43,40 @@ export function SignIn() {
   return (
     <AuthLayout title={t.signIn.title} subtitle={t.signIn.subtitle}>
       <form onSubmit={onSubmit} noValidate className="grid gap-4">
-        <Field label={t.signIn.email} type="email" autoComplete="email" autoCapitalize="off" autoCorrect="off" spellCheck={false} inputMode="email" enterKeyHint="next" required error={errors.email} value={email} onChange={(e) => setEmail(e.target.value)} />
-        <PasswordField label={t.signIn.password} autoComplete="current-password" required error={errors.password} value={password} onChange={(e) => setPassword(e.target.value)} />
+        <Field
+          label={t.signIn.email}
+          type="email"
+          autoComplete="email"
+          autoCapitalize="off"
+          autoCorrect="off"
+          spellCheck={false}
+          inputMode="email"
+          enterKeyHint="next"
+          required
+          error={errors.email}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <PasswordField
+          label={t.signIn.password}
+          autoComplete="current-password"
+          required
+          error={errors.password}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <p className="-mt-1 text-sm text-muted-foreground">{t.auth.forgot}</p>
         {error && <Notice kind="error">{error}</Notice>}
         <SubmitButton busy={busy}>{t.signIn.submit}</SubmitButton>
       </form>
       <p className="text-sm text-muted-foreground">
-        {needsSetup ? <Link className="font-medium text-foreground underline underline-offset-4" to={routes.register}>{t.signIn.firstTime}</Link> : t.signIn.needInvite}
+        {needsSetup ? (
+          <Link className="font-medium text-foreground underline underline-offset-4" to={routes.register}>
+            {t.signIn.firstTime}
+          </Link>
+        ) : (
+          t.signIn.needInvite
+        )}
       </p>
     </AuthLayout>
   )

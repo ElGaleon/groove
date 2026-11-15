@@ -12,7 +12,15 @@ export function VinylArt({ className }: { className?: string }) {
       <svg viewBox="0 0 200 200" className="size-full animate-[spin_24s_linear_infinite] motion-reduce:animate-none">
         <circle cx="100" cy="100" r="99" fill="#0b0b0c" stroke="#ffffff" strokeOpacity="0.14" />
         {GROOVES.map((r, i) => (
-          <circle key={r} cx="100" cy="100" r={r} fill="none" stroke="#ffffff" strokeOpacity={i % 4 === 0 ? 0.12 : 0.05} />
+          <circle
+            key={r}
+            cx="100"
+            cy="100"
+            r={r}
+            fill="none"
+            stroke="#ffffff"
+            strokeOpacity={i % 4 === 0 ? 0.12 : 0.05}
+          />
         ))}
         <circle cx="100" cy="100" r="34" fill="#e8a33d" />
         <circle cx="100" cy="100" r="28" fill="none" stroke="#0b0b0c" strokeOpacity="0.25" strokeWidth="0.8" />

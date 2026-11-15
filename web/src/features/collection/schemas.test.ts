@@ -1,12 +1,24 @@
 import { describe, expect, it } from 'vitest'
 import { parseSearch } from './schemas'
 
-const parse = (query: string, view: 'shelf' | 'list' | 'grid' = 'shelf') => parseSearch(new URLSearchParams(query), view)
+const parse = (query: string, view: 'shelf' | 'list' | 'grid' = 'shelf') =>
+  parseSearch(new URLSearchParams(query), view)
 
 describe('parseSearch', () => {
   it('uses the defaults when the address says nothing', () => {
     const { filters, view } = parse('')
-    expect(filters).toEqual({ q: '', owner: 'any', genre: '', decade: '', label: '', country: '', format: '', year: '', sort: 'artist', order: 'asc' })
+    expect(filters).toEqual({
+      q: '',
+      owner: 'any',
+      genre: '',
+      decade: '',
+      label: '',
+      country: '',
+      format: '',
+      year: '',
+      sort: 'artist',
+      order: 'asc',
+    })
     expect(view).toBe('shelf')
   })
 
@@ -20,7 +32,14 @@ describe('parseSearch', () => {
   it('reads valid values', () => {
     const { filters, view } = parse('view=list&q=blue&year=1960&decade=1960&owner=shared&order=desc&sort=year')
     expect(view).toBe('list')
-    expect(filters).toMatchObject({ q: 'blue', year: '1960', decade: '1960', owner: 'shared', order: 'desc', sort: 'year' })
+    expect(filters).toMatchObject({
+      q: 'blue',
+      year: '1960',
+      decade: '1960',
+      owner: 'shared',
+      order: 'desc',
+      sort: 'year',
+    })
   })
 
   it('falls back on an unknown order and an empty owner', () => {

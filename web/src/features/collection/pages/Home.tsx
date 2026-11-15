@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { api } from '@/shared/lib/api'
@@ -7,17 +7,24 @@ import { RecordSchema } from '@/shared/schemas'
 import { CollectionSummary } from '@/features/collection/components/CollectionSummary'
 import { FilterBar } from '@/features/collection/components/FilterBar'
 import { RecordViews } from '@/features/collection/components/RecordViews'
-import { ShelfView } from '@/features/collection/components/ShelfView'
-import { useFilters, useRecordPages } from '@/features/collection/filters'
+import { useFilters, useSummary } from '@/features/collection/filters'
 import { t } from '@/i18n'
+import { invalidateCollection } from '@/shared/lib/queries'
+import { VinylSpinner } from '@/shared/components/VinylSpinner'
 
-/** The collection, laid out like the Vinyl Editions prototype: summary, toolbar, then shelf, grid or list. */
+// The shelf pulls in three.js and GSAP (most of the bundle): load them only when it is shown.
+const ShelfView = lazy(() =>
+  import('@/features/collection/components/ShelfView').then((m) => ({ default: m.ShelfView })),
+)
+
+/** The collection, laid out like the original prototype: summary, toolbar, then shelf, grid or list. */
 export function Home() {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const location = useLocation()
   const { view, filters } = useFilters()
-  const total = useRecordPages(filters).data?.pages[0]?.total
+  // The count comes with the summary (already loaded above), so the shelf fetches no page of records.
+  const total = useSummary(filters).data?.total
   const removed = (location.state as { removed?: { id: string; title: string } } | null)?.removed
   const { pathname, search } = location
 
@@ -30,7 +37,7 @@ export function Home() {
         label: t.home.undo,
         onClick: () => {
           api(`/api/records/${removed.id}/restore`, { method: 'POST', schema: RecordSchema })
-            .then(() => queryClient.invalidateQueries({ queryKey: ['records'] }))
+            .then(() => invalidateCollection(queryClient))
             .catch(() => toast.error(t.home.undoFailed))
         },
       },
@@ -42,9 +49,21 @@ export function Home() {
     <>
       <h1 className="sr-only">{t.home.title}</h1>
       <CollectionSummary />
-      {view === 'shelf' ? <ShelfView count={total} /> : (
+      {view === 'shelf' ? (
+        <Suspense
+          fallback={
+            <div className="flex justify-center py-16">
+              <VinylSpinner />
+            </div>
+          }
+        >
+          <ShelfView count={total} />
+        </Suspense>
+      ) : (
         <>
-          <div className="mb-4"><FilterBar count={total} /></div>
+          <div className="mb-4">
+            <FilterBar count={total} />
+          </div>
           <RecordViews forceView={view === 'grid' ? 'grid' : 'list'} />
         </>
       )}

@@ -2,8 +2,9 @@
 
 Il workflow `.github/workflows/ci.yml` fa, a ogni push e pull request:
 
-1. **API** — `ruff check` + `pytest` su un Postgres 16 di servizio.
-2. **Web** — `oxlint`, `vitest`, `tsc + vite build`, `schemas:check`.
+1. **API** — `ruff check` (lint), `ruff format --check` (formattazione), `pytest` su Postgres 16.
+2. **Web** — `prettier --check`, `oxlint --deny-warnings` (correttezza, React hooks, import
+   circolari, Vitest), `vitest`, `tsc + vite build`, `schemas:check`.
 3. **Audit** — `npm audit` e `pip-audit` (segnala, non blocca il deploy).
 4. **Immagini** — build di `groove-api` e `groove-web` (pubblicate su GHCR solo da `main`).
 5. **Deploy** (solo push su `main`, dopo che tutto è verde) — via SSH lancia
@@ -39,8 +40,8 @@ ssh-keyscan -p 22 <host>        # output → secret VPS_KNOWN_HOSTS
 | `VPS_SSH_KEY` | contenuto di `groove_deploy` (chiave privata) |
 | `VPS_KNOWN_HOSTS` | output di `ssh-keyscan` (blocca attacchi man-in-the-middle) |
 
-Consigliato: in **Settings → Branches** proteggi `main` richiedendo i check `API · ruff + pytest`
-e `Web · lint + test + build`; nell'environment `production` puoi aggiungere un'approvazione
+Consigliato: in **Settings → Branches** proteggi `main` richiedendo i check `API · ruff lint + format + pytest`
+e `Web · prettier + lint + test + build`; nell'environment `production` puoi aggiungere un'approvazione
 manuale prima di ogni deploy.
 
 ## Rollback manuale
