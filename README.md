@@ -21,9 +21,10 @@ deployment. Instructions for AI coding agents are in the `CLAUDE.md` files
 
 ## Features
 
-- **Collection in three views:** a 3D shelf (10 random records, "show 10 more"), a grid and a
-  list, with search and filters (owner, genre, decade, label, country, format, year). On phones
-  the filters live in a bottom sheet and the menu is a hamburger.
+- **Collection in three views:** a 3D shelf (10 random records, "show 10 more"), a grid that
+  loads more as you scroll and a paged table (10, 25 or 50 per page), with search and filters
+  (owner, genre, decade, label, country, format, year). On phones the filters live in a bottom
+  sheet and the menu is a hamburger.
 - **Complete record sheet:** besides title, artist, year, label, format and notes, every record
   has its **version** (catalogue number and country: two pressings of the same album are not
   duplicates), its **purchase** (price, currency, date, place, channel) and its **current value**
@@ -46,6 +47,18 @@ deployment. Instructions for AI coding agents are in the `CLAUDE.md` files
   one-time link created by another member.
 - **Backup:** the collection can be exported and imported as a JSON file from Settings.
 - **Languages:** Italian (default) and English.
+
+## Screenshots
+
+Demo data (made-up purchases and values, placeholder covers), English interface.
+
+| The 3D shelf | Grid |
+|---|---|
+| ![The collection on the 3D shelf, with totals spent, value and difference](docs/screenshots/shelf.png) | ![The collection as a grid: cover, owner, title, artist and value](docs/screenshots/grid.png) |
+| **Table, 10 per page** | **Record** |
+| ![The collection as a paged table with version, owner, price paid, value and difference](docs/screenshots/table.png) | ![A record's detail: version, purchase, current value and owner](docs/screenshots/record.png) |
+| **Purchase map** | **On a phone: table and grid** |
+| ![Map of the shops where records were bought, with records and money spent per place](docs/screenshots/map.png) <img src="docs/screenshots/phone-table.png" alt="The table on a phone" width="48%"> <img src="docs/screenshots/phone-grid.png" alt="The grid on a phone" width="48%"> |
 
 ## Requirements
 
